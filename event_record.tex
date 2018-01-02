@@ -1,0 +1,67 @@
+\documentclass{article}
+
+\usepackage{master}
+
+\begin{document}
+
+\title{FREYA event recording}
+\author{J{\o}rgen Randrup}
+
+\maketitle
+
+The fission event generator FREYA records information about the events according to the format described below. The file containing the events starts with a single line,
+\[
+Z_{00},A_{00},E_{\text{input}},K 
+\]
+
+Here $Z_{00}$ and $A_{00}$ are the charge and mass numbers of the original compound nucleus, prior to any prefission emissions. Furthermore, $E_{\text{input}}$ is the energy value entered (if $E_{\text{input}} > 0$ it denotes the kinetic energy of the incoming neutron, if $E_{\text{input}} < 0$ its absolute value denotes the
+initial excitation energy, and if $E_{\text{input}} = 0$ the case considered is spontaneous fission). Finally, K is the total number of fission events recorded. (A line shift is denoted by ’//’.)
+
+In the description below, $p$ denotes the momentum of a neutron, its kinetic energy is given by $E = p^2/2m_n$, and $\hat p = p/|p|$ is a unit vector in its direction of motion; furthermore, $q$ denotes the momentum of a photon, its kinetic energy is given by $\epsilon = |q|$, and $\hat q = q/|q|$ is a unit vector in its direction of motion. 
+
+For each event $k$ of the $K$ fission events, the following information is recorded:
+
+First information prior to fission (including any pre-fission emission), is recorded:
+
+$k,Z_0,A_0,E_0^*, N_n^{(0)}, N_{\gamma}^{(0)}$
+
+$E_0^{\text{kin}} , \hat P_0$
+
+$(E_n^{(0)} , \hat p_n^{(0)}), n = 1, . . . ,N_n^{(0)}$
+
+Here $N^{(0)}_n$ and $N^{(0)}_{\gamma}$ are the number of pre-fission neutrons and photons emitted (up to now, the latter always vanishes but it is included with a view towards future extensions of FREYA), and $Z_0$ and $A_0$ are the charge and mass numbers of the nucleus that actually fissions (so $Z_0 = Z_{00}$
+and $A_0 = A_{00}−N_n^{(0)}$), and $E_0^*$ is its excitation energy. $E_0^{kin}$ is the kinetic energy of the fissioning nucleus, and 
+$\hat P_0 = P_0 / |P_0|$
+is the unit vector pointing in its direction of motion. Then follows the kinematic information on the pre-fission neutrons, if there are any.
+
+
+Then the information associated with the light fission fragment is recorded, 
+
+$k,Z_1,A_1,E_1^*, N_n^{(1)}, N_{\gamma}^{(1)}$
+
+$E_1^{\text{kin}} , \hat P_1$
+
+$(E_n^{(1)} , \hat p_n^{(1)}), n = 1, . . . ,N_n^{(1)}$
+
+$(\epsilon_n^{(1)} , \hat q_n^{(1)}), n = 1, . . . ,N_n^{(1)}$
+
+Here $Z_1$ and $A_1$ are the charge and mass numbers of the light primary fission fragment and $E_1^*$ is its excitation energy (before any emission); $N_n^{(1)}$ and $N_{\gamma}^{(1)}$ are the number of neutrons and photons emitted; $E_1^{kin}$ is the kinetic energy of the resulting product nucleus and $\hat P_1 = P_1/|P_1|$ is a unit vector in its direction of motion. Then follow the kinematic information on the individual neutrons (if any) and photons (if any).
+
+Finally, the similar information associated with the heavy fission fragment is recorded,
+
+$k,Z_2,A_2,E_2^*, N_n^{(2)}, N_{\gamma}^{(2)}$
+
+$E_2^{\text{kin}} , \hat P_2$
+
+$(E_n^{(2)} , \hat p_n^{(2)}), n = 1, . . . ,N_n^{(2)}$
+
+$(\epsilon_n^{(2)} , \hat q_n^{(2)}), n = 1, . . . ,N_n^{(2)}$
+
+Here $Z_2$ and $A_2$ are the charge and mass numbers of the heavy primary fission fragment and $E_2^*$ is its excitation energy (before any emission); $N_n^{(2)}$ and $N_{\gamma}^{(2)}$ are the number of neutrons and photons emitted; $S_2^{kin}$ is the kinetic energy of the product nucleus and $\hat P_2 = P_2/|P_2|$ is a
+unit vector in its direction of motion. Then follows the kinematic information on the individual neutrons (if any) and photons (if any).
+
+After all the $K$ events have been recorded, a single line with ’0 0 0’ in format is written, signifying that the recording is complete; although this is in principle redundant, it is very convenient.
+
+As already pointed out above, the mass number of the fissioning nucleus is equal to the mass number of the original compound nucleus minus the number of pre-fission neutrons. Likewise, the mass number of a product nucleus is equal to the mass number of the primary fragment precursor minus the number of neutrons it has evaporated. Furthermore, the momentum of the initial compound nucleus is equal to the momentum of the fissioning nucleus plus the momenta of any pre-fission neutrons. Likewise, the momentum of a product nucleus plus the momenta of all the associated ejectiles add up to the momentum of the precursor fragment, and the two fragment momenta in turn add up to the momentum of the fissioning nucleus.
+
+\end{document}
