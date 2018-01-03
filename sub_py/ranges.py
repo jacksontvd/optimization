@@ -42,7 +42,7 @@ ranges_x['n_TKE'] = [100,240]
 ranges_x['n_spectrum'] = [0,15]
 ranges_x['m_spectrum'] = [0,10]
 ranges_x['mannhart'] = [0.01, 100]
-ranges_x['n_A_TKE'] = [100, 240]
+ranges_x['n_A_TKE'] = [100, 300]
 
 ranges_x['nubar'] = [0,2]
 ranges_x['gammabar'] = [0,2]

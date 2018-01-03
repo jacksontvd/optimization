@@ -8,13 +8,13 @@ from isotope import isotope
 from optimize import opt
 from variance import variance
 from variance import covariance
-from covariance_plot import covariance_plot,prerun_plot
+# from covariance_plot import covariance_plot,prerun_plot
 
 Zinput = 98
 Ainput = 252
-generate_number = 10000
+generate_number = 50000
 reaction_type = 'spontaneous'
-resolution = 3
+resolution = 8
 
 
 def opti(opt_method):
@@ -64,3 +64,5 @@ print(covar('e','d'))
 #  print(plot('d','T'))
 #  print(plot('e','x'))
 #  print(plot('e','c'))
+
+opti('grid')
