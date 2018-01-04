@@ -30,7 +30,7 @@ def isotope(Z, A, reac_type = None):
         i = 6
         reaction_type = '(n,f)'
         reaction_word = 'induced'
-    elif int(A) == 240 and reac_type == 'spontaneous': 
+    elif int(A) == 240: 
         name = 'Pu240sf'
         i = 7
         reaction_type = 'sf'
