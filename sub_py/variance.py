@@ -23,9 +23,9 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
-
 def variance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting variance calculation')
+    big_number = generate_number
     reac_t = kwargs['reaction_type']
     parameter = kwargs['parameter']
     parameters = param_ranges[str(Z)+str(A)]
@@ -115,7 +115,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
         rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
         index = np.searchsorted(rrange,x)
         error = grid_values[index-1]
-        probability = np.exp(-error/10000)
+        probability = np.exp(-error/big_number)
         #  print("ranges:",rrange)
         #  print("value:",x)
         #  print("index:",index)
@@ -130,7 +130,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
         rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
         index = np.searchsorted(rrange,x)
         error = grid_values[index-1]
-        probability = np.exp(-error/10000)/normalizer
+        probability = np.exp(-error/big_number)/normalizer
         #  print("ranges:",rrange)
         #  print("value:",x)
         #  print("index:",index)
@@ -142,7 +142,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
         rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
         index = np.searchsorted(rrange,x)
         error = grid_values[index-1]
-        probability = np.exp(-error/10000)/normalizer
+        probability = np.exp(-error/big_number)/normalizer
         #  print("ranges:",rrange)
         #  print("value:",x)
         #  print("index:",index)
@@ -162,6 +162,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
 
 def covariance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting covariance calculation')
+    big_number = 10 * generate_number
     reac_t = kwargs['reaction_type']
     parameter = kwargs['parameter']
     parameter2 = kwargs['parameter2']
@@ -253,7 +254,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
 
     print("Finished.")
     print("Statistics generated in: \n"+var_path)
-    print("Calculating variance...")
+    print("Calculating covariance...")
 
     def normalizer_function(x,y):
         rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
@@ -261,7 +262,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
         index = np.searchsorted(rrange,x)
         index2 = np.searchsorted(rrange2,y)
         error = grid_values[index - 1,index2 - 1]
-        probability = np.exp(-error/10000)
+        probability = np.exp(-error/big_number)
         #  print("ranges:",rrange)
         #  print("value:",x)
         #  print("index:",index)
@@ -283,7 +284,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
         index = np.searchsorted(rrange,x)
         index2 = np.searchsorted(rrange2,y)
         error = grid_values[index-1,index2 - 1]
-        probability = np.exp(-error/10000)/normalizer
+        probability = np.exp(-error/big_number)/normalizer
         #  print("ranges:",rrange)
         #  print("value:",x)
         #  print("index:",index)
@@ -297,7 +298,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
         index = np.searchsorted(rrange,x)
         index2 = np.searchsorted(rrange2,y)
         error = grid_values[index-1,index2 - 1]
-        probability = np.exp(-error/10000)/normalizer
+        probability = np.exp(-error/big_number)/normalizer
         #  print("ranges:",rrange)
         #  print("value:",x)
         #  print("index:",index)

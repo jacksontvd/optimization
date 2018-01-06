@@ -12,9 +12,9 @@ from variance import covariance
 
 Zinput = 98
 Ainput = 252
-generate_number = 50000
+generate_number = 10000
 reaction_type = 'spontaneous'
-resolution = 8
+resolution = 4
 
 
 def opti(opt_method):
@@ -56,13 +56,4 @@ def plot(parameter1 , parameter2):
             parameter2)
     return result
 
-print(var('e'))
 print(covar('e','d'))
-
-#  prerun_plot(Zinput , Ainput,'test.txt','cS','dTKE')
-
-#  print(plot('d','T'))
-#  print(plot('e','x'))
-#  print(plot('e','c'))
-
-opti('grid')
