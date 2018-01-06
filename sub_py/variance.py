@@ -25,7 +25,8 @@ def enablePrint():
 
 def variance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting variance calculation')
-    big_number = generate_number
+    #  big_number = generate_number
+    big_number = 100000
     reac_t = kwargs['reaction_type']
     parameter = kwargs['parameter']
     parameters = param_ranges[str(Z)+str(A)]
@@ -162,7 +163,8 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
 
 def covariance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting covariance calculation')
-    big_number = 10 * generate_number
+    #  big_number = generate_number
+    big_number = 100000
     reac_t = kwargs['reaction_type']
     parameter = kwargs['parameter']
     parameter2 = kwargs['parameter2']

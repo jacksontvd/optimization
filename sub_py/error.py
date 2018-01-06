@@ -64,7 +64,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
 
                 single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
                 print("error:",single_chisq)
-                chi_sq_added = single_chisq * 10
+                chi_sq_added = single_chisq * 100
                 total_chisq += np.nan_to_num( chi_sq_added )
             else:
                 print('calculating error for: ' + key)
