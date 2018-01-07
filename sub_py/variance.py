@@ -179,7 +179,6 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
 
 def covariance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting covariance calculation')
-    #  big_number = generate_number
     reac_t = kwargs['reaction_type']
     parameter = kwargs['parameter']
     parameter2 = kwargs['parameter2']

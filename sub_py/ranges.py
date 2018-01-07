@@ -19,6 +19,13 @@ param_ranges['T'] = param_ranges['cS']
 
 param_ranges['98252'] = [10.37,1.27,1.18,0.87,0.52]
 
+error_weights = {}
+error_weights['m_mult'] = 10
+error_weights['n_Af'] = 1/100
+error_weights['n_mult'] = 1
+error_weights['n_TKE'] = 1
+error_weights['mannhart'] = 10
+
 ranges_x = {} 
 
 ranges_x['A'] = [60,180]
@@ -36,7 +43,7 @@ ranges_x['energy_per_photon'] = np.copy(ranges_x['Product_A'])
 ranges_x['n_angular'] = [-1,1]
 
 ranges_x['n_mult'] = [0,20]
-ranges_x['m_mult'] = [0,70]
+ranges_x['m_mult'] = [0,50]
 
 ranges_x['n_TKE'] = [100,240]
 ranges_x['n_spectrum'] = [0,15]

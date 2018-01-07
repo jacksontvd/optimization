@@ -7,10 +7,10 @@ TODO
 -variance for each parameter
 
 -covariance on parameters 
--plots for errors on pairs of parameters
+-plots of errors vs pairs of parameters
+
 
 -covariance on data sets
-
 
 
 -clean data parse/plot (json file)

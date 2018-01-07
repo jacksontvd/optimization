@@ -12,9 +12,9 @@ from variance import covariance
 
 Zinput = 98
 Ainput = 252
-generate_number = 10000
+generate_number = 100000
 reaction_type = 'spontaneous'
-resolution = 4
+resolution = 20
 
 
 def opti(opt_method):
@@ -56,4 +56,4 @@ def plot(parameter1 , parameter2):
             parameter2)
     return result
 
-print(covar('e','d'))
+print(var('e'))

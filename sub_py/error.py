@@ -9,6 +9,7 @@ cwd = os.getcwd()
 
 from gen_par_ana import gpa
 from isotope import isotope
+from ranges import *
 
 def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     
@@ -42,7 +43,8 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     #  this will be used by the optimization script to plot the errors
     chisq_dict = {}
     #  define dummy error to scale data with no error for comparison with the other error contribution
-    dummy_error = 0.01
+    dummy_error = 0.05
+    shift_error = 0.01
 
     keys_for_error = data_dictionary.keys()
 
@@ -63,8 +65,8 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                 freya_single = anal_array[0,1,0]
 
                 single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
-                print("error:",single_chisq)
-                chi_sq_added = single_chisq * 10
+                print(key,"error:",single_chisq)
+                chi_sq_added = single_chisq
                 total_chisq += np.nan_to_num( chi_sq_added )
             else:
                 print('calculating error for: ' + key)
@@ -82,6 +84,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                 #  initialize the chi_sq_array with zeros
                 #  once this is full it will eventually be written into the chi_sq dictionary under the name of the current data file
                 chi_sq_array = np.zeros( (len(anal_array)  + 1, 2) )
+                dirty_chi_sq_array = np.zeros( (len(anal_array)  + 1, 2) )
 
                 for element in data_array:
 
@@ -90,34 +93,46 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
 
                     #  for the sorted row number of the data in freya, assign that row of the chi-squared array to have first element the same as the data
                     chi_sq_array[row,0] = element[0,0]
+                    dirty_chi_sq_array[row,0] = element[0,0]
 
                     #  if we are dealing with an empty case, assure we have no contributing error
                     if element[1,0] ==0 or element[1,0] == 'NaN' or element[1,0] is None:
                         chi_sq_array[row,1] = 0
+                        dirty_chi_sq_array[row,1] = None
 
                     #  if we are dealing with a case with no uncertainty, assure we do not get infinite error
-                    if element[1,1] == 0:
-                    #  healthy row
+                    if element[1,1] == 0 or element[1,1] == 'NaN' or element[1,1] is None:
+                    #  clean row
                         #  chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2
                     #  scaled row
                         chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2 / ((dummy_error)**2)
+                    #  dirty row
+                        dirty_chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2 / ((dummy_error)**2)
 
                     #  otherwise, take the square of the difference between the data and freya, and divide by the square of the uncertainty
                     #  this will make uncertain data matter less in the grand scheme of things than the very certain data
                     else:
-                    #  healthy row
-                        #  chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2 / (element[1,1]**2)
-                    #  scaled row
-                        chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2 / ((element[1,1] + dummy_error)**2)
+                    #  clean row
+                        chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2 / (element[1,1]**2)
+                    #  shifted row
+                        dirty_chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2 / ((element[1,1] + shift_error)**2)
 
-                    chi_sq_added = chi_sq_array[row,1]
+                    #  chi_sq_added = chi_sq_array[row,1]
 
                     #  add every individual chi-squared value to the total. This will be weighted by uncertainties, and give us a goodness of fit for freya as a whole. 
                     #  this ultimately determines whether the current set of parameters is appropriate
-                    total_chisq +=np.nan_to_num( chi_sq_added )
 
-                #  chi_sq_added = np.mean(chi_sq_array[:,1])
-                #  print(chi_sq_added)
+                    #  total_chisq +=np.nan_to_num( chi_sq_added )
+
+                if key is 'n_Af':
+                    chi_sq_added = np.mean(dirty_chi_sq_array[45:75,1])
+
+                else:
+                    chi_sq_added = np.mean(dirty_chi_sq_array[:,1])
+
+                chi_sq_added = chi_sq_added * error_weights[key]
+
+                print("average",key,"error: ",chi_sq_added)
                 total_chisq += np.nan_to_num( chi_sq_added )
 
                 chisq_dict[key] = chi_sq_array
