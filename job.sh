@@ -9,7 +9,7 @@
 #SBATCH --partition=savio2
 #
 # Wall clock limit:
-#SBATCH --time=10:00:00
+#SBATCH --time=72:00:00
 #
 ## Command(s) to run:
 module load cmake
