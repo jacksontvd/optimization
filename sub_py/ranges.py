@@ -18,6 +18,7 @@ param_ranges['cS'] = [0.5, 1.5,3]
 param_ranges['T'] = param_ranges['cS'] 
 
 param_ranges['98252'] = [10.37,1.27,1.18,0.87,0.52]
+param_ranges['94240'] = [10.0724,1.3,3.0,0.87,-3.07119]
 
 error_weights = {}
 error_weights['m_mult'] = 10
