@@ -174,6 +174,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     print("average2",average2)
     variance = average2 - average**2
     print("variance:",variance)
+    print("events: ",generate_number)
 
     return grid_values, variance
 
@@ -364,6 +365,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     print("covariance:",covariance)
     x_array = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
     y_array = np.arange(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0])/resolution)
+    print("events:",generate_number)
 
     return covariance , grid_values, x_array , y_array
 
