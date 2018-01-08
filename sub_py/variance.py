@@ -351,9 +351,9 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     average ,error_first= integrate.dblquad(pintegrand, range_array[0] , range_array[1], y_min , y_max)
     print("average",average)
 
-    print("probability of",fixed_value_1,fixed_value_2,":",pintegrand(fixed_value_1, fixed_value_2))
-    print("probability of",fixed_value_1,"=",integrand1(fixed_value_1))
-    print("probability of",fixed_value_2,"=",integrand2(fixed_value_2))
+    print("probability of",fixed_value_1,fixed_value_2,":",pintegrand(fixed_value_1, fixed_value_2)/(fixed_value_1 * fixed_value_2))
+    print("probability of",fixed_value_1,"=",integrand1(fixed_value_1) / fixed_value_1)
+    print("probability of",fixed_value_2,"=",integrand2(fixed_value_2) / fixed_value_2)
 
     average1 ,error_1= integrate.quad(integrand1, range_array[0] , range_array[1])
     average2 ,error_2= integrate.quad(integrand2, range_array_2[0] , range_array_2[1])
