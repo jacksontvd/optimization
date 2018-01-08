@@ -25,6 +25,9 @@ error_weights['n_Af'] = 1/100
 error_weights['n_mult'] = 1
 error_weights['n_TKE'] = 1
 error_weights['mannhart'] = 10
+error_weights['mannhart'] = 10
+error_weights['n_spectrum'] = 1
+error_weights['product_A'] = 1
 
 ranges_x = {} 
 
