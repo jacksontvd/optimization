@@ -166,7 +166,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
         #  print("probability",probability)
         return probability * (x**2)
 
-    print("probability of",fixed_value,":",normalizer_function(fixed_value)/(fixed_value * normalizer))
+    print("probability of",fixed_value,":",integrand(fixed_value)/(fixed_value))
 
     average ,error_1= integrate.quad(integrand, range_array[0] , range_array[1])
     print("average",average)
