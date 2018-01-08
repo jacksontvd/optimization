@@ -80,7 +80,6 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     resolution = np.float(resolution)
     #  define the ranges to be from the minimum to the maximum values, with the difference/resolution many cells
 
-
     #  brute_ranges = (slice(range_array[0],range_array[1],range_array[2]/resolution))
     brute_ranges = ((range_array[0],range_array[1]),)
 
@@ -129,6 +128,8 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     def normalizer_function(x):
         rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
         index = np.searchsorted(rrange,x)
+        #  print(x,"index",index)
+        #  print(x,rrange)
         error = grid_values[index-1]
         probability = np.exp(-error/big_number)
         #  print("ranges:",rrange)
@@ -153,7 +154,6 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
         #  print("probability",probability)
         return probability * x
 
-
     def integrand2(x):
         rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
         index = np.searchsorted(rrange,x)
@@ -166,7 +166,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
         #  print("probability",probability)
         return probability * (x**2)
 
-    print("probability of",fixed_value,":",normalizer_function(fixed_value))
+    print("probability of",fixed_value,":",normalizer_function(fixed_value)/(fixed_value * normalizer))
 
     average ,error_1= integrate.quad(integrand, range_array[0] , range_array[1])
     print("average",average)
