@@ -12,10 +12,10 @@ from variance import covariance
 
 Zinput = 98
 Ainput = 252
-generate_number = 100000
+generate_number = 10000
 reaction_type = 'spontaneous'
 optimization_type = 'grid'
-resolution = 20
+resolution = 30
 
 def opti(opt_method):
     result = opt(Zinput,
