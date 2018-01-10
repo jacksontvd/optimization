@@ -317,18 +317,6 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     normalizer,int_error = integrate.dblquad(normalizer_function, range_array[0] , range_array[1],y_min , y_max)
     print("normalizer",normalizer)
 
-    def old_integrand(x):
-        rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
-        index = np.searchsorted(rrange,x)
-        error = grid_values[index-1]
-        probability = np.exp(-error/big_number)/normalizer
-        #  print("ranges:",rrange)
-        #  print("value:",x)
-        #  print("index:",index)
-        #  print("error:",error)
-        #  print("probability",probability)
-        return probability * x
-
     def pintegrand(x,y):
         rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
         rrange2 = np.arange(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0])/resolution)
@@ -356,8 +344,8 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     print("probability of",fixed_value_1,"=",integrand1(fixed_value_1) / fixed_value_1)
     print("probability of",fixed_value_2,"=",integrand2(fixed_value_2) / fixed_value_2)
 
-    average1 ,error_1= integrate.quad(integrand1, range_array[0] , range_array[1])
-    average2 ,error_2= integrate.quad(integrand2, range_array_2[0] , range_array_2[1])
+    average1 , error_1= integrate.quad(integrand1, range_array[0] , range_array[1])
+    average2 , error_2= integrate.quad(integrand2, range_array_2[0] , range_array_2[1])
 
     print(kwargs['parameter'],"average: ",average1)
     print(kwargs['parameter2'],"average: ",average2)
