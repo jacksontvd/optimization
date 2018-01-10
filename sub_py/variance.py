@@ -177,6 +177,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     print("events: ",generate_number)
     print(parameter)
     print(resolution)
+    print(Z,A)
 
     return grid_values, variance
 
@@ -358,6 +359,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     print("events:",generate_number)
     print(parameter , parameter2)
     print(resolution)
+    print(Z,A)
 
     return covariance , grid_values, x_array , y_array
 
