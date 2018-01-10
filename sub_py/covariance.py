@@ -23,16 +23,22 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
-def variance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
-    print('starting variance calculation')
+def covariance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
+    print('starting covariance calculation')
     reac_t = kwargs['reaction_type']
     parameter = kwargs['parameter']
+    parameter2 = kwargs['parameter2']
     parameters = param_ranges[str(Z)+str(A)]
+
+    #       DEFINE PARAMETER RANGES
 
     range_array = param_ranges[parameter]
     special_index = param_ranges[parameter][2]
+    range_array_2 = param_ranges[parameter2]
+    special_index_2 = param_ranges[parameter2][2]
 
-    fixed_value = parameters[special_index]
+    fixed_value_1 = parameters[special_index]
+    fixed_value_2 = parameters[special_index_2]
 
     os.chdir(cwd+'/../fission_v2.0.3/data_freya/')
 
@@ -65,23 +71,26 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     opt_begin = time.time()
 
     print('Begin Optimizing FREYA (This may take a while...)')
-
-
     #  define function which takes in a set of parameters and returns the raw chi-squared error (total sum)
     #  see error.py for the details of this error calculation
-    def err_opt(parameter):
+    def err_opt(params):
+        parameter = params[0]
+        parameter2 = params[1]
         #  return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
         parameters[special_index] = parameter
+        parameters[special_index_2] = parameter2
         return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
 
-    #  for grid search method initialize the brute source routine
+    ### start optimizing
 
     print("calculating errors on nodes...")
+
     resolution = np.float(resolution)
-    #  define the ranges to be from the minimum to the maximum values, with the difference/resolution many cells
+    #  define the ranges to be from th eminimum to the maximum values, with the difference/resolution many cells
+
 
     #  brute_ranges = (slice(range_array[0],range_array[1],range_array[2]/resolution))
-    brute_ranges = ((range_array[0],range_array[1]),)
+    brute_ranges = ((range_array[0],range_array[1]),(range_array_2[0],range_array[1]))
 
     #  block the printing for each iteration to avoid slowing the process down by taking the time to print the useless output
     #  comment this line to let it print if there is an issue with the routine
@@ -102,7 +111,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     ### stop optimizing
 
     #  define path for output to be placed
-    var_path = cwd + '/../output/variance/' + 'Z=' + str(Z) + ' A=' + str(A) + '_E=' + str(Energy) + '_' + str(method)
+    var_path = cwd + '/../output/variance/' + str(Z) + str(A) + str(Energy) + '_' + str(kwargs['parameter']) + str(kwargs['parameter2'])
 
     #  create appropriate directory if it does not already exist 
     if not os.path.exists(var_path):
@@ -113,24 +122,29 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
 
     print('Begin printing output...')
     os.chdir(var_path)
-    np.savetxt('variance',grid_values)
+    np.savetxt('covariance',grid_values)
     os.chdir(cwd)
 
     #  print(grid_values)
-    average_error = sum(grid_values) / len(grid_values)
+    grid_rows = sum(grid_values)
+    #  print(grid_rows)
+    grid_total = sum(grid_rows)
+    #  print(grid_total)
+    #  print(len(grid_values))
+    average_error = grid_total / len(grid_values)**2
     print("average error:",average_error)
     big_number = average_error
 
     print("Finished.")
     print("Statistics generated in: \n"+var_path)
-    print("Calculating variance...")
+    print("Calculating covariance...")
 
-    def normalizer_function(x):
+    def normalizer_function(x,y):
         rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
+        rrange2 = np.arange(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0])/resolution)
         index = np.searchsorted(rrange,x)
-        #  print(x,"index",index)
-        #  print(x,rrange)
-        error = grid_values[index-1]
+        index2 = np.searchsorted(rrange2,y)
+        error = grid_values[index - 1,index2 - 1]
         probability = np.exp(-error/big_number)
         #  print("ranges:",rrange)
         #  print("value:",x)
@@ -139,44 +153,55 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
         #  print("probability",probability)
         return probability 
 
-    normalizer,int_error = integrate.quad(normalizer_function, range_array[0] , range_array[1])
+    def y_min(x):
+        return range_array_2[0]
+    def y_max(x):
+        return range_array_2[1]
+
+    normalizer,int_error = integrate.dblquad(normalizer_function, range_array[0] , range_array[1],y_min , y_max)
     print("normalizer",normalizer)
 
-    def integrand(x):
+    def pintegrand(x,y):
         rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
+        rrange2 = np.arange(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0])/resolution)
         index = np.searchsorted(rrange,x)
-        error = grid_values[index-1]
+        index2 = np.searchsorted(rrange2,y)
+        error = grid_values[index-1,index2 - 1]
         probability = np.exp(-error/big_number)/normalizer
         #  print("ranges:",rrange)
         #  print("value:",x)
         #  print("index:",index)
         #  print("error:",error)
         #  print("probability",probability)
-        return probability * x
+        return probability * x * y
 
-    def integrand2(x):
-        rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
-        index = np.searchsorted(rrange,x)
-        error = grid_values[index-1]
-        probability = np.exp(-error/big_number)/normalizer
-        #  print("ranges:",rrange)
-        #  print("value:",x)
-        #  print("index:",index)
-        #  print("error:",error)
-        #  print("probability",probability)
-        return probability * (x**2)
+    def integrand1(x):
+        return pintegrand(x,fixed_value_2)/fixed_value_2
 
-    print("probability of",fixed_value,":",integrand(fixed_value)/(fixed_value))
+    def integrand2(y):
+        return pintegrand(fixed_value_1,y)/fixed_value_1
 
-    average ,error_1= integrate.quad(integrand, range_array[0] , range_array[1])
+    average ,error_first= integrate.dblquad(pintegrand, range_array[0] , range_array[1], y_min , y_max)
     print("average",average)
-    average2, error_2 = integrate.quad(integrand2, range_array[0] , range_array[1])
-    print("average2",average2)
-    variance = average2 - average**2
-    print("variance:",variance)
-    print("events: ",generate_number)
-    print(parameter)
+
+    print("probability of",fixed_value_1,fixed_value_2,":",pintegrand(fixed_value_1, fixed_value_2)/(fixed_value_1 * fixed_value_2))
+    print("probability of",fixed_value_1,"=",integrand1(fixed_value_1) / fixed_value_1)
+    print("probability of",fixed_value_2,"=",integrand2(fixed_value_2) / fixed_value_2)
+
+    average1 , error_1= integrate.quad(integrand1, range_array[0] , range_array[1])
+    average2 , error_2= integrate.quad(integrand2, range_array_2[0] , range_array_2[1])
+
+    print(kwargs['parameter'],"average: ",average1)
+    print(kwargs['parameter2'],"average: ",average2)
+
+    covariance = average - (average1 * average2)
+    print("covariance:",covariance)
+    x_array = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
+    y_array = np.arange(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0])/resolution)
+    print("events:",generate_number)
+    print(parameter , parameter2)
     print(resolution)
     print(Z,A)
 
-    return grid_values, variance
+    return covariance , grid_values, x_array , y_array
+
