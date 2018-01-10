@@ -59,16 +59,20 @@ def plot(parameter1 , parameter2):
 os.chdir(cwd)
 os.system('./restore.sh')
 
-if sys.argv[1] is opt:
+job_type = str(sys.argv[1])
+
+if job_type == 'opt':
     print(opti(optimization_type))
-elif sys.argv[1] is var:
+elif job_type == 'var':
+    print("we are here")
     arg = sys.argv[2]
     print(var(str(arg)))
-elif sys.argv[1] is covar:
+elif sys.argv[1] == 'covar':
     arg1 = sys.argv[2]
     arg2 = sys.argv[3]
     print(covar(str(arg1),str(arg2)))
+else:
+    print("ERROR: Job type not recognized.")
 
 os.chdir(cwd)
 os.system('./restore.sh')
-
