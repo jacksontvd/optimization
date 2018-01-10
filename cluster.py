@@ -10,12 +10,12 @@ from variance import variance
 from variance import covariance
 # from covariance_plot import covariance_plot,prerun_plot
 
-Zinput = 98
-Ainput = 252
+Zinput = 94
+Ainput = 240
 generate_number = 10000
 reaction_type = 'spontaneous'
 optimization_type = 'grid'
-resolution = 30
+resolution = 10
 
 def opti(opt_method):
     result = opt(Zinput,
@@ -59,15 +59,15 @@ def plot(parameter1 , parameter2):
 os.chdir(cwd)
 os.system('./restore.sh')
 
-if sys.argv[1] is var:
+if sys.argv[1] is opt:
+    print(opti(optimization_type))
+elif sys.argv[1] is var:
     arg = sys.argv[2]
     print(var(str(arg)))
 elif sys.argv[1] is covar:
     arg1 = sys.argv[2]
     arg2 = sys.argv[3]
     print(covar(str(arg1),str(arg2)))
-else:
-    print(opti(optimization_type))
 
 os.chdir(cwd)
 os.system('./restore.sh')
