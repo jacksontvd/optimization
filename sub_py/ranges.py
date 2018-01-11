@@ -21,14 +21,16 @@ param_ranges['98252'] = [10.37,1.27,1.18,0.87,0.52]
 param_ranges['94240'] = [10.0724,1.3,3.0,0.87,-3.07119]
 
 error_weights = {}
-error_weights['m_mult'] = 10
+error_weights['m_mult'] = 10/2.8
 error_weights['n_Af'] = 1/100
-error_weights['n_mult'] = 1
-error_weights['n_TKE'] = 1
-error_weights['mannhart'] = 10
-error_weights['mannhart'] = 10
+error_weights['n_mult'] = 1/1.7
+error_weights['n_TKE'] = 1/1.8
+error_weights['mannhart'] = 15
 error_weights['n_spectrum'] = 1
 error_weights['product_A'] = 1
+error_weights['nubar'] = 2
+error_weights['gammabar'] = 1
+error_weights['average_photon_energy'] = 1
 
 ranges_x = {} 
 
