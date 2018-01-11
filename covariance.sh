@@ -17,4 +17,4 @@ module load python/2.7.8
 module load numpy
 module load scipy
 module load cython
-python cluster.py covar e e
+python cluster.py covar e d

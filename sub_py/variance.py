@@ -176,7 +176,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     print("variance:",variance)
     print("events: ",generate_number)
     print(parameter)
-    print(resolution)
+    print("resolution:",resolution)
     print(Z,A)
 
     return grid_values, variance

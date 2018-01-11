@@ -89,15 +89,23 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     #  define the ranges to be from th eminimum to the maximum values, with the difference/resolution many cells
 
 
-    #  brute_ranges = (slice(range_array[0],range_array[1],range_array[2]/resolution))
-    brute_ranges = ((range_array[0],range_array[1]),(range_array_2[0],range_array[1]))
+    brute_ranges = (
+                    slice(range_array[0],range_array[1],(range_array[1] - range_array[0])/resolution),
+                    slice(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0]) / resolution)
+                    )
+    #  brute_ranges = ((range_array[0],range_array[1]),(range_array_2[0],range_array_2[1]))
 
     #  block the printing for each iteration to avoid slowing the process down by taking the time to print the useless output
     #  comment this line to let it print if there is an issue with the routine
 
     blockPrint()
-    x0, fval, grid, Jout = optimize.brute(err_opt , brute_ranges, full_output = True,Ns = resolution, finish = optimize.fmin)
+
+    #  x0, fval, grid, Jout = optimize.brute(err_opt , brute_ranges, full_output = True,Ns = resolution, finish = optimize.fmin)
+    x0, fval, grid, Jout = optimize.brute(err_opt , brute_ranges, full_output = True, finish = optimize.fmin)
+
     enablePrint()
+
+    #  print("grid",grid)
 
     #  set finalparams to be the 0th output of the brute routine
     finalparams = x0
@@ -111,7 +119,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     ### stop optimizing
 
     #  define path for output to be placed
-    var_path = cwd + '/../output/variance/' + str(Z) + str(A) + str(Energy) + '_' + str(kwargs['parameter']) + str(kwargs['parameter2'])
+    var_path = cwd + '/../output/covariance/' + str(Z) + str(A) + str(Energy)
 
     #  create appropriate directory if it does not already exist 
     if not os.path.exists(var_path):
@@ -122,7 +130,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
 
     print('Begin printing output...')
     os.chdir(var_path)
-    np.savetxt('covariance',grid_values)
+    np.savetxt(parameter + parameter2 , grid_values)
     os.chdir(cwd)
 
     #  print(grid_values)
@@ -161,9 +169,17 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     normalizer,int_error = integrate.dblquad(normalizer_function, range_array[0] , range_array[1],y_min , y_max)
     print("normalizer",normalizer)
 
+
+    rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
+    rrange2 = np.arange(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0])/resolution)
+    fixed_index1 = np.searchsorted(rrange,fixed_value_1)
+    fixed_index2 = np.searchsorted(rrange2,fixed_value_2)
+
+    print(rrange , rrange2)
+    print("fixed_values:",fixed_value_1,fixed_value_2)
+    print("indices:",fixed_index1,fixed_index2)
+
     def pintegrand(x,y):
-        rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
-        rrange2 = np.arange(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0])/resolution)
         index = np.searchsorted(rrange,x)
         index2 = np.searchsorted(rrange2,y)
         error = grid_values[index-1,index2 - 1]
@@ -176,10 +192,18 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
         return probability * x * y
 
     def integrand1(x):
-        return pintegrand(x,fixed_value_2)/fixed_value_2
+        #  return pintegrand(x,fixed_value_2)/fixed_value_2
+        index = np.searchsorted(rrange,x)
+        error = grid_values[index-1,fixed_index2 -1]
+        probability = np.exp(-error/ big_number) / normalizer
+        return probability * x
 
     def integrand2(y):
-        return pintegrand(fixed_value_1,y)/fixed_value_1
+        #  return pintegrand(fixed_value_1,y)/fixed_value_1
+        index = np.searchsorted(rrange2,y)
+        error = grid_values[fixed_index1 - 1 , index - 1]
+        probability = np.exp(-error/ big_number) / normalizer
+        return probability * y
 
     average ,error_first= integrate.dblquad(pintegrand, range_array[0] , range_array[1], y_min , y_max)
     print("average",average)
@@ -199,9 +223,8 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     x_array = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
     y_array = np.arange(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0])/resolution)
     print("events:",generate_number)
+    print("resolution:",resolution)
     print(parameter , parameter2)
-    print(resolution)
     print(Z,A)
 
     return covariance , grid_values, x_array , y_array
-
