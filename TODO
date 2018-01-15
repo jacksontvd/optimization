@@ -1,8 +1,16 @@
 TODO
 
 -fix error weights to recreate Pu opt
--get new pu var
+-new pu var
 -new pu covar
+
+
+-paper writing
+    -references for freya
+    -reference other codes?
+    -other questions?
+
+-Alexandrova cf data
 
 -contour plots of errors cf
 -contour plots of errors pu
