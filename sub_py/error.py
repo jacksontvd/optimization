@@ -30,6 +30,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
    
     #  initialize the total error to be 0. This will be added to as we calculate the error for each observable
     total_chisq = 0 
+    total_clean_chisq = 0 
 
     #  assign the output of the generating function to be anal
     #  this is a list as given by the gpa function in gen_par_ana.py
@@ -47,6 +48,8 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     shift_error = 0.01
 
     keys_for_error = data_dictionary.keys()
+
+    weights = error_weights[str(Z)+str(A)]
 
     for key in keys_for_error:
         if data_dictionary[key] is None:
@@ -66,7 +69,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
 
                 single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
                 chi_sq_added = single_chisq
-                chi_sq_added = chi_sq_added * error_weights[key]
+                chi_sq_added = chi_sq_added * weights[key]
                 print(key,"error:",chi_sq_added)
                 total_chisq += np.nan_to_num( chi_sq_added )
             else:
@@ -131,17 +134,20 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                 else:
                     chi_sq_added = np.mean(dirty_chi_sq_array[:,1])
 
-                chi_sq_added = chi_sq_added * error_weights[key]
+                chi_sq_added = chi_sq_added * weights[key]
 
                 print("average",key,"error: ",chi_sq_added)
                 total_chisq += np.nan_to_num( chi_sq_added )
 
                 chisq_dict[key] = chi_sq_array
+                clean_chisq_added = np.sum(chi_sq_array)
+                total_clean_chisq += np.nan_to_num(clean_chisq_added)
 
     end_chisq = time.time()
     chisq_time = end_chisq - begin_chisq
     print('Time:', chisq_time )
-    print('Total Error: ',total_chisq)
+    print('Total Weighted Error: ',total_chisq)
+    print('Total Error: ',total_clean_chisq)
 
     if total_chisq is not 0:
         print('Successful.')

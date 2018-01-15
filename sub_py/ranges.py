@@ -20,17 +20,33 @@ param_ranges['T'] = param_ranges['cS']
 param_ranges['98252'] = [10.37,1.27,1.18,0.87,0.52]
 param_ranges['94240'] = [10.0724,1.3,3.0,0.87,-3.07119]
 
+
 error_weights = {}
-error_weights['m_mult'] = 10/2.8
-error_weights['n_Af'] = 1/100
-error_weights['n_mult'] = 1/1.7
-error_weights['n_TKE'] = 1/1.8
-error_weights['mannhart'] = 15
-error_weights['n_spectrum'] = 1
-error_weights['product_A'] = 1
-error_weights['nubar'] = 2
-error_weights['gammabar'] = 1
-error_weights['average_photon_energy'] = 1
+cf252_weights = {}
+cf252_weights['m_mult'] = 10/2.8
+cf252_weights['n_Af'] = 1/100
+cf252_weights['n_mult'] = 1/1.7
+cf252_weights['n_TKE'] = 1/1.8
+cf252_weights['mannhart'] = 15
+cf252_weights['n_spectrum'] = 1
+cf252_weights['product_A'] = 1
+cf252_weights['nubar'] = 2
+cf252_weights['gammabar'] = 1
+cf252_weights['average_photon_energy'] = 1
+error_weights['98252'] = cf252_weights
+pu240sf_weights = {}
+pu240sf_weights['m_mult'] = 1
+pu240sf_weights['n_Af'] = 1
+pu240sf_weights['n_mult'] = 1
+pu240sf_weights['n_TKE'] = 1
+pu240sf_weights['mannhart'] = 1
+pu240sf_weights['n_spectrum'] = 26
+pu240sf_weights['product_A'] = 1
+pu240sf_weights['nubar'] = 1/260
+pu240sf_weights['gammabar'] = 1/18
+pu240sf_weights['average_photon_energy'] = 1/8
+error_weights['94240'] = pu240sf_weights
+
 
 ranges_x = {} 
 
