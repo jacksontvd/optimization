@@ -42,9 +42,10 @@ pu240sf_weights['n_TKE'] = 1
 pu240sf_weights['mannhart'] = 1
 pu240sf_weights['n_spectrum'] = 2.5
 pu240sf_weights['product_A'] = 1
-pu240sf_weights['nubar'] = 1/160
+pu240sf_weights['nubar'] = 1/170
 pu240sf_weights['gammabar'] = 1/18
-pu240sf_weights['average_photon_energy'] = 1/8
+#  pu240sf_weights['average_photon_energy'] = 1/8
+pu240sf_weights['average_photon_energy'] = 1
 error_weights['94240'] = pu240sf_weights
 
 
