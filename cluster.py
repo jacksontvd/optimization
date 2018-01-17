@@ -8,7 +8,7 @@ from isotope import isotope
 from optimize import opt
 from variance import variance
 from covariance import covariance
-from grid_plot import covariance_plot,prerun_plot
+#  from grid_plot import covariance_plot,prerun_plot
 
 Zinput = 94
 Ainput = 240
