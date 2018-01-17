@@ -130,6 +130,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
 
                 if key is 'n_Af':
                     chi_sq_added = np.mean(dirty_chi_sq_array[45:75,1])
+                    #  105 - 165
 
                 else:
                     chi_sq_added = np.mean(dirty_chi_sq_array[:,1])
@@ -152,5 +153,5 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     if total_chisq is not 0:
         print('Successful.')
 
-    return total_chisq, chisq_dict
+    return total_chisq, chisq_dict , total_clean_chisq
 

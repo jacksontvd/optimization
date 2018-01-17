@@ -1,24 +1,12 @@
 TODO
 
--fix error weights to recreate Pu opt
--new pu var
--new pu covar
-
-
--paper writing
-    -references for freya
+-paper 
+    -references for freya?
     -reference other codes?
-    -other questions?
-
--Alexandrova cf data
-
--contour plots of errors cf
--contour plots of errors pu
-
--comparison plots (old/new parameters) cf
--comparison plots (old/new parameters) pu
+-do c and dTKE cancel each other directly?
 
 
+-higher quality runs for cf, pu
 
 -covariance on data sets
 

@@ -197,7 +197,9 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
         '$$ \\begin{aligned} \n' +
         '\\text{Final Chi-Squared Estimation: } & ' +
         '\n\\\\ & ' +
-        '\\chi^2 & = & ' + str(    chisq_array[0]      ) +
+        '\\tilde\\chi^2 & = & ' + str(    chisq_array[0]      ) +
+        '\n\\\\ & ' +
+        '\\chi^2 & = & ' + str(    chisq_array[2]      ) +
         '\n\\end{aligned} $$'
         '$$ \\begin{aligned} \n' +
         '\\text{Times: } & ' +

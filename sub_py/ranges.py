@@ -6,7 +6,8 @@ param_ranges = {}
 
 param_ranges['c'] = [1,2,2]
 
-param_ranges['e0'] = [6,12,0]
+# param_ranges['e0'] = [6,12,0]
+param_ranges['e0'] = [9.75,10.3,0]
 param_ranges['e'] = param_ranges['e0']
 
 param_ranges['x'] = [1,1.5,1]

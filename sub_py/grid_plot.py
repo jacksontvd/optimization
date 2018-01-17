@@ -5,7 +5,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 cwd = os.getcwd()
 
-from variance import covariance
+from covariance import covariance
 from ranges import param_ranges
 
 def covariance_plot(Zinput, Ainput, generate_number , some_type, resolution, reaction_type, parameter1, parameter2):
@@ -56,11 +56,11 @@ def prerun_plot(Zinput, Ainput , filename, parameter1 , parameter2):
         element_array = np.array(elements)
         error_array[line_number] = element_array
 
-    new_error = np.divide(error_array, -10000)
-    prob_array = np.exp(new_error)
-    avg = np.sum(prob_array)
-    prob_array = np.multiply(prob_array, 1/avg)
-
+    #  new_error = error_array
+    #  prob_array = np.exp(new_error)
+    #  avg = np.sum(prob_array)
+    #  prob_array = np.multiply(prob_array, 1/avg)
+    #
     #  print(error_array)
     #  print(prob_array)
 
@@ -80,21 +80,26 @@ def prerun_plot(Zinput, Ainput , filename, parameter1 , parameter2):
 
     os.chdir(var_path)
 
-    #  CS = plt.contour(x_array,y_array,error_array)
+    CS = plt.contourf(x_array,y_array,error_array)
     #  CS = plt.contour(x_array,y_array,prob_array)
+    plt.colorbar()
     #  plt.clabel(CS, inline=1, fontsize=10)
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.contour(x_array, y_array,error_array)
+    #  fig = plt.figure()
+    #  ax = fig.add_subplot(111, projection='3d')
+    #  ax.contour(x_array, y_array,error_array)
     #  ax.contour(x_array, y_array,prob_array)
+
 
     plt.xlabel(parameter1)
     plt.ylabel(parameter2)
-    #  plt.title('Chi-squared error:'+parameter1+" vs. "+parameter2)
-    plt.title('Probability:'+parameter1+" vs. "+parameter2)
 
-    #  plt.savefig(parameter1+'_vs_'+parameter2+'.pdf')
-    plt.savefig('prob_'+parameter1+'_vs_'+parameter2+'.pdf')
+    plt.title('Chi-squared error:'+parameter1+" vs. "+parameter2)
+    #  plt.title('Probability:'+parameter1+" vs. "+parameter2)
+
+    plt.savefig(parameter1+'_vs_'+parameter2+'.pdf')
+    #  plt.savefig('prob_'+parameter1+'_vs_'+parameter2+'.pdf')
+
+    plt.close()
 
     os.chdir(cwd)
