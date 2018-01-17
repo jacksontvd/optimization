@@ -8,10 +8,10 @@ from isotope import isotope
 from optimize import opt
 from variance import variance
 from covariance import covariance
-#  from grid_plot import covariance_plot,prerun_plot
+from grid_plot import covariance_plot,prerun_plot
 
-Zinput = 94
-Ainput = 240
+Zinput = 98
+Ainput = 252
 generate_number = 10000
 reaction_type = 'spontaneous'
 optimization_type = 'grid'
@@ -57,16 +57,16 @@ def plot(parameter1 , parameter2):
     return result
 
 def pre_plot():
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/covar/'+str(Zinput)+str(Ainput)+'-1/Td',"T","d")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/covar/'+str(Zinput)+str(Ainput)+'-1/cT',"c","T")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/covar/'+str(Zinput)+str(Ainput)+'-1/cd',"c","d")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/covar/'+str(Zinput)+str(Ainput)+'-1/eT',"e","T")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/covar/'+str(Zinput)+str(Ainput)+'-1/ec',"e","c")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/covar/'+str(Zinput)+str(Ainput)+'-1/ed',"e","d")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/covar/'+str(Zinput)+str(Ainput)+'-1/ex',"e","x")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/covar/'+str(Zinput)+str(Ainput)+'-1/xT',"x","T")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/covar/'+str(Zinput)+str(Ainput)+'-1/xc',"x","c")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/covar/'+str(Zinput)+str(Ainput)+'-1/xd',"x","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',"T","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/cT',"c","T")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/cd',"c","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/eT',"e","T")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/ec',"e","c")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/ed',"e","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/ex',"e","x")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/xT',"x","T")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/xc',"x","c")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/xd',"x","d")
     return 
 
 os.chdir(cwd)
