@@ -13,8 +13,8 @@
 #
 ## Command(s) to run:
 module load cmake
-module load python/2.7.8
-module load numpy
-module load scipy
-module load cython
+module load python/2.7
+module load python/2.7/numpy
+module load python/2.7/scipy
+module load python/2.7/cython
 python cluster.py opt
