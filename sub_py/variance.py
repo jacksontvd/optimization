@@ -16,7 +16,8 @@ from gen_par_ana import gpa
 from error import error
 from data_parse import data_parse
 from isotope import isotope
-from test import *
+
+#  from test import *
 
 #  define functions to block and restore printing for when freya is run many times in a row during the optimization procedure
 def blockPrint():
