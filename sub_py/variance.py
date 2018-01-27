@@ -62,8 +62,8 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     #  see error.py for the details of this error calculation
     def err_opt(parameter):
         parameters[special_index] = parameter
-        #  return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
-        return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        #  return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
 
     #  for grid search method initialize the brute source routine
     print("calculating errors on nodes...")
