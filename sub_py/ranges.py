@@ -8,10 +8,11 @@ param_ranges['c'] = [1,2,2]
 
 # param_ranges['e0'] = [6,12,0]
 #  param_ranges['e0'] = [9.7,10.3,0]
-param_ranges['e0'] = [8.7,10.3,0]
+param_ranges['e0'] = [7,11,0]
 param_ranges['e'] = param_ranges['e0']
 
-param_ranges['x'] = [1,1.5,1]
+#  param_ranges['x'] = [1,1.5,1]
+param_ranges['x'] = [0.5,2,1]
 
 param_ranges['dTKE'] = [-5, 5,4]
 param_ranges['d'] = param_ranges['dTKE']
