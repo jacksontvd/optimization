@@ -18,7 +18,7 @@ from error import error
 from data_parse import data_parse
 from isotope import isotope
 
-from test import *
+#  from test import *
 
 #  define functions to block and restore printing for when freya is run many times in a row during the optimization procedure
 def blockPrint():
@@ -73,8 +73,8 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
         parameter_2 = params[1]
         parameters[special_index] = parameter
         parameters[special_index_2] = parameter_2
-        #  return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
-        return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        #  return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
 
 
     ### start optimizing

@@ -14,8 +14,10 @@ Zinput = 98
 Ainput = 252
 generate_number = 10000
 reaction_type = 'spontaneous'
-optimization_type = 'grid'
-resolution = 10
+#  optimization_type = 'grid'
+optimization_type = 'stochastic'
+stochastic_type = 0
+resolution = 100
 
 def opti(opt_method):
     result = opt(Zinput,
@@ -23,6 +25,7 @@ def opti(opt_method):
         generate_number, 
         opt_method,
         resolution, 
+        stochastic_type = stochastic_type,
         reaction_type = reaction_type)
     return result
 
