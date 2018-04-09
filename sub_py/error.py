@@ -43,6 +43,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     #  define empty dictionary to give the arrays of chi-squared values for each bin for each data set
     #  this will be used by the optimization script to plot the errors
     chisq_dict = {}
+    ratio_dict = {}
     #  define dummy error to scale data with no error for comparison with the other error contribution
     dummy_error = 0.05
     shift_error = 0.01
@@ -72,6 +73,8 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                 chi_sq_added = chi_sq_added * weights[key]
                 print(key,"error:",chi_sq_added)
                 total_chisq += np.nan_to_num( chi_sq_added )
+
+                ratio = [freya_single/data_single]
             else:
                 print('calculating error for: ' + key)
 
@@ -89,37 +92,75 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                 #  once this is full it will eventually be written into the chi_sq dictionary under the name of the current data file
                 chi_sq_array = np.zeros( (len(anal_array)  + 1, 2) )
                 dirty_chi_sq_array = np.zeros( (len(anal_array)  + 1, 2) )
+                ratio = np.zeros( (len(anal_array)  + 1, 3) )
+                ratio[:] = np.nan
 
                 for element in data_array:
 
                     #  sort the current element of the data array into the binning of the freya array
                     row = np.searchsorted(anal_array[:,0], element[0, 0] )
+                    if row >= len(anal_array_depcolumn):
+                        row = row - 1
 
                     #  for the sorted row number of the data in freya, assign that row of the chi-squared array to have first element the same as the data
                     chi_sq_array[row,0] = element[0,0]
                     dirty_chi_sq_array[row,0] = element[0,0]
+                    ratio[row,0] = element[0,0]
 
                     #  if we are dealing with an empty case, assure we have no contributing error
                     if element[1,0] ==0 or element[1,0] == 'NaN' or element[1,0] is None:
                         chi_sq_array[row,1] = 0
                         dirty_chi_sq_array[row,1] = None
+                        ratio[row,1] = None
 
                     #  if we are dealing with a case with no uncertainty, assure we do not get infinite error
                     if element[1,1] == 0 or element[1,1] == 'NaN' or element[1,1] is None:
                     #  clean row
                         #  chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2
                     #  scaled row
-                        chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2 / ((dummy_error)**2)
+                        chi_sq_array[row,1] = (anal_array_depcolumn[row] - element[1,0] )**2 / ((dummy_error)**2)
                     #  dirty row
-                        dirty_chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2 / ((dummy_error)**2)
+                        dirty_chi_sq_array[row,1] = (anal_array_depcolumn[row] - element[1,0] )**2 / ((dummy_error)**2)
+                    #   ratio
+                        this_ratio = anal_array_depcolumn[row] / element[1,0]
+                        ratio[row,1] = this_ratio
+
+                        if anal_array[row,2] is None:
+                            anal_array[row,2] = 0
+                        if element[1,1] is None:
+                            element[1,1] = 0
+
+                        #  potential_ratio_bar = (anal_array[row,1] * element[1,1] + anal_array[row,2] * element[1,0])/(element[1,0]**2 - element[1,1]**2)
+                        a = anal_array[row,1]
+                        x = anal_array[row,2]
+                        b = element[1,0]
+                        y = element[1,1]
+                        potential_ratio_bar = np.sqrt((x**2 + a**2)/(y**2 + b**2) - a**2 / b**2)
+                        ratio[row,2] = potential_ratio_bar
 
                     #  otherwise, take the square of the difference between the data and freya, and divide by the square of the uncertainty
                     #  this will make uncertain data matter less in the grand scheme of things than the very certain data
                     else:
                     #  clean row
-                        chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2 / (element[1,1]**2)
+                        chi_sq_array[row,1] = (anal_array_depcolumn[row] - element[1,0] )**2 / (element[1,1]**2)
                     #  shifted row
-                        dirty_chi_sq_array[row,1] = (anal_array_depcolumn[row - 1] - element[1,0] )**2 / ((element[1,1] + shift_error)**2)
+                        dirty_chi_sq_array[row,1] = (anal_array_depcolumn[row] - element[1,0] )**2 / ((element[1,1] + shift_error)**2)
+                    #  ratio
+                        this_ratio = anal_array_depcolumn[row] / element[1,0]
+                        ratio[row,1] = this_ratio
+
+                        if anal_array[row,2] is None:
+                            anal_array[row,2] = 0
+                        if element[1,1] is None:
+                            element[1,1] = 0
+
+                        #  potential_ratio_bar = (anal_array[row,1] * element[1,1] + anal_array[row,2] * element[1,0])/(element[1,0]**2 - element[1,1]**2)
+                        a = anal_array[row,1]
+                        x = anal_array[row,2]
+                        b = element[1,0]
+                        y = element[1,1]
+                        potential_ratio_bar = np.sqrt((x**2 + a**2)/(y**2 + b**2) - a**2 / b**2)
+                        ratio[row,2] = potential_ratio_bar
 
                     #  chi_sq_added = chi_sq_array[row,1]
 
@@ -131,7 +172,6 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                 if key is 'n_Af':
                     chi_sq_added = np.mean(dirty_chi_sq_array[45:75,1])
                     #  105 - 165
-
                 else:
                     chi_sq_added = np.mean(dirty_chi_sq_array[:,1])
 
@@ -140,10 +180,11 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                 print("average",key,"error: ",chi_sq_added)
                 total_chisq += np.nan_to_num( chi_sq_added )
 
+                ratio_dict[key] = ratio
                 chisq_dict[key] = chi_sq_array
                 clean_chisq_added = np.sum(chi_sq_array)
                 total_clean_chisq += np.nan_to_num(clean_chisq_added)
-
+    
     end_chisq = time.time()
     chisq_time = end_chisq - begin_chisq
     print('Time:', chisq_time )
@@ -153,5 +194,4 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     if total_chisq is not 0:
         print('Successful.')
 
-    return total_chisq, chisq_dict , total_clean_chisq
-
+    return total_chisq, chisq_dict , total_clean_chisq , ratio_dict

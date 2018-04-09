@@ -6,15 +6,14 @@ from scipy import optimize
 
 cwd = os.getcwd()
 
-sys.path.append(cwd+'/../data_master/Cf252/')
-from mannhart_data import mannhart_bins, mannhart_split, mannhart_bindiff
-sys.path.append(cwd)
-
 from ranges import * 
 from gen_par_ana import gpa
 from error import error
 from data_parse import data_parse
 from isotope import isotope
+from anneal import anneal
+
+from test import *
 
 #  define functions to block and restore printing for when freya is run many times in a row during the optimization procedure
 def blockPrint():
@@ -91,7 +90,8 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     #  define function which takes in a set of parameters and returns the raw chi-squared error (total sum)
     #  see error.py for the details of this error calculation
     def err_opt(parameters):
-        return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        #  return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
 
     #  define class to give parameter bounds to optimization routine
     class MyBounds(object):
@@ -122,6 +122,7 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
         resolution = np.float(resolution)
         #  define the ranges to be from th eminimum to the maximum values, with the difference/resolution many cells
         brute_ranges = (slice(e_range[0],e_range[1],e_range[2]/resolution),
+
             slice(x_range[0] , x_range[1] , x_range[2]/resolution),
             slice(c_range[0] , c_range[1] , c_range[2]/resolution),
             slice(T_range[0] , T_range[1] , T_range[2]/resolution),
@@ -137,6 +138,10 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
         finalparams = x0
         #  set grid_values to be the final element of the output list of the brute routine
         grid_values = Jout
+
+    elif method == 'anneal':
+        finalparams , error = anneal(err_opt , guesses)
+        grid_values = None
 
     #  this is a hidden feature of the optimization routine, which allows the user to simply plot the data (alone and along with freya) without waiting for the optimization to happen
     elif method == 'bypass':
@@ -158,6 +163,7 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
                 )
         enablePrint()
         finalparams = res.x
+        grid_values = None
     
     opt_end = time.time()
 
@@ -180,7 +186,8 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     print('Calling for final error estimation...')
 
     print(reac_t)
-    chisq_array =  error(Z,A,None, None, None, None, None,generate_number, parsed_data , reaction_type = reac_t)
+    #  chisq_array =  error(Z,A,None, None, None, None, None , generate_number, parsed_data , reaction_type = reac_t)
+    chisq_array =  test_error(Z,A,finalparams[0],finalparams[1],finalparams[2],finalparams[3],finalparams[4], generate_number, parsed_data , reaction_type = reac_t)
     
     if finalparams is not None:
         print('Final Set of Parameters: ',finalparams)
@@ -225,7 +232,7 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
         '\n\\\\ & ' +
         '\\text{Events} & = & ' + str(        generate_number        ) +
         '\n\\\\ & ' +
-        '\\text{Optimization Time} & = & ' + str( opt_time ) + '\\text{ sec}' +
+        #  '\\text{Optimization Time} & = & ' + str( opt_time ) + '\\text{ sec}' +
         '\n\\end{aligned} $$'
         '\n\\end{document}')
     print("Successful.")

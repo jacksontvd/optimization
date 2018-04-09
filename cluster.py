@@ -8,16 +8,17 @@ from isotope import isotope
 from optimize import opt
 from variance import variance
 from covariance import covariance
-from grid_plot import covariance_plot,prerun_plot
+from grid_plot import *
 
 Zinput = 98
 Ainput = 252
-generate_number = 10000
+generate_number = 1000
 reaction_type = 'spontaneous'
 #  optimization_type = 'grid'
-optimization_type = 'stochastic'
+#  optimization_type = 'anneal'
+optimization_type = 'process'
 stochastic_type = 0
-resolution = 100
+resolution = 1000
 
 def opti(opt_method):
     result = opt(Zinput,
@@ -72,6 +73,23 @@ def pre_plot():
     prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/xd',"x","d")
     return 
 
+def well():
+    #  well_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Te',"T","d")
+    well_plot(str(Zinput),str(Ainput),
+            "/Users/jacksontvd/Documents/nuclear/freya/optimization_v2.1/output/grids/"+str(Zinput)+str(Ainput)+"-1/cd",
+            "/Users/jacksontvd/Documents/nuclear/freya/optimization_v2.1/output/grids/"+str(Zinput)+str(Ainput)+"-1/Td",
+            "c","d","T","d")
+
+def well_2():
+    #  well_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Te',"T","d")
+    well_plot_2(str(Zinput),str(Ainput),
+            "/Users/jacksontvd/Documents/nuclear/freya/optimization_v2.1/output/grids/"+str(Zinput)+str(Ainput)+"-1/eT",
+            "/Users/jacksontvd/Documents/nuclear/freya/optimization_v2.1/output/grids/"+str(Zinput)+str(Ainput)+"-1/Td",
+            "/Users/jacksontvd/Documents/nuclear/freya/optimization_v2.1/output/grids/"+str(Zinput)+str(Ainput)+"-1/cT",
+            "c","d","T","d")
+
+
+
 os.chdir(cwd)
 os.system('./restore.sh')
 
@@ -92,6 +110,10 @@ elif job_type == 'covar':
     print(covar(str(arg1),str(arg2)))
 elif job_type == 'pre_plot':
     pre_plot()
+elif job_type == 'well':
+    well()
+elif job_type == 'well2':
+    well_2()
 else:
     print("ERROR: Job type not recognized.")
 

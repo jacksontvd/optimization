@@ -1,5 +1,5 @@
 \cite{Santi Miller}
 Moment number : nubar and moments : Error
-1      2.154 	0.005
-2      3.7889	0.029
-3      5.2105	0.1492
+1  	3.757 	    0.01
+2  	11.9517	    0.0188
+3	31.6680	    0.175

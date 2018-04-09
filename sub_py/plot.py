@@ -9,9 +9,6 @@ cwd = os.getcwd()
 from gen_par_ana import gpa
 from ranges import *
 
-sys.path.append(cwd+'/../data_master/Cf252/')
-from mannhart_data import mannhart_bins, mannhart_split, mannhart_bindiff
-sys.path.append(cwd)
 
 def plot(Z, A, Energy, output_file, **kwargs):
     #  generate events and parse into neatly organized arrays using gpa function
@@ -31,35 +28,44 @@ def plot(Z, A, Energy, output_file, **kwargs):
         string_energy = 0
 
     stats =open(plot_path+'/Statistics.tex', 'w+')
-    stats.write('\\documentclass[12pt]{letter} \n \\usepackage{amsmath} ' + 
+    stats.write('\\documentclass[12pt]{letter} \n \\usepackage{amsmath} ' +
         '\n \\begin{document} '
-        '\n $$\\begin{aligned} ' + 
-        '\\text{Reaction: } & ' + 
+        '\n $$\\begin{aligned} ' +
+        '\\text{Reaction: } & ' +
         '\n\\\\ & ' +
         'Z & = & ' + str(Z) +
         '\n\\\\ & ' +
-        'A & = & ' + str(A) + 
+        'A & = & ' + str(A) +
         '\n\\\\ & ' +
         '\\text{Energy} & = & ' + str(string_energy) +
         '\n\\end{aligned} $$ \n' +
-        '\n $$\\begin{aligned} ' + 
-        '\\text{Total Neutron Multiplicity Moments: } & ' + 
+        '\n $$\\begin{aligned} ' +
+        '\\text{Total Neutron Multiplicity Moments: } & ' +
         '\n\\\\ & ' +
-        '\\nu_1 & = & ' + str(freya_output[ 'nu1' ]) +
+        '\\bar\\nu & = & ' + str(freya_output[ 'nubar' ][0][0,1,0]) +
+        '\pm' + str(freya_output[ 'nubar' ][0][0,2,0]) +
         '\n\\\\ & ' +
-        '\\nu_2 & = & ' + str(freya_output[ 'nu2' ]) + 
+        '\\nu_1 & = & ' + str(freya_output[ 'nu1' ][0]) +
+        '\pm' + str(freya_output[ 'nu1' ][1]) +
         '\n\\\\ & ' +
-        '\\nu_3 & = & ' + str(freya_output[ 'nu3' ]) +
+        '\\nu_2 & = & ' + str(freya_output[ 'nu2' ][0]) +
+        '\pm' + str(freya_output[ 'nu2' ][1]) +
         '\n\\\\ & ' +
-        '\\nu_4 & = & ' + str(freya_output[ 'nu4' ]) + 
+        '\\nu_3 & = & ' + str(freya_output[ 'nu3' ][0]) +
+        '\pm' + str(freya_output[ 'nu3' ][1]) +
         '\n\\\\ & ' +
-        '\\bar\\gamma & = & ' + str(freya_output[ 'gammabar' ][0][0,1,0]) + 
+        '\\nu_4 & = & ' + str(freya_output[ 'nu4' ][0]) +
+        '\pm' + str(freya_output[ 'nu4' ][1]) +
+        '\n\\\\ & ' +
+        '\\bar\\gamma & = & ' + str(freya_output[ 'gammabar' ][0][0,1,0]) +
+        '\pm' + str(freya_output[ 'gammabar' ][0][0,2,0]) +
         '\n\\end{aligned} $$ \n' +
-        '\n $$\\begin{aligned} ' + 
-        '\\text{Total Neutron Multiplicity Moments: } & ' + 
+        '\n $$\\begin{aligned} ' +
+        '\\text{Gamma statistics: } & ' +
         '\n\\\\ & ' +
-        '\\text{Average photon energy} & : & ' + str(freya_output[ 'average_photon_energy' ][0][0,1,0]) + 
-        '\n\\end{aligned} $$ \n' 
+        '\\text{Average photon energy} & : & ' + str(freya_output[ 'average_photon_energy' ][0][0,1,0]) +
+        '\pm' + str(freya_output[ 'average_photon_energy' ][0][0,2,0]) +
+        '\n\\end{aligned} $$ \n'
         '$$ \\begin{aligned} \n' +
         '\\text{Times: } & ' +
         '\n\\\\ & ' +
@@ -110,7 +116,7 @@ def plot(Z, A, Energy, output_file, **kwargs):
                 plt.ylim( y_lim1 , y_lim2 )
                 plt.tick_params(direction = 'in' , labelright = True, right = True)
                 plt.xscale(scale_var)
-                plt.title( obs_master[2] )
+                #  plt.title( obs_master[2] )
                 plt.legend()
 
                 plt.savefig( str(key) + '.pdf' )
@@ -140,7 +146,7 @@ def plot(Z, A, Energy, output_file, **kwargs):
 
     plt.xlabel("Mass (amu)")
     plt.ylabel("Total Kinetic Energy (MeV)")
-    plt.title('Neutron Yield as function of Mass, TKE')
+    #  plt.title('Neutron Yield as function of Mass, TKE')
 
     plt.savefig('n_A_TKE' + '.pdf')
     plt.close()
@@ -161,9 +167,22 @@ def plot(Z, A, Energy, output_file, **kwargs):
     plt.xlim( ranges_x['Fragment_A'][0] , ranges_x['Fragment_A'][1])
     plt.ylim( ranges_y['Fragment_A'][0] , ranges_y['Fragment_A'][1])
     plt.legend()
-    plt.title('Fragment, Product Mass Yields')
+    #  plt.title('Fragment, Product Mass Yields')
     plt.savefig('Fragment_Product_A.pdf')
     plt.close()
+
+    os.chdir(cwd)
+
+    if not os.path.exists(plot_path + "/raw_data/"):
+        os.makedirs(plot_path+"/raw_data/")
+
+    os.chdir(plot_path + "/raw_data/")
+
+    for key in freya_output:
+        entry = freya_output[key]
+        if isinstance(entry, list):
+            obs_array = entry[0]
+            np.savetxt(key+".txt",obs_array)
 
     os.chdir(cwd)
 

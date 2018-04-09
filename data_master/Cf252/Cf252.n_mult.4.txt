@@ -1,4 +1,4 @@
-\cite{Santi_Miller}
+\cite{Santi Miller}
 Count : Probability : Error
  0  0.0021767  0.01095
  1  0.0259869  0.03507

@@ -7,12 +7,9 @@ from subprocess import Popen, PIPE, STDOUT
 
 cwd = os.getcwd()
 
-sys.path.append(cwd+'/../data_master/Cf252/')
-from mannhart_data import mannhart_bins, mannhart_split, mannhart_bindiff
-sys.path.append(cwd)
-
 from isotope import *
 from ranges import *
+from maxwellian import *
 
 # g(enerate)p(arse)a(nalysis) for a provided isotope, energy, and name to call the output freya data. 
 def gpa(Z, A, Energy, output_file, **kwargs):
@@ -111,8 +108,14 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     TKE_A = np.copy(Fragment_A)
 
-    mannhart = np.zeros((len(mannhart_bins) , 3))
-    mannhart[:,0] = mannhart_bins
+    #  egrid = np.logspace(-3,2,bin_number['mannhart'])
+    egrid = np.zeros((bin_number['mannhart']+1))
+    egrid[1:] = np.array(mannhart_bins)
+    degrid = egrid[1:]-egrid[:-1]
+    #  print(degrid)
+
+    mannhart = np.zeros((bin_number['mannhart'], 3))
+    mannhart[:,0]= mannhart_bins
 
     n_mult = np.zeros((ranges_x['n_mult'][1] - ranges_x['n_mult'][0] , 3))
     n_mult[:,0] = range(ranges_x['n_mult'][0],ranges_x['n_mult'][1])
@@ -134,6 +137,8 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     light_neutrons = []
     heavy_neutrons = []
+    neutrons = []
+    photons = []
     Freya_Ah = []
     Freya_Al = []
     freya_TKE = []
@@ -147,6 +152,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     n_TKE = np.zeros((bin_number['n_TKE'],4))
     n_TKE[:,0] = np.arange(ranges_x['n_TKE'][0], ranges_x['n_TKE'][1], bin_width['n_TKE'])
+
 
     import_begin = time.time()
 
@@ -236,6 +242,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         #  write the appropriate values into the appropriate arrays
         #  the contents of each line for each events is detailed in the document: event_record.pdf
 
+
         Fragment_A[Afrag_l - ranges_x['A'][0] ][1] += 1
         Fragment_A[Afrag_h - ranges_x['A'][0] ][1] += 1
         
@@ -265,9 +272,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         
         ntot = nnl + nnh + nn
         n_mult[ntot][1] += 1
+        neutrons.append(ntot)
         
         mtot = ngl + ngh + m
         m_mult[mtot][1] += 1
+        photons.append(mtot)
 
         TKE = float( light[1].split()[0] ) + float( heavy[1].split()[0] )
 
@@ -423,7 +432,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
             for q in range(p+1,len(momenta_n)):
                 dotprod = momenta_n[p][0] * momenta_n[q][0] + momenta_n[p][1] * momenta_n[q][1] + momenta_n[p][2] * momenta_n[q][2]
                 n_ang.append(dotprod)
-
+       
     print('All events parsed.')
     end_parse = time.time()
     parse_time = end_parse - begin_parse
@@ -456,6 +465,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         energy_per_photon[:,2] = np.sqrt(energy_per_photon[:,2])
 
         average_photon_energy = np.average(m_spec)
+        ape_sigma = np.sqrt(np.mean(np.square(m_spec)) - average_photon_energy**2)
 
         n_Af[:,1] = np.divide(n_Af[:,1] , Fragment_A[:,1])
         n_Af[:,2] = np.divide(n_Af[:,2] , Fragment_A[:,1])
@@ -472,15 +482,14 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         m_Af[:,2] = np.subtract(m_Af[:,2],np.square(m_Af[:,1]))
         m_Af[:,2] = np.sqrt(m_Af[:,2])
 
-        hist, bins = np.histogram(n_spec,bins = mannhart_bins)
-        mannhart[:-1,1] = hist
-        mannhart[:-1,2] = np.square(hist)
-        mannhart[:,1] = np.divide(mannhart[:,1],len(n_spec))
-        mannhart[:,1] = np.divide(mannhart[:,1],mannhart_bindiff.flatten())
-        mannhart[:,2] = np.divide(mannhart[:,2],sum(n_spec))
-        mannhart[:,2] = np.subtract(mannhart[:,2],np.square(mannhart[:,1]))
-        mannhart[:,2] = np.sqrt(mannhart[:,2])
-        mannhart[:,2] = np.divide(mannhart[:,2],mannhart_bindiff.flatten() * 1000  )
+
+        hlab_freya , binEdges_freya = np.histogram(n_spec,bins = egrid)
+        #  binCenters_freya = 0.5 * (binEdges_freya[1:] + binEdges_freya[:-1])
+        n = len(n_spec)
+
+        mannhart[:,0] = binEdges_freya[:-1]
+        mannhart[:,1] = hlab_freya/degrid/n
+        mannhart[:,2] = 1/(np.sqrt(hlab_freya))
 
         n_TKE[:,1] = np.divide(n_TKE[:,1], n_TKE[:,3])
         n_TKE[:,2] = np.divide(n_TKE[:,2], n_TKE[:,3])
@@ -488,23 +497,40 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         n_TKE[:,2] = np.sqrt(n_TKE[:,2])
 
         nubar = float(len(n_spec))/float(len(events))
+        nubar_sigma = np.sqrt(np.mean(np.square(np.array(neutrons))) - nubar**2)
         gammabar = float(len(m_spec)) / float(len(events))
+        gammabar_sigma = np.sqrt(np.mean(np.square(np.array(photons))) - gammabar**2)
 
-        nu1 = nubar 
-        nu2 = 0.0
-        nu3 = 0.0
-        nu4 = 0.0
-
+        n_mult[:,2] = np.sqrt(1/n_mult[:,1])
         n_mult[:,1] = np.divide(n_mult[:,1] , np.sum(n_mult[:,1]) )
 
+        m_mult[:,2] = np.sqrt(1/m_mult[:,1])
         m_mult[:,1] = np.divide(m_mult[:,1] , np.sum(m_mult[:,1]) )
+
+        nu1 = 0.0
+        nu1_sigma = 0.0
+        nu2 = 0.0
+        nu2_sigma = 0.0
+        nu3 = 0.0
+        nu3_sigma = 0.0
+        nu4 = 0.0
+        nu4_sigma = 0.0
 
         for i in n_mult[:,0]:
             i = int(i)
             if sum(n_mult[:,1]) != 0:
+                nu1 += (i) * n_mult[i,1]
+                nu1_sigma += (i)**2 * n_mult[i,1]
                 nu2 += (i) * (i-1) * n_mult[i,1]
+                nu2_sigma += (i)**2 * (i-1)**2 * n_mult[i,1]
                 nu3 += (i) * (i-1) * (i-2) *  n_mult[i,1]
+                nu3_sigma += (i)**2 * (i-1)**2 * (i-2)**2 *  n_mult[i,1]
                 nu4 += (i) * (i-1) * (i-2) * (i-3) * n_mult[i,1]
+                nu4_sigma += (i)**2 * (i-1)**2 * (i-2)**2 * (i-3)**2 * n_mult[i,1]
+        nu1_sigma = np.sqrt(nu1_sigma - nu1**2)
+        nu2_sigma = np.sqrt(nu2_sigma - nu2**2)
+        nu3_sigma = np.sqrt(nu3_sigma - nu3**2)
+        nu4_sigma = np.sqrt(nu4_sigma - nu4**2)
 
         end_calc = time.time()
 
@@ -550,12 +576,17 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     freya_output['A00'] = initial_words[1]
     freya_output['isotope'] = 'Z = ' + str(freya_output['Z00']) + ' A = ' + str(freya_output['A00'])
     freya_output['number_of_events'] = initial_words[3]
-    freya_output['nubar'] = [np.array([[[1],[nubar],[0]]]),"nubar","nubar","N/A","nubar"]
-    freya_output['nu1'] = nu1
-    freya_output['nu2'] = nu2
-    freya_output['nu3'] = nu3
-    freya_output['nu4'] = nu4
-    freya_output['gammabar'] = [np.array([[[1],[gammabar],[0]]]),"gammabar","gammabar","N/A","gammabar"]
+    freya_output['nubar_moments'] = [np.array([[1,nu1,nu1_sigma],[2,nu2,nu2_sigma],[3,nu3,nu3_sigma]]),
+                    "Moments",
+                    "Neutron multiplicity moments for: "+freya_output['isotope'],
+                    "Moment Number",
+                    "Value"]
+    freya_output['nubar'] = [np.array([[[1],[nubar],[nubar_sigma]]]),"nubar","nubar","N/A","nubar"]
+    freya_output['nu1'] = np.array([nu1,nu1_sigma])
+    freya_output['nu2'] = np.array([nu2,nu2_sigma])
+    freya_output['nu3'] = np.array([nu3,nu3_sigma])
+    freya_output['nu4'] = np.array([nu4,nu4_sigma])
+    freya_output['gammabar'] = [np.array([[[1],[gammabar],[gammabar_sigma]]]),"gammabar","gammabar","N/A","gammabar"]
     freya_output['Fragment_A'] = Fragment_A
     freya_output['Product_A'] = [Product_A,
                     'Product Mass (A)',
@@ -607,7 +638,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                     'Energy Per Photon',
                     r'$Energy \ per \ Photon\ for: \ $'+freya_output['isotope'], 
                     'Fragment Mass A', 'Energy per Photon (MeV)']
-    freya_output['average_photon_energy'] = [np.array([[[1],[average_photon_energy],[0]]]),"average_photon_energy","average_photon_energy","N/A","average_photon_energy"]
+    freya_output['average_photon_energy'] = [np.array([[[1],[average_photon_energy],[ape_sigma]]]),"average_photon_energy","average_photon_energy","N/A","average_photon_energy"]
     freya_output['n_Af'] = [n_Af,
                     r'$ \bar \nu(A)$',
                     r'$Neutron \ Multiplicity \ vs. \ Fragment \ Mass \ for: \ $'+freya_output['isotope'], 
@@ -634,6 +665,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     freya_output['Ah'] = np.array(Freya_Ah)
     freya_output['Al'] = np.array(Freya_Al)
     freya_output['TKE'] = np.array(freya_TKE)
+    freya_output['neutrons'] = np.array(neutrons)
 
 
     times['gen_time'] = gen_time

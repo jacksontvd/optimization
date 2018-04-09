@@ -1,6 +1,7 @@
 import time
 from math import sqrt, pi
 import os, sys
+import matplotlib
 import matplotlib.pyplot as plt
 #  from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
@@ -8,16 +9,14 @@ from scipy import optimize
 
 cwd = os.getcwd()
 
-sys.path.append(cwd+'/../data_master/Cf252/')
-from mannhart_data import mannhart_bins, mannhart_split, mannhart_bindiff
-sys.path.append(cwd)
-
 from ranges import * 
 from gen_par_ana import gpa
 from error import error
 from data_parse import data_parse
 from isotope import isotope
 from plot import plot
+from matplotlib.ticker import MaxNLocator
+from maxwellian import *
 
 #  define functions to block and restore printing for when freya is run many times in a row during the optimization procedure
 def blockPrint():
@@ -71,37 +70,20 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
 
         os.chdir(data_path)
         if dim_status is False:
-            #  element 9 is the sigma indicator. This determines whether or not the error bars on the plot will be the variance or the uncertainty 
-            #  this is reflected in the name of the pdf output of the plots
-            if element[9] is True:
-                print('plotting: ',key)
-                plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , color = 'r' , label = None)
-                plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , '^' , color = 'r')
-                plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 2, 0], 
-                        color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
-                plt.title(str(key)  + ' ' +  str(element[1])  + ' ' +  str(iso)  + ' ' +  '(Variance)')
-                plt.xlabel( element[2] )
-                plt.ylabel( element[3] )
-                plt.xlim( ranges_x[key_translator[key]][0] , ranges_x[key_translator[key]][1] )
-                plt.ylim( ranges_y[key_translator[key]][0] , ranges_y[key_translator[key]][1] )
-                plt.xscale(element[7])
-                plt.savefig(str(key) + '(variance)' + '.pdf')
-                plt.close()
+            print('plotting: ',key)
+            plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , color = 'r' , label = None)
+            plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , '^' , color = 'r')
+            plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], 
+                    color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+            #  plt.title(str(key)  + ' ' +  str(element[1])  + ' ' +  str(iso)  )
+            plt.xlabel( element[2] )
+            plt.ylabel( element[3] )
+            plt.xlim( ranges_x[key_translator[key]][0] , ranges_x[key_translator[key]][1] )
+            plt.ylim( ranges_y[key_translator[key]][0] , ranges_y[key_translator[key]][1] )
+            plt.xscale(element[7])
 
-            else:
-                print('plotting: ',key)
-                plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , color = 'r' , label = None)
-                plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , '^' , color = 'r')
-                plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], 
-                        color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
-                plt.title(str(key)  + ' ' +  str(element[1])  + ' ' +  str(iso)  )
-                plt.xlabel( element[2] )
-                plt.ylabel( element[3] )
-                plt.xlim( ranges_x[key_translator[key]][0] , ranges_x[key_translator[key]][1] )
-                plt.ylim( ranges_y[key_translator[key]][0] , ranges_y[key_translator[key]][1] )
-                plt.xscale(element[7])
-                plt.savefig(str(key) + '.pdf')
-                plt.close()
+            plt.savefig(str(key) + '.pdf')
+            plt.close()
 
         elif dim_status is True:
             print('plotting: ',key)
@@ -131,6 +113,45 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             ax.set_zlim(ranges_z[key_translator[key]][0],ranges_z[key_translator[key]][1])
             ax.text2D(0.05, 0.95, str(key) + ' ' + str(element[1]) + ' ' + str(iso), transform=ax.transAxes)
             plt.savefig(str(key) + '.pdf')
+            plt.close()
+
+        if key == "mannhart":
+            print("plotting mannhart over alternative spectrum...")
+
+            maxwell_temp = 1.32
+
+            data_array[:,1,0] = data_array[:,1,0] * MaxwellianSpectrum(maxwell_temp)
+            data_array[:,1,1] = data_array[:,1,1] * MaxwellianSpectrum(maxwell_temp)
+
+            plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , 'r^-' , label = "Mannhart")
+            plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], 
+                    color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+
+            spectrum_element = parsed_data[0]["n_spectrum"]
+            spectrum_array = spectrum_element[0]
+            data_array = spectrum_array
+            total_count = np.sum(np.multiply(data_array[:,0,0],data_array[:,1,0]))*0.05
+            data_array[:,1,0] = data_array[:,1,0] / total_count 
+            data_array[:,1,1] = data_array[:,1,1] / total_count
+
+            plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , 'b^-',label = "G\"o\"ok")
+            plt.errorbar(data_array[:, 0, 0],data_array[: ,1, 0] , yerr = data_array[:, 1, 1], 
+                    color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
+
+            plt.xlabel( element[2] )
+            plt.ylabel( element[3] )
+
+            #  plt.xlim(0,20)
+            plt.xlim( ranges_x[key_translator[key]][0] , ranges_x[key_translator[key]][1] )
+            #  plt.ylim( ranges_y[key_translator[key]][0] , ranges_y[key_translator[key]][1] )
+
+            plt.xscale("log")
+            #  plt.yscale("log")
+
+            lg = plt.legend(fontsize=14,numpoints=1)
+            lg.draw_frame(False)
+
+            plt.savefig("mannhart_comparison" + '.pdf')
             plt.close()
 
         os.chdir(cwd)
@@ -220,27 +241,141 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
         element = parsed_data[0][str(key)]
         if element is None:
             continue
-        else:
+        if key_translator[key] == 'nubar' or key == 'average_photon_energy' or key == 'gammabar':
+            continue
+        elif key_translator[key] != "mannhart" and key_translator[key] != "n_spectrum":
             print('plotting: ',key)
-
             dim_status = element[5]
             data_array = element[0]
+            translated_key = key_translator[key]
+            freya_data = freya_dict[translated_key][0]
+            ratio_array = chisq_array[3][translated_key]
 
-            freya_data = freya_dict[key_translator[key]][0]
+            matplotlib.rcParams.update({'font.size': 14})
+            plt.figure(figsize=(6,6))
 
-            freya = plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output') 
-            data = plt.plot(data_array[:,0] , data_array[:,1] , '^-' , color = 'b' , label = str(element[1]) + ' data')
+            ax = plt.subplot(2,1,1,ylabel=element[3])
 
-            plt.xlabel(element[2])
-            plt.ylabel(element[3])
+            ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+            ax.xaxis.set_visible(False)
+            plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output') 
+            plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]) + ' data')
+            plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
+            #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
+            #  plt.xlabel(element[2],fontsize=15)
+            #  plt.ylabel(element[3],fontsize=15)
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
             plt.xscale(element[7])
+            #  plt.yscale(element[7])
+            lg = plt.legend(("FREYA",str(element[1]) + ' data'),fontsize=14,numpoints=1)
+            lg.draw_frame(False)
+            #  plt.title(str(key) + ' ' + str(iso[0]))
 
-            plt.legend(("FREYA",str(element[1]) + ' data'))
-            plt.title(str(key) + ' ' + str(iso[0]))
-            plt.savefig(str(key) + '.pdf')
+            plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
+            plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'r') 
+            plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+            #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
+            plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+            if len(ranges_y[key]) > 2:
+                plt.ylim( ranges_y[key][2] , ranges_y[key][3] + 0.2)
+                print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")
+            plt.xscale(element[7])
+            plt.axhline(1, color='black')
+
+            plt.subplots_adjust(hspace=0)
+            plt.savefig(str(key) + '.pdf',bbox_inches='tight')
             plt.close()
+        else:
+            print("Plotting log scale plots...")
+
+            maxwell_temp = 1.32
+
+            dim_status = element[5]
+            data_array = element[0]
+            translated_key = key_translator[key]
+            freya_data = freya_dict[translated_key][0]
+            ratio_array = chisq_array[3][translated_key]
+            if key == "mannhart":
+                ratio_array[:-1,1] = ratio_array[:-1,1] / MaxwellianSpectrum(maxwell_temp)
+                ratio_array[1:,2] = ratio_array[1:,2] / MaxwellianSpectrum(maxwell_temp)
+                #  data_array[:,1,0] = data_array[:,1,0]*MaxwellianSpectrum(maxwell_temp)
+            if key == "n_spectrum":
+                total_count = np.sum(np.multiply(data_array[:,0,0],data_array[:,1,0]))*0.05
+                data_array[:,1,0] = data_array[:,1,0] / total_count 
+                data_array[:,1,1] = data_array[:,1,1] / total_count
+                ratio_array[:,1] = ratio_array[:,1] * total_count
+
+            matplotlib.rcParams.update({'font.size': 14})
+
+### MANNHART REGULAR LOG XSCALE
+
+            plt.figure(figsize=(6,6))
+
+            ax = plt.subplot(2,1,1,ylabel=element[3])
+            ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+            ax.xaxis.set_visible(False)
+            plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output') 
+            plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.plot(data_array[:,0,0] , data_array[:,1,0], '^-' , color = 'b' , label = str(element[1]) + ' data')
+            plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0], 
+                    yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+            plt.ylim( ranges_y[key][0] , ranges_y[key][1])
+            plt.xscale('log')
+            lg = plt.legend(("FREYA",str(element[1]) + ' data'),fontsize=14,numpoints=1)
+            lg.draw_frame(False)
+
+            plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
+            plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'r') 
+            plt.errorbar( ratio_array[1:,0] , ratio_array[1:,1] , 
+                    yerr = ratio_array[1:,2]
+                    , color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+            plt.autoscale(axis = 'y')
+            #  plt.ylim( ranges_y[key][2] , ranges_y[key][3])
+            plt.xscale('log')
+            plt.axhline(1, color='black')
+
+            plt.subplots_adjust(hspace=0)
+            plt.savefig(str(key) + "_x" + '.pdf',bbox_inches='tight')
+            plt.close()
+
+
+### MANNHART REGULAR LOG YSCALE
+
+            plt.figure(figsize=(6,6))
+
+            ax = plt.subplot(2,1,1,ylabel=element[3])
+            ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+            ax.xaxis.set_visible(False)
+            plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output') 
+            plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.plot(data_array[:,0,0] , data_array[:,1,0], '^-' , color = 'b' , label = str(element[1]) + ' data')
+            plt.errorbar( data_array[:,0,0] , data_array[:,1,0], 
+                    yerr = data_array[:,1,1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+            plt.ylim( ranges_y[key][0] , ranges_y[key][1])
+            plt.ylim(1E-4,None)
+            plt.yscale('log')
+            lg = plt.legend(("FREYA",str(element[1]) + ' data'),fontsize=14,numpoints=1)
+            lg.draw_frame(False)
+
+            plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
+            plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'r') 
+            plt.errorbar( ratio_array[1:,0] , ratio_array[1:,1] , 
+                    yerr = ratio_array[1:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+            plt.autoscale(axis = 'y')
+            #  plt.ylim( ranges_y[key][2] , ranges_y[key][3])
+            plt.axhline(1, color='black')
+
+            plt.subplots_adjust(hspace=0)
+            plt.savefig(str(key) + "_y" + '.pdf',bbox_inches='tight')
+            plt.close()
+
+            continue
 
     print('Begin generating plots of Chi-Squared distributions...')
 
@@ -252,12 +387,12 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
         chi_y = chi_dict[key][:,1]
         plt.scatter(chi_x,chi_y,color = 'b')
         plt.xlim(ranges_x[key_translator[key]][0], ranges_x[key_translator[key]][1])
-        plt.xlabel('x value')
-        plt.ylabel('error')
-        plt.title('Chi-Squared Error for: ' + str(key) + ' (' + str(iso[0]) + ')')
+        #  plt.xlabel()
+        plt.ylabel('uncertainty',fontsize=15)
+        #  plt.title('Chi-Squared Error for: ' + str(key) + ' (' + str(iso[0]) + ')')
         if key_translator[key] is 'mannhart': 
             plt.xscale('log')
-        plt.savefig(str(key) + '_chisq.pdf')
+        plt.savefig('chisq_'+str(key)+'.pdf')
         plt.close()
     print('Finished.')
 

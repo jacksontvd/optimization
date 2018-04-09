@@ -6,12 +6,9 @@ from subprocess import Popen, PIPE, STDOUT
 
 cwd = os.getcwd()
 
-sys.path.append(cwd+'/../data_master/Cf252/')
-from mannhart_data import mannhart_bins, mannhart_split, mannhart_bindiff, normedMannErr, mannhart_x, mannhart_y
-sys.path.append(cwd)
-
 from isotope import isotope
 from ranges import *
+from maxwellian import *
 
 def data_parse(Z,A,reaction_type):
 
@@ -59,12 +56,6 @@ def data_parse(Z,A,reaction_type):
                 is3d = True
             else:
                 is3d = False
-
-            #  assign scale to determine whether the axes will have logarithmic scaling or not
-            if file_name_words[1] == 'mannhart':
-                scale = 'log'
-            else:
-                scale = 'linear'
 
             #  some of the data sets contain the variance rather than the actual values. To these sets, we attach the boolean value of 'sigma'
             #  this indication will later be used to attach this array to the appropriate data values
@@ -179,6 +170,18 @@ def data_parse(Z,A,reaction_type):
                         print('Data failed to parse for: ' + str(datafile))
                 data = np.array(data, dtype = np.float)
 
+
+            if file_name_words[1] == 'mannhart':
+
+                scale = 'log'
+
+            elif file_name_words[1] == 'n_spectrum':
+                scale = 'log'
+            else:
+                scale = 'linear'
+            if sigma is True:
+                data[:,2,0] = np.sqrt(data[:,2,0])
+
             #  the value of the output dictionary as defined above for each data key (name of data file)
             #  will be as follows:
 
@@ -191,24 +194,6 @@ def data_parse(Z,A,reaction_type):
                     scale,
                     z_label,
                     False] # sigma indicator
-
-    #  here we manually parse and structure the mannhart entry since it is so strange. 
-    if int(A) == 252:
-        key_translator['mannhart'] = 'mannhart'
-        mannhart_array = np.zeros((len(mannhart_x), 4, 2) )
-        mannhart_array[:, 0, 0] = mannhart_x[:].flatten()
-        mannhart_array[:, 1, 0] = mannhart_y[:].flatten()
-        mannhart_array[:, 1, 1] = normedMannErr.flatten()
-        output_dict['mannhart'] = [mannhart_array, 'mannhart',
-                'Energy (MeV)', 
-                'Neutron Multiplicity (Count/Bin Width)',
-                '-1',
-                False, # dimension
-                False, # sigma 
-                'log',
-                None, # z label
-                False] # sigma indicator (set below)
-
 
     #  run through each element of the data_dictionary, and find the ones which contain only the variances for that observable
     #  these correspond to another element of the dictionary which contains the actual data, for which this original element contains the variance of
@@ -228,7 +213,6 @@ def data_parse(Z,A,reaction_type):
                 output_dict[key] = None
         else:
             continue
-
 
     data_end = time.time()
     data_time = data_end - data_begin
