@@ -24,7 +24,7 @@ def plot(Z, A, Energy, output_file, **kwargs):
         os.makedirs(plot_path)
     print("Begin Printing Statistics...")
     plot_begin = time.time()
-    if Energy == -1:
+    if int(Energy) == -1:
         string_energy = 0
 
     stats =open(plot_path+'/Statistics.tex', 'w+')
@@ -121,20 +121,6 @@ def plot(Z, A, Energy, output_file, **kwargs):
 
                 plt.savefig( str(key) + '.pdf' )
                 plt.close()
-
-            #  elif is_3d == True:
-            #      observable_array = obs_master[0]
-            #
-            #      fig = plt.figure()
-            #      ax = fig.add_subplot(111 , projection = '3d')
-            #      ax.scatter( observable_array[:,0] , observable_array[:,1] , observable_array[:,2])
-            #      ax.set_xlabel(obs_master[3])
-            #      ax.set_ylabel(obs_master[4])
-            #      ax.set_zlabel(obs_master[5])
-            #      ax.set_xlim( ranges_x[key][0] , ranges_x[key][1])
-            #      ax.set_ylim( ranges_y[key][0] , ranges_y[key][1])
-            #      ax.set_zlim( ranges_z[key][0] , ranges_z[key][1])
-            #      ax.text2D(0.05, 0.95 , obs_master[2] , transform = ax.transAxes)
 
     nu = np.concatenate((freya_output["light_neutrons"],freya_output["heavy_neutrons"]))
     A = np.concatenate((freya_output['Al'],freya_output['Ah']))

@@ -18,12 +18,6 @@ from plot import plot
 from matplotlib.ticker import MaxNLocator
 from maxwellian import *
 
-#  define functions to block and restore printing for when freya is run many times in a row during the optimization procedure
-def blockPrint():
-    sys.stdout = open(os.devnull, 'w')
-def enablePrint():
-    sys.stdout = sys.__stdout__
-
 def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting')
     reac_t = kwargs['reaction_type']
@@ -88,21 +82,6 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
         elif dim_status is True:
             print('plotting: ',key)
 
-            #  nu = np.concatenate((freya_output["light_neutrons"],freya_output["heavy_neutrons"]))
-            #  A = np.concatenate((freya_output['Al'],freya_output['Ah']))
-            #  TKE = np.tile(freya_output['TKE'],2)
-            #
-            #  plt.hist2d(A, TKE,bins=(max(A) - min(A),150),weights=nu, normed = True)
-            #
-            #  plt.colorbar(format='%7.2e')
-            #
-            #  plt.xlabel("Mass (amu)")
-            #  plt.ylabel("Total Kinetic Energy (MeV)")
-            #  plt.title('Neutron Yield as function of Mass, TKE')
-            #
-            #  plt.savefig('n_A_TKE' + '.pdf')
-            #  plt.close()
-
             ax = fig.add_subplot(111, projection='3d')
             ax.scatter(data_array[:,0,0] , data_array[:,1,0] , data_array[:,2,0])
             ax.set_xlabel(element[2])
@@ -122,35 +101,25 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
 
             data_array[:,1,0] = data_array[:,1,0] * MaxwellianSpectrum(maxwell_temp)
             data_array[:,1,1] = data_array[:,1,1] * MaxwellianSpectrum(maxwell_temp)
-
             plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , 'r^-' , label = "Mannhart")
-            plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], 
-                    color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
-
+            plt.errorbar(data_array[:,0,0],data_array[:,1,0],
+                    yerr = data_array[:, 1, 1]*MaxwellianSpectrum(maxwell_temp), color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
             spectrum_element = parsed_data[0]["n_spectrum"]
             spectrum_array = spectrum_element[0]
             data_array = spectrum_array
             total_count = np.sum(np.multiply(data_array[:,0,0],data_array[:,1,0]))*0.05
             data_array[:,1,0] = data_array[:,1,0] / total_count 
             data_array[:,1,1] = data_array[:,1,1] / total_count
-
-            plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , 'b^-',label = "G\"o\"ok")
+            plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , 'b^-',label = u'Göök')
             plt.errorbar(data_array[:, 0, 0],data_array[: ,1, 0] , yerr = data_array[:, 1, 1], 
                     color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
-
             plt.xlabel( element[2] )
             plt.ylabel( element[3] )
-
-            #  plt.xlim(0,20)
             plt.xlim( ranges_x[key_translator[key]][0] , ranges_x[key_translator[key]][1] )
-            #  plt.ylim( ranges_y[key_translator[key]][0] , ranges_y[key_translator[key]][1] )
-
             plt.xscale("log")
             #  plt.yscale("log")
-
             lg = plt.legend(fontsize=14,numpoints=1)
             lg.draw_frame(False)
-
             plt.savefig("mannhart_comparison" + '.pdf')
             plt.close()
 
@@ -191,8 +160,8 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
 
     print('Begin Generating, Analyzing, Plotting Events with Final Set of Parameters')
 
-    final = plot(Z, A , Energy, str(iso[0])  + '.' + 'opt', generate_number = generate_number) 
-    freya = gpa(Z,A,Energy,'cf.plot',generate_number = generate_number)
+    freya = chisq_array[4]
+    #  freya = gpa(Z,A,Energy,'cf.plot',generate_number = generate_number)
     freya_dict = freya[0]    
 
     opt_end = time.time()

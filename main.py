@@ -11,9 +11,28 @@ from isotope import isotope
 from optimize import opt
 from post_op import post_opt
 
-taskraw = input("What would you like to do with FREYA? (run/optimize): ")
-task = str(taskraw)
-taskl = task.lower()
+if len(sys.argv) > 1:
+    job_type = str(sys.argv[1])
+else:
+    job_type = None
+
+if job_type == 'process':
+    print("Processing...")
+    Zinput=98
+    Ainput=252
+    generate_number = 10000
+    method='process'
+    resolution=None
+    reaction_type="spontaneous"
+    post_opt(Zinput , Ainput , generate_number , method , resolution , reaction_type = reaction_type , stochastic_type = 1 , iteration_number = 100)
+
+    taskl = None
+
+else:
+    taskraw = input("What would you like to do with FREYA? (run/optimize): ")
+    task = str(taskraw)
+    taskl = task.lower()
+
 if taskl == 'run' or taskl == 'run ' or taskl == ' run':
     Zinputraw = input('Z = ')
     Zinput = int(Zinputraw)

@@ -135,7 +135,9 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                         x = anal_array[row,2]
                         b = element[1,0]
                         y = element[1,1]
-                        potential_ratio_bar = np.sqrt((x**2 + a**2)/(y**2 + b**2) - a**2 / b**2)
+                        #  potential_ratio_bar = np.sqrt((x**2 + a**2)/(y**2 + b**2) - a**2 / b**2)
+                        potential_ratio_bar = np.sqrt(((x**2 + a**2)*b**2 - a**2 * (y**2 + b**2))
+                                /(b**2*(y**2 + b**2)))
                         ratio[row,2] = potential_ratio_bar
 
                     #  otherwise, take the square of the difference between the data and freya, and divide by the square of the uncertainty
@@ -159,7 +161,9 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                         x = anal_array[row,2]
                         b = element[1,0]
                         y = element[1,1]
-                        potential_ratio_bar = np.sqrt((x**2 + a**2)/(y**2 + b**2) - a**2 / b**2)
+                        #  potential_ratio_bar = np.sqrt((x**2 + a**2)/(y**2 + b**2) - a**2 / b**2)
+                        potential_ratio_bar = np.sqrt(((x**2 + a**2)*b**2 - a**2 * (y**2 + b**2))
+                                /(b**2*(y**2 + b**2)))
                         ratio[row,2] = potential_ratio_bar
 
                     #  chi_sq_added = chi_sq_array[row,1]
@@ -194,4 +198,4 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     if total_chisq is not 0:
         print('Successful.')
 
-    return total_chisq, chisq_dict , total_clean_chisq , ratio_dict
+    return total_chisq, chisq_dict , total_clean_chisq , ratio_dict , anal

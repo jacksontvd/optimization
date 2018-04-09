@@ -9,10 +9,11 @@ from optimize import opt
 from variance import variance
 from covariance import covariance
 from grid_plot import *
+from plot import plot
 
 Zinput = 98
 Ainput = 252
-generate_number = 1000
+generate_number = 10000
 reaction_type = 'spontaneous'
 #  optimization_type = 'grid'
 #  optimization_type = 'anneal'
@@ -28,6 +29,10 @@ def opti(opt_method):
         resolution, 
         stochastic_type = stochastic_type,
         reaction_type = reaction_type)
+    return result
+
+def cluster_plot():
+    result = plot(Zinput, Ainput, "-1", "plot_output",generate_number = generate_number)
     return result
 
 def var(parameter):
@@ -49,7 +54,7 @@ def covar(parameter1 , parameter2):
             parameter = parameter1,
             parameter2 = parameter2)
 
-def plot(parameter1 , parameter2):
+def cov_plot(parameter1 , parameter2):
     result = covariance_plot(Zinput,
             Ainput, 
             generate_number, 
@@ -89,7 +94,6 @@ def well_2():
             "c","d","T","d")
 
 
-
 os.chdir(cwd)
 os.system('./restore.sh')
 
@@ -100,6 +104,8 @@ else:
 
 if job_type == 'opt':
     print(opti(optimization_type))
+elif job_type == 'plot':
+    print(cluster_plot())
 elif job_type == 'var':
     print("we are here")
     arg = sys.argv[2]
