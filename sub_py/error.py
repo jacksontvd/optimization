@@ -11,6 +11,12 @@ from gen_par_ana import gpa
 from isotope import isotope
 from ranges import *
 
+def ratio_bar_scheme(a,x,b,y):
+    #  return np.sqrt(((x**2 + a**2)*b**2 - a**2 * (y**2 + b**2))/(b**2*(y**2 + b**2)))
+    bar =  np.sqrt((x**2 + a**2)/(y**2 + b**2) - a**2 / b**2)
+    #  print(bar)
+    return bar
+
 def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     
     #  the data is brought into this function as a list by the optimization.py script
@@ -57,9 +63,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
             continue
         else:
             #  separate error calculation for n_A_TKE out from the rest of the observables
-            if key_trans[key] == 'n_A_TKE':
-                continue
-            elif key_trans[key] == 'nubar' or key_trans[key] == 'average_photon_energy' or key_trans[key] == 'gammabar':
+            if key_trans[key] == 'nubar' or key_trans[key] == 'average_photon_energy' or key_trans[key] == 'gammabar':
                 print("Calculating error for:" + key)
                 data_array = data_dictionary[key][0]
                 data_single = data_array[0,1,0]
@@ -96,6 +100,10 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                 ratio[:] = np.nan
 
                 for element in data_array:
+
+                    if key == "n_A_TKE":
+                        ratio = data_array
+                        continue
 
                     #  sort the current element of the data array into the binning of the freya array
                     row = np.searchsorted(anal_array[:,0], element[0, 0] )
@@ -161,10 +169,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                         x = anal_array[row,2]
                         b = element[1,0]
                         y = element[1,1]
-                        #  potential_ratio_bar = np.sqrt((x**2 + a**2)/(y**2 + b**2) - a**2 / b**2)
-                        potential_ratio_bar = np.sqrt(((x**2 + a**2)*b**2 - a**2 * (y**2 + b**2))
-                                /(b**2*(y**2 + b**2)))
-                        ratio[row,2] = potential_ratio_bar
+                        ratio[row,2] = ratio_bar_scheme(a,x,b,y)
 
                     #  chi_sq_added = chi_sq_array[row,1]
 

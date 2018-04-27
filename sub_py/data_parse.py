@@ -172,9 +172,7 @@ def data_parse(Z,A,reaction_type):
 
 
             if file_name_words[1] == 'mannhart':
-
                 scale = 'log'
-
             elif file_name_words[1] == 'n_spectrum':
                 scale = 'log'
             else:

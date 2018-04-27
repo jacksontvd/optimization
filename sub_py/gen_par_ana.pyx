@@ -112,7 +112,6 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     egrid = np.zeros((bin_number['mannhart']+1))
     egrid[1:] = np.array(mannhart_bins)
     degrid = egrid[1:]-egrid[:-1]
-    #  print(degrid)
 
     mannhart = np.zeros((bin_number['mannhart'], 3))
     mannhart[:,0]= mannhart_bins
@@ -130,6 +129,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     #  the neutron and gamma spectrums, and the angular correlation will be calculated from the list which we will fill event by event. 
     n_spec = []
+    rest_n_spec = []
 
     n_ang = []
 
@@ -145,10 +145,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     #  the n_A_TKE bin columns need to be 'repeated' and 'tiled' so as to get every combinatorial pair
     n_A_TKE = np.zeros((bin_number['n_A_TKE'] * (ranges_x['A'][1] - ranges_x['A'][0]) , 4))
-    n_A_TKE_energy_bins = np.arange(ranges_x['n_A_TKE'][0], ranges_x['n_A_TKE'][1], bin_width['n_A_TKE'] )
+    n_A_TKE_energy_bins = np.arange(ranges_y['n_A_TKE'][0], ranges_y['n_A_TKE'][1], 
+            (ranges_y['n_A_TKE'][1] - ranges_y['n_A_TKE'][0]) / bin_number['n_A_TKE'] )
     n_A_TKE_mass_bins = np.arange(ranges_x['A'][0],ranges_x['A'][1] )
-    n_A_TKE[:,0] = np.repeat(n_A_TKE_energy_bins,int( len(n_A_TKE) / len(n_A_TKE_energy_bins) ) )
-    n_A_TKE[:,1] = np.tile( n_A_TKE_mass_bins , int( len(n_A_TKE)  / len(n_A_TKE_mass_bins ) ) )
+    n_A_TKE[:,0] = np.repeat( n_A_TKE_mass_bins , int( len(n_A_TKE)  / len(n_A_TKE_mass_bins ) ) )
+    n_A_TKE[:,1] = np.tile(n_A_TKE_energy_bins,int( len(n_A_TKE) / len(n_A_TKE_energy_bins) ) )
 
     n_TKE = np.zeros((bin_number['n_TKE'],4))
     n_TKE[:,0] = np.arange(ranges_x['n_TKE'][0], ranges_x['n_TKE'][1], bin_width['n_TKE'])
@@ -181,6 +182,12 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     begin_parse = time.time()
     print('Parsing events...')
+
+    def rest_frame_boost(old_energy , dot_product , fragment_energy , fragment_mass):
+        new_energy = (np.sqrt(old_energy*2) + (dot_product * np.sqrt(fragment_energy * 2 * fragment_mass)))**2 / 2
+        #  new_energy = old_energy + (dot_product * np.sqrt(fragment_energy) * fragment_mass)
+        return new_energy
+
     for event in events:
         initial = []
         light = []
@@ -195,6 +202,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         else:
             nn_tf = 0
         initial = event[0:nn_tf+2]
+        nucleus_direction = [float(initial[1].split()[1]),float(initial[1].split()[2]),float(initial[1].split()[3])]
+        nucleus_TKE = float(initial[1].split()[0])
+        nucleus_A = float(initial[0].split()[2]) - 1
 
         m = int( event[0].split()[5] )
         if (m>0):
@@ -280,6 +290,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
         TKE = float( light[1].split()[0] ) + float( heavy[1].split()[0] )
 
+        light_TKE = float( light[1].split()[0] )
+        heavy_TKE = float( heavy[1].split()[0] )
+        light_direction = [float(light[1].split()[1]),float(light[1].split()[2]),float(light[1].split()[3])]
+        heavy_direction = [float(heavy[1].split()[1]),float(heavy[1].split()[2]),float(heavy[1].split()[3])]
+
         freya_TKE.append(TKE)
 
         TKE_A[Afrag_l - ranges_x['A'][0]][1] += TKE
@@ -288,17 +303,16 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         TKE_A[Afrag_h - ranges_x['A'][0]][1] += TKE
         TKE_A[Afrag_h - ranges_x['A'][0]][2] += TKE**2
 
-        energy_bin =  np.searchsorted(n_A_TKE[:,0],TKE)
-        energy_bin = Afrag_l - ranges_x['A'][0] + energy_bin
-        n_A_TKE[energy_bin,2] += nnl
-        n_A_TKE[energy_bin,3] += nnl**2
-        energy_bin = Afrag_h - ranges_x['A'][0] + energy_bin + 1
-        n_A_TKE[energy_bin,2] += nnh
-        n_A_TKE[energy_bin,3] += nnh**2
-        energy_bin = int(A - ranges_x['A'][0] + energy_bin + 1)
-        n_A_TKE[energy_bin,2] += nn
-        n_A_TKE[energy_bin,3] += nn**2
-
+        energy_bin =  np.searchsorted(n_A_TKE_energy_bins,TKE)
+        energy_bin_l = (Afrag_l - ranges_x['A'][0])*len(n_A_TKE_energy_bins) + energy_bin
+        n_A_TKE[energy_bin_l,2] += nnl
+        n_A_TKE[energy_bin_l,3] += nnl**2
+        energy_bin_h = (Afrag_h - ranges_x['A'][0]) * len(n_A_TKE_energy_bins) + energy_bin
+        n_A_TKE[energy_bin_h,2] += nnh
+        n_A_TKE[energy_bin_h,3] += nnh**2
+        #  energy_bin_n = int((A - ranges_x['A'][0]) * len(n_A_TKE_energy_bins) + energy_bin)
+        #  n_A_TKE[energy_bin_n,2] += nn
+        #  n_A_TKE[energy_bin_n,3] += nn**2
 
         n_TKE_bin = np.searchsorted(n_TKE[:,0], TKE)
         n_TKE[n_TKE_bin,1] += ntot
@@ -318,7 +332,8 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                 momentum.append( float(parts[j*4 +3]) )
                 momenta_n.append( momentum )
                 n_spec.append(En)
-        
+                dot_product = np.sum(np.array(momentum) * np.array(nucleus_direction))
+                rest_n_spec.append(rest_frame_boost(En,dot_product,nucleus_TKE,nucleus_A))
         if( (nnl_tf > 0) and (ngl > 0) ):
             parts = light[2].split()
             for j in range( 0,int(len(parts)/4) ):
@@ -329,6 +344,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                 momentum.append( float(parts[j*4 +3]) )
                 momenta_n.append( momentum )
                 n_spec.append(En)
+                dot_product = np.sum(np.array(momentum) * np.array(light_direction))
+                rest_En = rest_frame_boost(En,dot_product,light_TKE,Afrag_l)
+                rest_n_spec.append(rest_En)
             parts = light[3].split()
             for j in range( 0,int(len(parts)/4) ):
                 Eg = float(parts[j*4])
@@ -355,6 +373,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                 momentum.append( float(parts[j*4 +3]) )
                 momenta_n.append( momentum )
                 n_spec.append(En)
+                dot_product = np.sum(np.array(momentum) * np.array(light_direction))
+                rest_En = rest_frame_boost(En,dot_product , light_TKE,Afrag_l)
+                rest_n_spec.append(rest_En)
         elif( ngl > 0 ):
             parts = light[2].split()
             for j in range( 0,int(len(parts)/4) ):
@@ -383,6 +404,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                 momentum.append( float(parts[j*4 +3]) )
                 momenta_n.append( momentum )
                 n_spec.append(En)
+                dot_product = np.sum(np.array(momentum) * np.array(heavy_direction))
+                rest_En = rest_frame_boost(En , dot_product , heavy_TKE,Afrag_h)
+                rest_n_spec.append(rest_En)
             parts = heavy[3].split()
             for j in range( 0,int(len(parts)/4) ):
                 Eg = float(parts[j*4])
@@ -409,8 +433,10 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                 momentum.append( float(parts[j*4 +3]) )
                 momenta_n.append( momentum )
                 n_spec.append(En)
+                dot_product = np.sum(np.array(momentum) * np.array(heavy_direction))
+                rest_En = rest_frame_boost(En , dot_product , heavy_TKE,Afrag_h)
+                rest_n_spec.append(rest_En)
         elif( ngh > 0 ):
-
             parts = heavy[2].split()
             for j in range( 0,int(len(parts)/4) ):
                 Eg = float(parts[j*4])
@@ -432,7 +458,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
             for q in range(p+1,len(momenta_n)):
                 dotprod = momenta_n[p][0] * momenta_n[q][0] + momenta_n[p][1] * momenta_n[q][1] + momenta_n[p][2] * momenta_n[q][2]
                 n_ang.append(dotprod)
-       
+
     print('All events parsed.')
     end_parse = time.time()
     parse_time = end_parse - begin_parse
@@ -445,9 +471,10 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     #  (using numpy functions for efficiency)
     with np.errstate(divide='ignore', invalid='ignore'):
 
-        long_frag_counts = np.tile(Fragment_A[:,1][:-1],  int(len(n_A_TKE)/(ranges_x['A'][1] - ranges_x['A'][0])))
+        long_frag_counts = np.repeat(Fragment_A[:,1][:-1],int(len(n_A_TKE)/(ranges_x['A'][1] - ranges_x['A'][0])))
         n_A_TKE[:,2] = np.divide(n_A_TKE[:,2], long_frag_counts)
-        n_A_TKE[:,3] = np.divide(n_A_TKE[:,3], long_frag_counts)
+        n_A_TKE[:,2]= 100 * n_A_TKE[:,2]
+        #  n_A_TKE[:,3] = np.divide(n_A_TKE[:,3], long_frag_counts)
         n_A_TKE[:,3] = np.subtract(n_A_TKE[:,3],np.square(n_A_TKE[:,2]))
         n_A_TKE[:,3] = np.sqrt(n_A_TKE[:,3])
         n_A_TKE[:,2] = np.array( n_A_TKE[:,2], dtype = np.float)
@@ -489,7 +516,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
         mannhart[:,0] = binEdges_freya[:-1]
         mannhart[:,1] = hlab_freya/degrid/n
-        mannhart[:,2] = 1/(np.sqrt(hlab_freya))
+        #  mannhart[:,2] = 10/(np.sqrt(hlab_freya))
 
         n_TKE[:,1] = np.divide(n_TKE[:,1], n_TKE[:,3])
         n_TKE[:,2] = np.divide(n_TKE[:,2], n_TKE[:,3])
@@ -547,12 +574,29 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     n_spectrum_bin_widths = bin_width['n_spectrum']
     number_of_bins = int(np.ceil(bin_number['n_spectrum']))
-    hist, bin_edges = np.histogram(n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]), normed = True)
+    hist, bin_edges = np.histogram(n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]))
+    hist = hist.astype('float')
+    hist[hist == 0] = None
+    normed_hist, bin_edges = np.histogram(n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]), normed = True)
     n_spectrum = np.zeros((number_of_bins ,3))
     n_spectrum[0] = [0,ranges_x['n_spectrum'][1],n_spectrum_bin_widths]
-    n_spectrum[:,0] = np.add(bin_edges,n_spectrum_bin_widths/2)[:-1]
-    n_spectrum[:,1] = hist
+    n_spectrum[:,0] = bin_edges[:-1]
+    n_spectrum[:,1] = normed_hist
+    #  n_spectrum[:,2] = n_spectrum_bin_widths * 1/np.sqrt(hist)
     n_spectrum[:,2] = np.nan
+
+    n_spectrum_bin_widths = bin_width['n_spectrum']
+    number_of_bins = int(np.ceil(bin_number['n_spectrum']))
+    hist, bin_edges = np.histogram(rest_n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]))
+    hist = hist.astype('float')
+    hist[hist == 0] = None
+    normed_hist, bin_edges = np.histogram(rest_n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]), normed = True)
+    rest_n_spectrum = np.zeros((number_of_bins ,3))
+    rest_n_spectrum[0] = [0,ranges_x['n_spectrum'][1],n_spectrum_bin_widths]
+    rest_n_spectrum[:,0] = bin_edges[:-1]
+    rest_n_spectrum[:,1] = normed_hist
+    #  rest_n_spectrum[:,2] = rest_n_spectrum_bin_widths * 1/np.sqrt(hist)
+    rest_n_spectrum[:,2] = np.nan
 
     m_spectrum_bin_widths = bin_width['m_spectrum']
     number_of_bins = int(np.ceil(bin_number['m_spectrum']))
@@ -596,9 +640,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     freya_output['n_A_TKE'] = [n_A_TKE,
                     'nu(A,TKE)', 
                     'Neutron Multiplicity vs Mass Number A and Total Kinetic Energy for: ' + freya_output['isotope'],
-                    'Total Kinetic Energy',
                     'Mass Number(A)',
-                    'Neutron Multiplicity',
+                    'Total Kinetic Energy',
+                    'Neutron Multiplicity'
                     ]
     freya_output['mannhart'] = [mannhart,
                     r'$ \bar\nu (E) $',
@@ -620,6 +664,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                     'Gamma Multiplicity',
                     'Probability']
     freya_output['n_spectrum'] = [n_spectrum,
+                    'Neutron Spectral Shape',
+                    r'$Fission \ Neutron \ Spectrum\ for: \ $'+freya_output['isotope'], 
+                    'Neutron Energy (MeV)', 
+                    'Probability'] 
+    freya_output['rest_n_spectrum'] = [rest_n_spectrum,
                     'Neutron Spectral Shape',
                     r'$Fission \ Neutron \ Spectrum\ for: \ $'+freya_output['isotope'], 
                     'Neutron Energy (MeV)', 
@@ -666,6 +715,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     freya_output['Al'] = np.array(Freya_Al)
     freya_output['TKE'] = np.array(freya_TKE)
     freya_output['neutrons'] = np.array(neutrons)
+    freya_output['n_TKE_alt'] = freya_output['n_TKE']
 
 
     times['gen_time'] = gen_time

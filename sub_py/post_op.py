@@ -3,7 +3,7 @@ from math import sqrt, pi
 import os, sys
 import matplotlib
 import matplotlib.pyplot as plt
-#  from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 from scipy import optimize
 
@@ -67,7 +67,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             print('plotting: ',key)
             plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , color = 'r' , label = None)
             plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , '^' , color = 'r')
-            plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], 
+            plt.errorbar( data_array[:, 0, 0],data_array[: ,1, 0],yerr = data_array[:, 1, 1], 
                     color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
             #  plt.title(str(key)  + ' ' +  str(element[1])  + ' ' +  str(iso)  )
             plt.xlabel( element[2] )
@@ -81,18 +81,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
 
         elif dim_status is True:
             print('plotting: ',key)
-
-            ax = fig.add_subplot(111, projection='3d')
-            ax.scatter(data_array[:,0,0] , data_array[:,1,0] , data_array[:,2,0])
-            ax.set_xlabel(element[2])
-            ax.set_ylabel(element[3])
-            ax.set_zlabel(element[8])
-            ax.set_xlim(ranges_x[key_translator[key]][0],ranges_x[key_translator[key]][1])
-            ax.set_ylim(ranges_y[key_translator[key]][0],ranges_y[key_translator[key]][1])
-            ax.set_zlim(ranges_z[key_translator[key]][0],ranges_z[key_translator[key]][1])
-            ax.text2D(0.05, 0.95, str(key) + ' ' + str(element[1]) + ' ' + str(iso), transform=ax.transAxes)
-            plt.savefig(str(key) + '.pdf')
-            plt.close()
+#  #  #  #  ADD CONTOUR
 
         if key == "mannhart":
             print("plotting mannhart over alternative spectrum...")
@@ -100,10 +89,27 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             maxwell_temp = 1.32
 
             data_array[:,1,0] = data_array[:,1,0] * MaxwellianSpectrum(maxwell_temp)
-            data_array[:,1,1] = data_array[:,1,1] * MaxwellianSpectrum(maxwell_temp)
+            #  data_array[:,1,1] = data_array[:,1,1] * MaxwellianSpectrum(maxwell_temp)
+
+###
+            plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , color = 'r' , label = None)
+            plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , '^' , color = 'r')
+            plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], 
+                    color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+            #  plt.title(str(key)  + ' ' +  str(element[1])  + ' ' +  str(iso)  )
+            plt.xlabel( element[2] )
+            plt.ylabel( element[3] )
+            #  plt.xlim( ranges_x[key_translator[key]][0] , ranges_x[key_translator[key]][1] )
+            #  plt.ylim( ranges_y[key_translator[key]][0] , ranges_y[key_translator[key]][1] )
+            plt.xscale(element[7])
+
+            plt.savefig(str(key) + '.pdf')
+            plt.close()
+###
+
             plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , 'r^-' , label = "Mannhart")
             plt.errorbar(data_array[:,0,0],data_array[:,1,0],
-                    yerr = data_array[:, 1, 1]*MaxwellianSpectrum(maxwell_temp), color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+                    yerr = data_array[:, 1, 1], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
             spectrum_element = parsed_data[0]["n_spectrum"]
             spectrum_array = spectrum_element[0]
             data_array = spectrum_array
@@ -122,7 +128,6 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             lg.draw_frame(False)
             plt.savefig("mannhart_comparison" + '.pdf')
             plt.close()
-
         os.chdir(cwd)
 
     print('Successful.')
@@ -212,7 +217,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             continue
         if key_translator[key] == 'nubar' or key == 'average_photon_energy' or key == 'gammabar':
             continue
-        elif key_translator[key] != "mannhart" and key_translator[key] != "n_spectrum":
+        elif key_translator[key] != "mannhart" and key_translator[key] != "n_spectrum" and key_translator[key] != "rest_n_spectrum" and key_translator[key] != "n_A_TKE":
             print('plotting: ',key)
             dim_status = element[5]
             data_array = element[0]
@@ -231,9 +236,6 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]) + ' data')
             plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
-            #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
-            #  plt.xlabel(element[2],fontsize=15)
-            #  plt.ylabel(element[3],fontsize=15)
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
             plt.xscale(element[7])
@@ -256,8 +258,78 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.subplots_adjust(hspace=0)
             plt.savefig(str(key) + '.pdf',bbox_inches='tight')
             plt.close()
+        elif key == "n_A_TKE":
+            print("plotting nubar as function of TKE for given values of A...")
+
+            large_data_array = element[0]
+            large_data_array = large_data_array[np.where(large_data_array[:,2,0] != 0)]
+            large_freya_array = freya_dict[key][0]
+            A_min = min(large_data_array[:,0,0])
+            A_max = max(large_data_array[:,0,0])
+
+            translated_key = key_translator[key]
+
+            if not os.path.exists(opt_path+"/n_A_TKE"):
+                os.makedirs(opt_path+"/n_A_TKE")
+            os.chdir(opt_path+"/n_A_TKE")
+
+            #  nu = np.concatenate((freya_dict["light_neutrons"],freya_dict["heavy_neutrons"]))
+            #  A = np.concatenate((freya_dict['Al'],freya_dict['Ah']))
+            #  TKE = np.tile(freya_dict['TKE'],2)
+            #  large_freya_array, xedges, yedges = np.histogram2d(A, TKE, bins=(max(A) - min(A), 150),weights = nu,normed=True)
+            #  print(large_freya_array)
+            large_freya_array = freya_dict["n_A_TKE"][0]
+
+            for fixed_number in range(0,int(A_max) - int(A_min)):
+                fixed_A = range(int(A_min) , int(A_max))[fixed_number]
+                data_array = large_data_array[np.where(np.rint(large_data_array[:,0,0]) == fixed_A)]
+                data_array = data_array[:,1:]
+                #  freya_data = large_freya_array[np.where(np.rint(large_freya_array[:,0]) == fixed_A)]
+                #  freya_data = freya_data[:,1:]
+                #  freya_data = np.column_stack((yedges[:-1] , large_freya_array[fixed_number]))
+                freya_data = large_freya_array[np.where(np.rint(large_freya_array[:,0])== fixed_A)]
+                freya_data = freya_data[:,1:]
+                #  print(freya_data)
+
+                ratio_array = chisq_array[3][translated_key]
+
+                matplotlib.rcParams.update({'font.size': 14})
+                plt.figure(figsize=(6,6))
+
+                ax = plt.subplot(2,1,1,ylabel="Average Neutron Multiplicity")
+
+                ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+                ax.xaxis.set_visible(False)
+                plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output')
+                #  plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+                plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]) + ' data')
+                plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
+                #  plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+                #  plt.ylim( ranges_y[key][0] , ranges_y[key][1])
+                plt.xscale(element[7])
+                plt.yscale(element[7])
+                lg = plt.legend(("FREYA",str(element[1]) + ' data'),fontsize=14,numpoints=1)
+                lg.draw_frame(False)
+
+                plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
+                #  plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'r')
+                #  plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+                #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
+                #  plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+                if len(ranges_y[key]) > 2:
+                    plt.ylim( ranges_y[key][2] , ranges_y[key][3] + 0.2)
+                    print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")
+                #  plt.xscale(element[7])
+                plt.axhline(1, color='black')
+
+                plt.subplots_adjust(hspace=0)
+                plt.savefig(str(key)+ "_" +str(fixed_A) + '.pdf',bbox_inches='tight')
+                plt.close()
+
+            os.chdir(opt_path)
+
         else:
-            print("Plotting log scale plots...")
+            print("Plotting log scale plots for: " + str(key) + "...")
 
             maxwell_temp = 1.32
 
@@ -266,11 +338,17 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             translated_key = key_translator[key]
             freya_data = freya_dict[translated_key][0]
             ratio_array = chisq_array[3][translated_key]
+
             if key == "mannhart":
-                ratio_array[:-1,1] = ratio_array[:-1,1] / MaxwellianSpectrum(maxwell_temp)
-                ratio_array[1:,2] = ratio_array[1:,2] / MaxwellianSpectrum(maxwell_temp)
-                #  data_array[:,1,0] = data_array[:,1,0]*MaxwellianSpectrum(maxwell_temp)
+                #  ratio_array[:-1,1] = ratio_array[:-1,1] / MaxwellianSpectrum(maxwell_temp)
+                #  ratio_array[:-1,2] = ratio_array[:-1,2] / MaxwellianSpectrum(maxwell_temp)
+                data_array[:,1,1] = data_array[:,1,1]*MaxwellianSpectrum(maxwell_temp)
             if key == "n_spectrum":
+                total_count = np.sum(np.multiply(data_array[:,0,0],data_array[:,1,0]))*0.05
+                data_array[:,1,0] = data_array[:,1,0] / total_count 
+                data_array[:,1,1] = data_array[:,1,1] / total_count
+                ratio_array[:,1] = ratio_array[:,1] * total_count
+            if key == "rest_n_spectrum":
                 total_count = np.sum(np.multiply(data_array[:,0,0],data_array[:,1,0]))*0.05
                 data_array[:,1,0] = data_array[:,1,0] / total_count 
                 data_array[:,1,1] = data_array[:,1,1] / total_count
@@ -303,14 +381,13 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
                     , color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             plt.autoscale(axis = 'y')
-            #  plt.ylim( ranges_y[key][2] , ranges_y[key][3])
+            plt.ylim( ranges_y[key][2] , ranges_y[key][3])
             plt.xscale('log')
             plt.axhline(1, color='black')
 
             plt.subplots_adjust(hspace=0)
             plt.savefig(str(key) + "_x" + '.pdf',bbox_inches='tight')
             plt.close()
-
 
 ### MANNHART REGULAR LOG YSCALE
 
@@ -325,19 +402,21 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.errorbar( data_array[:,0,0] , data_array[:,1,0], 
                     yerr = data_array[:,1,1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
-            plt.ylim( ranges_y[key][0] , ranges_y[key][1])
+            #  plt.ylim( ranges_y[key][0] , ranges_y[key][1])
+            plt.ylim( 1E-6 , ranges_y[key][1])
             plt.ylim(1E-4,None)
             plt.yscale('log')
             lg = plt.legend(("FREYA",str(element[1]) + ' data'),fontsize=14,numpoints=1)
             lg.draw_frame(False)
 
+            #  print(ratio_array)
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
-            plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'r') 
-            plt.errorbar( ratio_array[1:,0] , ratio_array[1:,1] , 
-                    yerr = ratio_array[1:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.plot(ratio_array[:-2,0] , ratio_array[:-2,1] , '^' , color = 'r') 
+            plt.errorbar( ratio_array[1:-2,0] , ratio_array[1:-2,1] , 
+                    yerr = ratio_array[1:-2,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             plt.autoscale(axis = 'y')
-            #  plt.ylim( ranges_y[key][2] , ranges_y[key][3])
+            plt.ylim( ranges_y[key][2] , ranges_y[key][3])
             plt.axhline(1, color='black')
 
             plt.subplots_adjust(hspace=0)
@@ -345,6 +424,55 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.close()
 
             continue
+        if key == "n_TKE":
+            print('plotting alternative',key,"data")
+            dim_status = element[5]
+            data_array = element[0]
+            alt_element = parsed_data[0][key+"_alt"]
+            alt_data_array = alt_element[0]
+            translated_key = key_translator[key]
+            freya_data = freya_dict[translated_key][0]
+            ratio_array = chisq_array[3][translated_key]
+            alt_ratio_array = chisq_array[3][translated_key+"_alt"]
+
+            matplotlib.rcParams.update({'font.size': 14})
+            plt.figure(figsize=(6,6))
+
+            ax = plt.subplot(2,1,1,ylabel=element[3])
+
+            ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+            ax.xaxis.set_visible(False)
+            plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output') 
+            plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]) + ' data')
+            plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.plot(alt_data_array[:,0,0] , alt_data_array[:,1,0] , '^-' , color = 'g' , label = str(element[1]) + ' data')
+            plt.errorbar( alt_data_array[:, 0, 0] , alt_data_array[: ,1, 0] , yerr = alt_data_array[:, 1, 1], color = 'g', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+            plt.ylim( ranges_y[key][0] , ranges_y[key][1])
+            plt.xscale(element[7])
+            #  plt.yscale(element[7])
+            lg = plt.legend(("FREYA",str(element[1]) + ' data',str(alt_element[1])+' data'),fontsize=14,numpoints=1)
+            lg.draw_frame(False)
+            #  plt.title(str(key) + ' ' + str(iso[0]))
+
+            plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
+            plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'b') 
+            plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.plot(alt_ratio_array[:,0] , alt_ratio_array[:,1] , '^' , color = 'g') 
+            plt.errorbar( alt_ratio_array[1:None,0] , alt_ratio_array[1:None,1] , yerr = alt_ratio_array[1:None,2], color = 'g', fmt = ' ' , capsize = 3, elinewidth = 1)
+            #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
+            plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+            if len(ranges_y[key]) > 2:
+                plt.ylim( ranges_y[key][2] , ranges_y[key][3] + 0.2)
+                print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")
+            plt.xscale(element[7])
+            plt.axhline(1, color='black')
+
+            plt.subplots_adjust(hspace=0)
+            plt.savefig(str(key)+'_double' + '.pdf',bbox_inches='tight')
+            plt.close()
+
 
     print('Begin generating plots of Chi-Squared distributions...')
 

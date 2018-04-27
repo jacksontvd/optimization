@@ -34,8 +34,11 @@ cf252_weights['m_mult'] = 10/2.8
 cf252_weights['n_Af'] = 1/100
 cf252_weights['n_mult'] = 1/1.7
 cf252_weights['n_TKE'] = 1/1.8
+cf252_weights['n_TKE_alt'] = 0
+cf252_weights['n_A_TKE'] = 0
 cf252_weights['mannhart'] = 15
 cf252_weights['n_spectrum'] = 0
+cf252_weights['rest_n_spectrum'] = 0
 cf252_weights['product_A'] = 1
 cf252_weights['nubar'] = 2
 cf252_weights['nubar_moments'] = 2
@@ -48,6 +51,7 @@ pu240sf_weights['n_Af'] = 1
 pu240sf_weights['n_mult'] = 1
 #  pu240sf_weights['n_mult'] = 10
 pu240sf_weights['n_TKE'] = 1
+pu240sf_weights['n_TKE_alt'] = 1
 #  pu240sf_weights['n_spectrum'] = 2.5
 pu240sf_weights['n_spectrum'] = 0
 pu240sf_weights['product_A'] = 1
@@ -79,12 +83,15 @@ ranges_x['n_mult'] = [0,14]
 ranges_x['m_mult'] = [0,35]
 
 ranges_x['n_TKE'] = [100,240]
+ranges_x['n_TKE_alt'] = [100,240]
 #  ranges_x['n_spectrum'] = [0,15]
 ranges_x['n_spectrum'] = [0.2500E-01, 19.975]
+ranges_x['rest_n_spectrum'] = [0.2500E-01, 19.975]
 ranges_x['m_spectrum'] = [0,10]
 #  ranges_x['mannhart'] = [0.01, 100]
-ranges_x['mannhart'] = [0.2500E-01, 0.1280E+02]
-ranges_x['n_A_TKE'] = [100, 300]
+#  ranges_x['mannhart'] = [0.2500E-01, 0.1280E+02]
+ranges_x['mannhart'] = [0.2500E-01, 0.130E+02]
+ranges_x['n_A_TKE'] = np.copy(ranges_x['A'])
 
 ranges_x['nubar'] = [0,2]
 ranges_x['nubar_moments'] = [0,4]
@@ -105,18 +112,20 @@ ranges_y['energy_per_photon'] = [ 0,3.7 ]
 
 ranges_y['n_angular'] = [0.2,1.2]
 
-ranges_y['n_mult'] = [0,0.6]
+ranges_y['n_mult'] = [0,0.6,0,2]
 # third and fourth elements are ranges for ratio of freya to data
 ranges_y['m_mult'] = [0,0.25,0,2]
 
 ranges_y['n_TKE'] = [0,12]
+ranges_y['n_TKE_alt'] = [0,12]
 #  ranges_y['n_spectrum'] = [0,0.55]
-ranges_y['n_spectrum'] = [None,None]
+ranges_y['n_spectrum'] = [None,None,None,None]
+ranges_y['rest_n_spectrum'] = [None,None,None,None]
 ranges_y['m_spectrum'] = [0,1.3]
 #  ranges_y['mannhart'] = [0.01,2]
 #  ranges_y['mannhart'] = [0.01,None]
 ranges_y['mannhart'] = [-0.2,0.5,0,2]
-ranges_y['n_A_TKE'] = np.copy(ranges_x['A'])
+ranges_y['n_A_TKE'] = [100, 300]
 
 ranges_y['nubar'] = [0,10]
 ranges_y['nubar_moments'] = [0,40]
@@ -134,10 +143,12 @@ output_keys = ranges_x.keys()
 
 bin_number = {}
 
-bin_number['n_A_TKE'] = 70
+bin_number['n_A_TKE'] = 400
 bin_number['n_TKE'] = 70
+bin_number['n_TKE_alt'] = 70
 bin_number['n_angular'] = 20
 bin_number['n_spectrum'] = 400
+bin_number['rest_n_spectrum'] = 400
 bin_number['m_spectrum'] = 20
 bin_number['mannhart'] = 62
 
