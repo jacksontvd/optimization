@@ -31,6 +31,7 @@ param_ranges['94240'] = [10.0724,1.3,3.0,0.87,-3.07119]
 error_weights = {}
 cf252_weights = {}
 cf252_weights['m_mult'] = 10/2.8
+cf252_weights['m_mult_smudge'] = 0
 cf252_weights['n_Af'] = 1/100
 cf252_weights['n_mult'] = 1/1.7
 cf252_weights['n_TKE'] = 1/1.8
@@ -47,6 +48,7 @@ cf252_weights['average_photon_energy'] = 1
 error_weights['98252'] = cf252_weights
 pu240sf_weights = {}
 pu240sf_weights['m_mult'] = 1
+pu240sf_weights['m_mult_smudge'] = 0
 pu240sf_weights['n_Af'] = 1
 pu240sf_weights['n_mult'] = 1
 #  pu240sf_weights['n_mult'] = 10
@@ -79,8 +81,9 @@ ranges_x['energy_per_photon'] = np.copy(ranges_x['Product_A'])
 
 ranges_x['n_angular'] = [-1,1]
 
-ranges_x['n_mult'] = [0,14]
-ranges_x['m_mult'] = [0,35]
+ranges_x['n_mult'] = [0,14,0,10]
+ranges_x['m_mult'] = [0,35,0,22]
+ranges_x['m_mult_smudge'] = [0,35]
 
 ranges_x['n_TKE'] = [100,240]
 ranges_x['n_TKE_alt'] = [100,240]
@@ -103,7 +106,7 @@ ranges_y = {}
 ranges_y['Product_A'] = [0,12]
 ranges_y['Fragment_A'] = np.copy(ranges_y['Product_A'])
 
-ranges_y['n_Af'] = [0,5]
+ranges_y['n_Af'] = [0,5,0,2.5]
 ranges_y['m_Af'] = [0,8]
 ranges_y['TKE_A'] = [100,240]
 
@@ -115,6 +118,7 @@ ranges_y['n_angular'] = [0.2,1.2]
 ranges_y['n_mult'] = [0,0.6,0,2]
 # third and fourth elements are ranges for ratio of freya to data
 ranges_y['m_mult'] = [0,0.25,0,2]
+ranges_y['m_mult_smudge'] = [0,0.25,0,2]
 
 ranges_y['n_TKE'] = [0,12]
 ranges_y['n_TKE_alt'] = [0,12]
@@ -124,7 +128,7 @@ ranges_y['rest_n_spectrum'] = [None,None,None,None]
 ranges_y['m_spectrum'] = [0,1.3]
 #  ranges_y['mannhart'] = [0.01,2]
 #  ranges_y['mannhart'] = [0.01,None]
-ranges_y['mannhart'] = [-0.2,0.5,0,2]
+ranges_y['mannhart'] = [-0.2,0.5,0,2.2]
 ranges_y['n_A_TKE'] = [100, 300]
 
 ranges_y['nubar'] = [0,10]

@@ -19,8 +19,10 @@ else:
 if job_type == 'process':
     print("Processing...")
     Zinput=98
-    Ainput=252
-    generate_number = 10000
+    Ainput= 252
+    #  Zinput=94
+    #  Ainput=240
+    generate_number = 1000000
     method='process'
     resolution=None
     reaction_type="spontaneous"

@@ -7,6 +7,7 @@ cwd = os.getcwd()
 
 from covariance import covariance
 from ranges import *
+from isotope import *
 
 def covariance_plot(Zinput, Ainput, generate_number , some_type, resolution, reaction_type, parameter1, parameter2):
     covar, grid, x , y = covariance(Zinput,
@@ -112,6 +113,9 @@ def well_plot(Zinput, Ainput , filename1, filename2, parameter1 , parameter2 , p
     lines2 = file.readlines()
     file.close()
 
+    reac_t = 'spontaneous'
+    iso = isotope(Zinput,Ainput,reac_t)
+
     error_array1 = np.zeros((len(lines1),len(lines1)))
     error_array2 = np.zeros((len(lines2),len(lines2)))
 
@@ -163,6 +167,8 @@ def well_plot(Zinput, Ainput , filename1, filename2, parameter1 , parameter2 , p
     plt.errorbar(1.7594 , 1.438 , xerr = 1.8 , yerr = 2.36,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
     plt.xlabel('$1.2 \\times c + d$TKE(MeV)',fontsize=15)
     plt.ylabel('$1.2 \\times d$TKE (MeV) $ + c_S$',fontsize=15)
+    plt.annotate("$^{252}$Cf(sf)",(2.5,6),fontsize=15)
+    #  lg = plt.legend((str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
     plt.savefig('well.pdf')
     plt.close()
 

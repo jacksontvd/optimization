@@ -516,7 +516,10 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
         mannhart[:,0] = binEdges_freya[:-1]
         mannhart[:,1] = hlab_freya/degrid/n
+###
         #  mannhart[:,2] = 10/(np.sqrt(hlab_freya))
+        mannhart[:,2] = 2/(np.sqrt(hlab_freya))
+###
 
         n_TKE[:,1] = np.divide(n_TKE[:,1], n_TKE[:,3])
         n_TKE[:,2] = np.divide(n_TKE[:,2], n_TKE[:,3])
@@ -531,7 +534,14 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         n_mult[:,2] = np.sqrt(1/n_mult[:,1])
         n_mult[:,1] = np.divide(n_mult[:,1] , np.sum(n_mult[:,1]) )
 
-        m_mult[:,2] = np.sqrt(1/m_mult[:,1])
+###
+        m_mult[:,2] = np.sqrt(1/m_mult[:,1])/2
+###
+        m_mult_smudge = np.copy(m_mult)
+        #  m_mult_smudge[1:-1,1] = m_mult[1:-1,1] + m_mult[:-2,1] + m_mult[2:,1]
+        m_mult_smudge[1:-1,1] = m_mult[:-2,1] + m_mult[2:,1]
+
+        m_mult_smudge[:,1] = np.divide(m_mult_smudge[:,1] , np.sum(m_mult_smudge[:,1]) )
         m_mult[:,1] = np.divide(m_mult[:,1] , np.sum(m_mult[:,1]) )
 
         nu1 = 0.0
@@ -659,6 +669,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                     'Neutron Multiplicity', 
                     'Probability'] 
     freya_output['m_mult'] = [m_mult,
+                    'Gamma Multiplicity',
+                    r'$Gamma \ Multiplicity\ Distribution\ for: \ $'+freya_output['isotope'],
+                    'Gamma Multiplicity',
+                    'Probability']
+    freya_output['m_mult_smudge'] = [m_mult_smudge,
                     'Gamma Multiplicity',
                     r'$Gamma \ Multiplicity\ Distribution\ for: \ $'+freya_output['isotope'],
                     'Gamma Multiplicity',

@@ -57,23 +57,31 @@ c_d_covariance , grid_values, x_array , y_array = covar('c','d')
 T_d_covariance , grid_values, x_array , y_array = covar('T','d')
 
 print(
-        e_x_covariance / (np.sqrt(e_var * x_var))
+        e_var
+        )
+
+print(
+        e_x_covariance / (np.sqrt(e_var * x_var)),
+        x_var
         )
 
 print(
         e_c_covariance / (np.sqrt(e_var * c_var)),
-        x_c_covariance / (np.sqrt(x_var * c_var))
+        x_c_covariance / (np.sqrt(x_var * c_var)),
+        c_var
         )
 
 print(
         e_T_covariance / (np.sqrt(e_var * T_var)),
         x_T_covariance / (np.sqrt(x_var * T_var)),
-        c_T_covariance / (np.sqrt(c_var * T_var))
+        c_T_covariance / (np.sqrt(c_var * T_var)),
+        T_var
         )
 
 print(
         e_d_covariance / (np.sqrt(e_var * d_var)),
         x_d_covariance / (np.sqrt(x_var * d_var)),
         c_d_covariance / (np.sqrt(c_var * d_var)),
-        T_d_covariance / (np.sqrt(T_var * d_var))
+        T_d_covariance / (np.sqrt(T_var * d_var)),
+        d_var
         )

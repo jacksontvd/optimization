@@ -217,7 +217,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             continue
         if key_translator[key] == 'nubar' or key == 'average_photon_energy' or key == 'gammabar':
             continue
-        elif key_translator[key] != "mannhart" and key_translator[key] != "n_spectrum" and key_translator[key] != "rest_n_spectrum" and key_translator[key] != "n_A_TKE":
+        elif key_translator[key] not in ["mannhart","n_spectrum","rest_n_spectrum","n_A_TKE"]:
             print('plotting: ',key)
             dim_status = element[5]
             data_array = element[0]
@@ -234,25 +234,28 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             ax.xaxis.set_visible(False)
             plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output') 
             plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
-            plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]) + ' data')
+            plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]))
             plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
-            plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+            plt.plot([],[],color='#ffffff')
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
-            plt.xscale(element[7])
-            #  plt.yscale(element[7])
-            lg = plt.legend(("FREYA",str(element[1]) + ' data'),fontsize=14,numpoints=1)
+            lg = plt.legend(("FREYA",str(element[1]),'$^{'+str(iso[0][2:5])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
             lg.draw_frame(False)
-            #  plt.title(str(key) + ' ' + str(iso[0]))
 
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
             plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'r') 
             plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
             #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
-            plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+            if key in ['n_Af','m_mult_smudge','n_TKE']:
+            #  if key in ['n_mult','m_mult','n_Af','m_mult_smudge','n_TKE']:
+                nonzero_ones = freya_data[np.where(np.nan_to_num(freya_data[:,1]) > 0.0001)]
+                plt.xlim( min(nonzero_ones[:,0]) , max(nonzero_ones[:,0]))
+            elif key in ['n_mult','m_mult']: 
+                plt.xlim( ranges_x[key][2] , ranges_x[key][3])
+            else:
+                plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             if len(ranges_y[key]) > 2:
                 plt.ylim( ranges_y[key][2] , ranges_y[key][3] + 0.2)
                 print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")
-            plt.xscale(element[7])
             plt.axhline(1, color='black')
 
             plt.subplots_adjust(hspace=0)
@@ -302,13 +305,14 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
                 ax.xaxis.set_visible(False)
                 plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output')
                 #  plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
-                plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]) + ' data')
+                plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]))
                 plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
+                plt.plot([],[],color='#ffffff')
                 #  plt.xlim( ranges_x[key][0] , ranges_x[key][1])
                 #  plt.ylim( ranges_y[key][0] , ranges_y[key][1])
                 plt.xscale(element[7])
                 plt.yscale(element[7])
-                lg = plt.legend(("FREYA",str(element[1]) + ' data'),fontsize=14,numpoints=1)
+                lg = plt.legend(("FREYA",str(element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
                 lg.draw_frame(False)
 
                 plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
@@ -339,10 +343,10 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             freya_data = freya_dict[translated_key][0]
             ratio_array = chisq_array[3][translated_key]
 
-            if key == "mannhart":
+            #  if key == "mannhart":
                 #  ratio_array[:-1,1] = ratio_array[:-1,1] / MaxwellianSpectrum(maxwell_temp)
                 #  ratio_array[:-1,2] = ratio_array[:-1,2] / MaxwellianSpectrum(maxwell_temp)
-                data_array[:,1,1] = data_array[:,1,1]*MaxwellianSpectrum(maxwell_temp)
+                #  data_array[:,1,1] = data_array[:,1,1]*MaxwellianSpectrum(maxwell_temp)
             if key == "n_spectrum":
                 total_count = np.sum(np.multiply(data_array[:,0,0],data_array[:,1,0]))*0.05
                 data_array[:,1,0] = data_array[:,1,0] / total_count 
@@ -365,13 +369,15 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             ax.xaxis.set_visible(False)
             plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output') 
             plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
-            plt.plot(data_array[:,0,0] , data_array[:,1,0], '^-' , color = 'b' , label = str(element[1]) + ' data')
+            plt.plot(data_array[:,0,0] , data_array[:,1,0], '^-' , color = 'b' , label = str(element[1]))
             plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0], 
                     yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.plot([],[],color='#ffffff')
+            plt.axhline(0, color='black')
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
             plt.xscale('log')
-            lg = plt.legend(("FREYA",str(element[1]) + ' data'),fontsize=14,numpoints=1)
+            lg = plt.legend(("FREYA",str(element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
             lg.draw_frame(False)
 
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
@@ -398,15 +404,17 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             ax.xaxis.set_visible(False)
             plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output') 
             plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
-            plt.plot(data_array[:,0,0] , data_array[:,1,0], '^-' , color = 'b' , label = str(element[1]) + ' data')
+            plt.plot(data_array[:,0,0] , data_array[:,1,0], '^-' , color = 'b' , label = str(element[1]))
             plt.errorbar( data_array[:,0,0] , data_array[:,1,0], 
                     yerr = data_array[:,1,1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.plot([],[],color='#ffffff')
+            plt.axhline(0, color='black')
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             #  plt.ylim( ranges_y[key][0] , ranges_y[key][1])
             plt.ylim( 1E-6 , ranges_y[key][1])
             plt.ylim(1E-4,None)
             plt.yscale('log')
-            lg = plt.legend(("FREYA",str(element[1]) + ' data'),fontsize=14,numpoints=1)
+            lg = plt.legend(("FREYA",str(element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
             lg.draw_frame(False)
 
             #  print(ratio_array)
@@ -444,15 +452,17 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             ax.xaxis.set_visible(False)
             plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output') 
             plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
-            plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]) + ' data')
+            plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]))
             plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
-            plt.plot(alt_data_array[:,0,0] , alt_data_array[:,1,0] , '^-' , color = 'g' , label = str(element[1]) + ' data')
+            plt.plot(alt_data_array[:,0,0] , alt_data_array[:,1,0] , '^-' , color = 'g' , label = str(element[1]))
             plt.errorbar( alt_data_array[:, 0, 0] , alt_data_array[: ,1, 0] , yerr = alt_data_array[:, 1, 1], color = 'g', fmt = ' ' , capsize = 3, elinewidth = 1)
-            plt.xlim( ranges_x[key][0] , ranges_x[key][1])
+            plt.plot([],[],color='#ffffff')
+            nonzero_ones = freya_data[np.where(np.nan_to_num(freya_data[:,1]) != 0)]
+            plt.xlim( min(nonzero_ones[:,0])-5 , max(nonzero_ones[:,0])+5)
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
             plt.xscale(element[7])
             #  plt.yscale(element[7])
-            lg = plt.legend(("FREYA",str(element[1]) + ' data',str(alt_element[1])+' data'),fontsize=14,numpoints=1)
+            lg = plt.legend(("FREYA",str(element[1]),str(alt_element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
             lg.draw_frame(False)
             #  plt.title(str(key) + ' ' + str(iso[0]))
 
@@ -462,7 +472,6 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.plot(alt_ratio_array[:,0] , alt_ratio_array[:,1] , '^' , color = 'g') 
             plt.errorbar( alt_ratio_array[1:None,0] , alt_ratio_array[1:None,1] , yerr = alt_ratio_array[1:None,2], color = 'g', fmt = ' ' , capsize = 3, elinewidth = 1)
             #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
-            plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             if len(ranges_y[key]) > 2:
                 plt.ylim( ranges_y[key][2] , ranges_y[key][3] + 0.2)
                 print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")

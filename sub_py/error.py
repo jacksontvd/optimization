@@ -11,10 +11,8 @@ from gen_par_ana import gpa
 from isotope import isotope
 from ranges import *
 
-def ratio_bar_scheme(a,x,b,y):
-    #  return np.sqrt(((x**2 + a**2)*b**2 - a**2 * (y**2 + b**2))/(b**2*(y**2 + b**2)))
-    bar =  np.sqrt((x**2 + a**2)/(y**2 + b**2) - a**2 / b**2)
-    #  print(bar)
+def ratio_bar_scheme(C,sig_C,E,sig_E):
+    bar = (sig_C**2 + C**2)/(sig_E**2 + E**2) - C**2/E**2
     return bar
 
 def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):

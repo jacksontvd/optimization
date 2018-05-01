@@ -13,13 +13,13 @@ from plot import plot
 
 Zinput = 98
 Ainput = 252
-generate_number = 10000
+generate_number = 1000
 reaction_type = 'spontaneous'
 #  optimization_type = 'grid'
 #  optimization_type = 'anneal'
 optimization_type = 'process'
 stochastic_type = 0
-resolution = 1000
+resolution = 10
 
 def opti(opt_method):
     result = opt(Zinput,
@@ -94,7 +94,7 @@ def well_2():
             "c","d","T","d")
 
 
-os.chdir(cwd)
+os.chdir(cwd+"/..")
 os.system('./restore.sh')
 
 if len(sys.argv) > 1:
@@ -123,5 +123,5 @@ elif job_type == 'well2':
 else:
     print("ERROR: Job type not recognized.")
 
-os.chdir(cwd)
+os.chdir(cwd+"/..")
 os.system('./restore.sh')
