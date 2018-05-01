@@ -145,8 +145,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     #  the n_A_TKE bin columns need to be 'repeated' and 'tiled' so as to get every combinatorial pair
     n_A_TKE = np.zeros((bin_number['n_A_TKE'] * (ranges_x['A'][1] - ranges_x['A'][0]) , 4))
-    n_A_TKE_energy_bins = np.arange(ranges_y['n_A_TKE'][0], ranges_y['n_A_TKE'][1], 
-            (ranges_y['n_A_TKE'][1] - ranges_y['n_A_TKE'][0]) / bin_number['n_A_TKE'] )
+    n_A_TKE_energy_bins = np.arange(ranges_y['n_A_TKE'][0], ranges_y['n_A_TKE'][1])
     n_A_TKE_mass_bins = np.arange(ranges_x['A'][0],ranges_x['A'][1] )
     n_A_TKE[:,0] = np.repeat( n_A_TKE_mass_bins , int( len(n_A_TKE)  / len(n_A_TKE_mass_bins ) ) )
     n_A_TKE[:,1] = np.tile(n_A_TKE_energy_bins,int( len(n_A_TKE) / len(n_A_TKE_energy_bins) ) )
