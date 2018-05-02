@@ -83,7 +83,7 @@ ranges_x['n_angular'] = [-1,1]
 
 ranges_x['n_mult'] = [0,14,0,10]
 ranges_x['m_mult'] = [0,35,0,22]
-ranges_x['m_mult_smudge'] = [0,35]
+ranges_x['m_mult_smudge'] = [0,35,0,22]
 
 ranges_x['n_TKE'] = [100,240]
 ranges_x['n_TKE_alt'] = [100,240]

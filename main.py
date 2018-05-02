@@ -22,7 +22,9 @@ if job_type == 'process':
     Ainput= 252
     #  Zinput=94
     #  Ainput=240
-    generate_number = 1000000
+    #  generate_number = 1000000
+    #  generate_number = 200000
+    generate_number = 10000
     method='process'
     resolution=None
     reaction_type="spontaneous"

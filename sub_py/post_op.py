@@ -242,14 +242,14 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             lg.draw_frame(False)
 
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
-            plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'r') 
-            plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+            plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'k') 
+            plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'k', fmt = ' ' , capsize = 3, elinewidth = 1)
             #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
-            if key in ['n_Af','m_mult_smudge','n_TKE']:
+            if key in ['n_Af','n_TKE']:
             #  if key in ['n_mult','m_mult','n_Af','m_mult_smudge','n_TKE']:
                 nonzero_ones = freya_data[np.where(np.nan_to_num(freya_data[:,1]) > 0.0001)]
                 plt.xlim( min(nonzero_ones[:,0]) , max(nonzero_ones[:,0]))
-            elif key in ['n_mult','m_mult']: 
+            elif key in ['n_mult','m_mult','m_mult_smudge']: 
                 plt.xlim( ranges_x[key][2] , ranges_x[key][3])
             else:
                 plt.xlim( ranges_x[key][0] , ranges_x[key][1])
@@ -381,10 +381,10 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             lg.draw_frame(False)
 
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
-            plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'r') 
+            plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'k') 
             plt.errorbar( ratio_array[1:,0] , ratio_array[1:,1] , 
                     yerr = ratio_array[1:,2]
-                    , color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+                    , color = 'k', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             plt.autoscale(axis = 'y')
             plt.ylim( ranges_y[key][2] , ranges_y[key][3])
@@ -419,9 +419,9 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
 
             #  print(ratio_array)
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
-            plt.plot(ratio_array[:-2,0] , ratio_array[:-2,1] , '^' , color = 'r') 
+            plt.plot(ratio_array[:-2,0] , ratio_array[:-2,1] , '^' , color = 'k') 
             plt.errorbar( ratio_array[1:-2,0] , ratio_array[1:-2,1] , 
-                    yerr = ratio_array[1:-2,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
+                    yerr = ratio_array[1:-2,2], color = 'k', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             plt.autoscale(axis = 'y')
             plt.ylim( ranges_y[key][2] , ranges_y[key][3])
@@ -486,7 +486,9 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
     print('Begin generating plots of Chi-Squared distributions...')
 
     #  plot chi squared distributions
-    os.chdir(opt_path)
+    if not os.path.exists(opt_path+"/chi_sq"):
+        os.makedirs(opt_path+"/chi_sq")
+    os.chdir(opt_path+"/chi_sq")
     for key in chisq_array[1]:
         chi_dict = chisq_array[1]
         chi_x = chi_dict[key][:,0]

@@ -533,9 +533,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         n_mult[:,2] = np.sqrt(1/n_mult[:,1])
         n_mult[:,1] = np.divide(n_mult[:,1] , np.sum(n_mult[:,1]) )
 
-###
-        m_mult[:,2] = np.sqrt(1/m_mult[:,1])/2
-###
+        m_mult[:,2] = 1/np.sqrt(m_mult[:,1])
         m_mult_smudge = np.copy(m_mult)
         #  m_mult_smudge[1:-1,1] = m_mult[1:-1,1] + m_mult[:-2,1] + m_mult[2:,1]
         m_mult_smudge[1:-1,1] = m_mult[:-2,1] + m_mult[2:,1]
