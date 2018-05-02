@@ -178,7 +178,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
 
                 if key is 'n_Af':
                     chi_sq_added = np.mean(dirty_chi_sq_array[45:85,1])
-                    #  105 - 165
+                    #  105 - 145
                 else:
                     chi_sq_added = np.mean(dirty_chi_sq_array[:,1])
 

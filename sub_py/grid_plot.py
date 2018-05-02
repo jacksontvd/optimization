@@ -167,7 +167,7 @@ def well_plot(Zinput, Ainput , filename1, filename2, parameter1 , parameter2 , p
     plt.errorbar(1.7594 , 1.438 , xerr = 1.8 , yerr = 2.36,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
     plt.xlabel('$1.2 \\times c + d$TKE(MeV)',fontsize=15)
     plt.ylabel('$1.2 \\times d$TKE (MeV) $ + c_S$',fontsize=15)
-    plt.annotate("$^{252}$Cf(sf)",(2.5,6),fontsize=15)
+    plt.annotate("$^{252}$Cf(sf)",(2.5,7),fontsize=18)
     #  lg = plt.legend((str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
     plt.savefig('well.pdf')
     plt.close()

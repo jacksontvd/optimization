@@ -377,7 +377,8 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
             plt.xscale('log')
-            lg = plt.legend(("FREYA",str(element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
+            lg = plt.legend(("FREYA",str(element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),
+                    loc="upper right",fontsize=14,numpoints=1)
             lg.draw_frame(False)
 
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
