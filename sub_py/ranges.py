@@ -30,10 +30,11 @@ param_ranges['94240'] = [10.0724,1.3,3.0,0.87,-3.07119]
 
 error_weights = {}
 cf252_weights = {}
-cf252_weights['m_mult'] = 10/2.8
+cf252_weights['m_mult'] = 4
 cf252_weights['m_mult_smudge'] = 0
 cf252_weights['n_Af'] = 1/100
-cf252_weights['n_mult'] = 1/1.7
+#  cf252_weights['n_mult'] = 1/1.7
+cf252_weights['n_mult'] = 100
 cf252_weights['n_TKE'] = 1/1.8
 cf252_weights['n_TKE_alt'] = 0
 cf252_weights['n_A_TKE'] = 0

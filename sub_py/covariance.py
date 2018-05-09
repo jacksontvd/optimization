@@ -22,7 +22,7 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
-def probability(chi_sq_array,number):
+def probability_function(chi_sq_array,number):
     dof = len(chi_sq_array) - 5
     return (chi_sq_array)**(dof/2 - 1)*np.exp(-chi_sq_array/(2*number))
 
@@ -132,7 +132,8 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     average_error = grid_total / len(grid_values)**2
     big_number = average_error
 
-    prob_array = np.exp(-grid_values / big_number)
+    #  prob_array = np.exp(-grid_values / big_number)
+    prob_array = probability_function(grid_values,big_number)
 
     rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
     rrange_2 = np.arange(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0])/resolution)
