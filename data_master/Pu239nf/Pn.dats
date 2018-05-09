@@ -1,6 +1,4 @@
-Neutron multiplicity distributions (from RV 22nov11):
-n + 239Pu
-Holden-Zucker
+\cite{Holden-Zucker}
 0 0.0108601 3e-05
 1 0.0993044 0.0028
 2 0.2748737 0.0003

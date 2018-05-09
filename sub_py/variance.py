@@ -21,6 +21,10 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
+def probability(chi_sq_array,number):
+    dof = len(chi_sq_array) - 5
+    return (chi_sq_array)**(dof/2 - 1)*np.exp(-chi_sq_array/(2*number))
+
 def variance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting variance calculation')
     reac_t = kwargs['reaction_type']
@@ -108,7 +112,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
 
     average_error = sum(grid_values) / len(grid_values)
     big_number = average_error
-    probability_array = np.exp(-grid_values / big_number)
+    probability_array = probability(grid_values,big_number)
 
     def normalizer_function(x):
         index = np.searchsorted(grid,x)

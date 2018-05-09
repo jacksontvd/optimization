@@ -22,6 +22,10 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
+def probability(chi_sq_array,number):
+    dof = len(chi_sq_array) - 5
+    return (chi_sq_array)**(dof/2 - 1)*np.exp(-chi_sq_array/(2*number))
+
 def covariance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting covariance calculation')
     reac_t = kwargs['reaction_type']

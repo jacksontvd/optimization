@@ -242,6 +242,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             lg.draw_frame(False)
 
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
+            plt.plot([],[],color='#ffffff')
             plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'k') 
             plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'k', fmt = ' ' , capsize = 3, elinewidth = 1)
             #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
@@ -256,6 +257,13 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             if len(ranges_y[key]) > 2:
                 plt.ylim( ranges_y[key][2] , ranges_y[key][3] + 0.2)
                 print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")
+            # Print reduced chi squared on C/E plot
+            chi_dict = chisq_array[1]
+            chi_y = chi_dict[key][:,1]
+            #  reduced_chi_sq = np.mean(np.nan_to_num(chi_y))
+            reduced_chi_sq = np.sum(np.nan_to_num(chi_y))/(len(chi_y) - 5)
+            lg = plt.legend((r'$\chi^2_\nu = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1)
+            lg.draw_frame(False)
             plt.axhline(1, color='black')
 
             plt.subplots_adjust(hspace=0)
