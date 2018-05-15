@@ -8,7 +8,7 @@ cwd = os.getcwd()
 
 from ranges import * 
 from gen_par_ana import gpa
-from error import error
+from error import *
 from data_parse import data_parse
 from isotope import isotope
 from anneal import anneal
@@ -129,7 +129,7 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
         #  block the printing for each iteration to avoid slowing the process down by taking the time to print the useless output
         #  comment this line to let it print if there is an issue with the routine
         blockPrint()
-        x0, fval, grid, Jout = optimize.brute(err_opt , brute_ranges, full_output = True, finish = optimize.fmin)
+        x0, fval, grid, Jout = optimize.brute(err_opt , brute_ranges , full_output = True, finish = optimize.fmin)
         enablePrint()
 
         #  set finalparams to be the 0th output of the brute routine
@@ -138,7 +138,7 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
         grid_values = Jout
 
     elif method == 'anneal':
-        finalparams , error = anneal(err_opt , guesses)
+        finalparams , this_error = anneal(err_opt , guesses)
         grid_values = None
 
     #  this is a hidden feature of the optimization routine, which allows the user to simply plot the data (alone and along with freya) without waiting for the optimization to happen
