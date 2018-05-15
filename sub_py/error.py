@@ -35,6 +35,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     #  initialize the total error to be 0. This will be added to as we calculate the error for each observable
     total_chisq = 0 
     total_clean_chisq = 0 
+    dof = -5
 
     #  assign the output of the generating function to be anal
     #  this is a list as given by the gpa function in gen_par_ana.py
@@ -190,6 +191,8 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
 
                 ratio_dict[key] = ratio
                 chisq_dict[key] = chi_sq_array
+
+                dof += len(chi_sq_array)
                 red_chisq = np.sum(np.nan_to_num(chi_sq_array)) / (len(chi_sq_array) - 5)
                 reduced_chisq_dict[key] = red_chisq
                 clean_chisq_added = np.sum(chi_sq_array)
@@ -204,4 +207,4 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     if total_chisq is not 0:
         print('Successful.')
 
-    return total_chisq, chisq_dict , total_clean_chisq , ratio_dict , anal , reduced_chisq_dict
+    return total_chisq, chisq_dict , total_clean_chisq , ratio_dict , anal , reduced_chisq_dict , dof

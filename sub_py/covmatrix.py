@@ -1,29 +1,10 @@
-"""
-module to calculate
-- The Hessian matrix of a function
-- The covariance matrix of log probability functions, using the Hessian
-  as a Gaussian approximation
-
-    Copyright (C) 2014  Erin Sheldon, Brookhaven National Laboratory
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of version 2 of the the GNU General Public License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-"""
 from __future__ import print_function
 
 import numpy
 from numpy import exp, array, linalg, zeros, isscalar
 from ranges import *
 from error import *
+from test import *
 from data_parse import *
 
 def blockPrint():
@@ -31,15 +12,26 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
+def probability(chi_sq_array,number,dof):
+    return (chi_sq_array)**(dof/2 - 1)*np.exp(-chi_sq_array/(2*number))
+
 def freya_hessian(Z,A,generate_number,h,reac_t):
     parameters = param_ranges[str(Z)+str(A)]
     parsed_data = data_parse(Z,A,reac_t)
-    def err_opt(parameters):
-        return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
-        #  return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number,None, reaction_type = reac_t)[0]
-    blockPrint()
-    result = calc_cov(err_opt,parameters,h)
-    enablePrint()
+    def objective(parameters):
+        #  error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+        error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number,None, reaction_type = reac_t)
+        error = error_array[0]
+        #  print(error)
+        dof = error_array[6]
+        prob = probability(error,1,dof)
+        #  print(prob)
+        log_prob = np.log(prob)
+        #  print(log_prob)
+        return log_prob
+    #  blockPrint()
+    result = calc_cov(objective,parameters,h)
+    #  enablePrint()
     return result
 
 def calc_cov(func, x, h):

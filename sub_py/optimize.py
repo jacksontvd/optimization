@@ -63,35 +63,33 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
 
     print('Begin Optimizing FREYA (This may take a while...)')
 
-
     #       DEFINE PARAMETER RANGES
 
-
-    e_range = [6,12,0]
+    #  e_range = [6,12,0]
+    e_range = [10,11,0]
     e_range[2] = e_range[1] - e_range[0]
 
-    x_range = [1,1.5,0]
-    #  x_range = [1.27,1.27,6]
+    #  x_range = [1,1.5,0]
+    x_range = [1.2,1.35,0]
     x_range[2] = x_range[1] - x_range[0]
 
-    c_range = [1,2,0]
-    #  c_range = [1.18,1.18,6]
+    #  c_range = [1,2,0]
+    c_range = [1.1,1.2,0]
     c_range[2] = c_range[1] - c_range[0]
 
-    T_range = [0.5,1.5,0]
-    #  T_range = [0.87,0.87,6]
+    #  T_range = [0.5,1.5,0]
+    T_range = [0.8,1,0]
     T_range[2] = T_range[1] - T_range[0]
 
-    d_range = [-5,5,0]
-    #  d_range = [0.52,0.52,6]
+    #  d_range = [-5,5,0]
+    d_range = [-1,1,0]
     d_range[2] = d_range[1] - d_range[0]
-
 
     #  define function which takes in a set of parameters and returns the raw chi-squared error (total sum)
     #  see error.py for the details of this error calculation
     def err_opt(parameters):
-        #  return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
-        return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        #  return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
 
     #  define class to give parameter bounds to optimization routine
     class MyBounds(object):
@@ -186,8 +184,8 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     print('Calling for final error estimation...')
 
     print(reac_t)
-    #  chisq_array =  error(Z,A,None, None, None, None, None , generate_number, parsed_data , reaction_type = reac_t)
-    chisq_array =  test_error(Z,A,finalparams[0],finalparams[1],finalparams[2],finalparams[3],finalparams[4], generate_number, parsed_data , reaction_type = reac_t)
+    chisq_array =  error(Z,A,None, None, None, None, None , generate_number, parsed_data , reaction_type = reac_t)
+    #  chisq_array =  test_error(Z,A,finalparams[0],finalparams[1],finalparams[2],finalparams[3],finalparams[4], generate_number, parsed_data , reaction_type = reac_t)
     
     if finalparams is not None:
         print('Final Set of Parameters: ',finalparams)
@@ -198,7 +196,6 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
 
     freya = gpa(Z,A,Energy,'cf.plot',generate_number = generate_number)
     freya_dict = freya[0]    
-
 
     opt_end = time.time()
 

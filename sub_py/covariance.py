@@ -22,8 +22,7 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
-def probability_function(chi_sq_array,number):
-    dof = len(chi_sq_array) - 5
+def probability(chi_sq_array,number,dof):
     return (chi_sq_array)**(dof/2 - 1)*np.exp(-chi_sq_array/(2*number))
 
 def covariance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
@@ -73,8 +72,8 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
         parameter_2 = params[1]
         parameters[special_index] = parameter
         parameters[special_index_2] = parameter_2
-        return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
-        #  return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        #  return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
 
 
     ### start optimizing
@@ -99,6 +98,9 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
 
     #  set finalparams to be the 0th output of the brute routine
     finalparams = x0
+    #  error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+    error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+    dof = error_array[6]
     #  set grid_values to be the final element of the output list of the brute routine
     grid_values = Jout
 
@@ -132,8 +134,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     average_error = grid_total / len(grid_values)**2
     big_number = average_error
 
-    #  prob_array = np.exp(-grid_values / big_number)
-    prob_array = probability_function(grid_values,big_number)
+    prob_array = probability(grid_values,big_number,dof)
 
     rrange = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
     rrange_2 = np.arange(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0])/resolution)

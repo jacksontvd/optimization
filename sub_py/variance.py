@@ -21,8 +21,7 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
-def probability(chi_sq_array,number):
-    dof = len(chi_sq_array) - 5
+def probability(chi_sq_array,number,dof):
     return (chi_sq_array)**(dof/2 - 1)*np.exp(-chi_sq_array/(2*number))
 
 def variance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
@@ -63,8 +62,11 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     #  see error.py for the details of this error calculation
     def err_opt(parameter):
         parameters[special_index] = parameter
-        return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
-        #  return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        #  error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+        error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+        error = error_array[0]
+        dof = error_array[6]
+        return error
 
     #  for grid search method initialize the brute source routine
     print("calculating errors on nodes...")
@@ -82,6 +84,9 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
 
     #  set finalparams to be the 0th output of the brute routine
     finalparams = x0
+    #  error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+    error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+    dof = error_array[6]
     #  set grid_values to be the final element of the output list of the brute routine
     grid_values = Jout
 
@@ -112,7 +117,8 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
 
     average_error = sum(grid_values) / len(grid_values)
     big_number = average_error
-    probability_array = probability(grid_values,big_number)
+    print("Number of Degrees of Freedom:",dof)
+    probability_array = probability(grid_values,big_number,dof)
 
     def normalizer_function(x):
         index = np.searchsorted(grid,x)
