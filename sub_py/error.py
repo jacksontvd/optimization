@@ -47,6 +47,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     #  define empty dictionary to give the arrays of chi-squared values for each bin for each data set
     #  this will be used by the optimization script to plot the errors
     chisq_dict = {}
+    reduced_chisq_dict = {}
     ratio_dict = {}
     #  define dummy error to scale data with no error for comparison with the other error contribution
     dummy_error = 0.05
@@ -189,6 +190,8 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
 
                 ratio_dict[key] = ratio
                 chisq_dict[key] = chi_sq_array
+                red_chisq = np.sum(np.nan_to_num(chi_sq_array)) / (len(chi_sq_array) - 5)
+                reduced_chisq_dict[key] = red_chisq
                 clean_chisq_added = np.sum(chi_sq_array)
                 total_clean_chisq += np.nan_to_num(clean_chisq_added)
     
@@ -201,4 +204,4 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     if total_chisq is not 0:
         print('Successful.')
 
-    return total_chisq, chisq_dict , total_clean_chisq , ratio_dict , anal
+    return total_chisq, chisq_dict , total_clean_chisq , ratio_dict , anal , reduced_chisq_dict

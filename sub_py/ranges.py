@@ -37,6 +37,7 @@ cf252_weights['n_Af'] = 1/100
 cf252_weights['n_mult'] = 100
 cf252_weights['n_TKE'] = 1/1.8
 cf252_weights['n_TKE_alt'] = 0
+cf252_weights['n_Af_alt'] = 0
 cf252_weights['n_A_TKE'] = 0
 cf252_weights['mannhart'] = 15
 cf252_weights['n_spectrum'] = 0
@@ -55,6 +56,7 @@ pu240sf_weights['n_mult'] = 1
 #  pu240sf_weights['n_mult'] = 10
 pu240sf_weights['n_TKE'] = 1
 pu240sf_weights['n_TKE_alt'] = 1
+pu240sf_weights['n_Af_alt'] = 1
 #  pu240sf_weights['n_spectrum'] = 2.5
 pu240sf_weights['n_spectrum'] = 0
 pu240sf_weights['product_A'] = 1
@@ -75,6 +77,7 @@ ranges_x['Product_A'] = ranges_x['A']
 ranges_x['Fragment_A'] = np.copy(ranges_x['Product_A'])
 
 ranges_x['n_Af'] = np.copy(ranges_x['Product_A'])
+ranges_x['n_Af_alt'] = np.copy(ranges_x['Product_A'])
 ranges_x['m_Af'] = np.copy(ranges_x['Product_A'])
 ranges_x['TKE_A'] = np.copy(ranges_x['Product_A'])
 
@@ -109,6 +112,7 @@ ranges_y['Product_A'] = [0,12]
 ranges_y['Fragment_A'] = np.copy(ranges_y['Product_A'])
 
 ranges_y['n_Af'] = [0,5,0,2.5]
+ranges_y['n_Af_alt'] = [0,5,0,2.5]
 ranges_y['m_Af'] = [0,8]
 ranges_y['TKE_A'] = [100,240]
 

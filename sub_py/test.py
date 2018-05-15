@@ -16,15 +16,15 @@ param_ranges['98252'] = [10.37,1.27,1.18,0.87,0.52]
 
 def test_error(Z, A, e ,x ,c ,T,d, generate_number, parsed_data, **kwargs):
     error = 1
-    error += abs(e - 10.37)
-    error += abs(x - 1.27)
-    error += abs(c - 1.18)
-    error += abs(T - 0.87)
-    error += abs(d - 0.52)
-    #  error += np.exp(-abs(e -10.37)/10)
-    #  error += np.exp(-abs(x - 1.27)/10)
-    #  error += np.exp(-abs(c - 1.18)/10)
-    #  error += np.exp(-abs(T - 0.87)/10)
-    #  error += np.exp(-abs(d - 0.52)/10)
+    #  error -= abs(e - 10.37)
+    #  error -= abs(x - 1.27)
+    #  error -= abs(c - 1.18)
+    #  error -= abs(T - 0.87)
+    #  error -= abs(d - 0.52)
+    error += np.exp(-abs(e +x -10.37)/1)
+    error += np.exp(-abs(x - 1.27)/1000)
+    error += np.exp(-abs(c - 1.18)/1000)
+    error += np.exp(-abs(T - 0.87)/1000)
+    error += np.exp(-abs(d - 0.52)/1000)
     return error**2, error, None
 

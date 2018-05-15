@@ -10,16 +10,18 @@ from variance import variance
 from covariance import covariance
 from grid_plot import *
 from plot import plot
+from covmatrix import freya_hessian
 
 Zinput = 98
 Ainput = 252
-generate_number = 1000
+generate_number = 1000000
 reaction_type = 'spontaneous'
 #  optimization_type = 'grid'
 #  optimization_type = 'anneal'
 optimization_type = 'process'
 stochastic_type = 0
 resolution = 10
+hessian_h = 0.01
 
 def opti(opt_method):
     result = opt(Zinput,
@@ -53,6 +55,14 @@ def covar(parameter1 , parameter2):
             reaction_type = reaction_type,
             parameter = parameter1,
             parameter2 = parameter2)
+
+def hess():
+    result = freya_hessian(Zinput,
+            Ainput,
+            generate_number,
+            hessian_h,
+            reaction_type)
+    return result
 
 def cov_plot(parameter1 , parameter2):
     result = covariance_plot(Zinput,
@@ -114,6 +124,8 @@ elif job_type == 'covar':
     arg1 = sys.argv[2]
     arg2 = sys.argv[3]
     print(covar(str(arg1),str(arg2)))
+elif job_type == 'hessian':
+    print(hess())
 elif job_type == 'pre_plot':
     pre_plot()
 elif job_type == 'well':

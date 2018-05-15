@@ -258,11 +258,8 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
                 plt.ylim( ranges_y[key][2] , ranges_y[key][3] + 0.2)
                 print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")
             # Print reduced chi squared on C/E plot
-            chi_dict = chisq_array[1]
-            chi_y = chi_dict[key][:,1]
-            #  reduced_chi_sq = np.mean(np.nan_to_num(chi_y))
-            reduced_chi_sq = np.sum(np.nan_to_num(chi_y))/(len(chi_y) - 5)
-            lg = plt.legend((r'$\chi^2_\nu = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1)
+            reduced_chi_sq = chisq_array[5][key]
+            lg = plt.legend((r'$\chi^2_n = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1)
             lg.draw_frame(False)
             plt.axhline(1, color='black')
 
@@ -324,6 +321,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
                 lg.draw_frame(False)
 
                 plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
+                plt.plot([],[],color='#ffffff')
                 #  plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'r')
                 #  plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
                 #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
@@ -332,6 +330,9 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
                     plt.ylim( ranges_y[key][2] , ranges_y[key][3] + 0.2)
                     print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")
                 #  plt.xscale(element[7])
+                reduced_chi_sq = chisq_array[5][key]
+                lg = plt.legend((r'$\chi^2_n = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1)
+                lg.draw_frame(False)
                 plt.axhline(1, color='black')
 
                 plt.subplots_adjust(hspace=0)
@@ -382,6 +383,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
                     yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.plot([],[],color='#ffffff')
             plt.axhline(0, color='black')
+
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
             plt.xscale('log')
@@ -390,6 +392,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             lg.draw_frame(False)
 
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
+            plt.plot([],[],color='#ffffff')
             plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'k') 
             plt.errorbar( ratio_array[1:,0] , ratio_array[1:,1] , 
                     yerr = ratio_array[1:,2]
@@ -399,6 +402,10 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.ylim( ranges_y[key][2] , ranges_y[key][3])
             plt.xscale('log')
             plt.axhline(1, color='black')
+            reduced_chi_sq = chisq_array[5][key]
+            lg = plt.legend((r'$\chi^2_n = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1)
+            lg.draw_frame(False)
+
 
             plt.subplots_adjust(hspace=0)
             plt.savefig(str(key) + "_x" + '.pdf',bbox_inches='tight')
@@ -428,6 +435,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
 
             #  print(ratio_array)
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
+            plt.plot([],[],color='#ffffff')
             plt.plot(ratio_array[:-2,0] , ratio_array[:-2,1] , '^' , color = 'k') 
             plt.errorbar( ratio_array[1:-2,0] , ratio_array[1:-2,1] , 
                     yerr = ratio_array[1:-2,2], color = 'k', fmt = ' ' , capsize = 3, elinewidth = 1)
@@ -435,13 +443,17 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.autoscale(axis = 'y')
             plt.ylim( ranges_y[key][2] , ranges_y[key][3])
             plt.axhline(1, color='black')
+            reduced_chi_sq = chisq_array[5][key]
+            lg = plt.legend((r'$\chi^2_n = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1,loc="upper left")
+            lg.draw_frame(False)
+
 
             plt.subplots_adjust(hspace=0)
             plt.savefig(str(key) + "_y" + '.pdf',bbox_inches='tight')
             plt.close()
 
             continue
-        if key == "n_TKE":
+        if key in ["n_TKE","n_Af"]:
             print('plotting alternative',key,"data")
             dim_status = element[5]
             data_array = element[0]
@@ -466,16 +478,19 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.plot(alt_data_array[:,0,0] , alt_data_array[:,1,0] , '^-' , color = 'g' , label = str(element[1]))
             plt.errorbar( alt_data_array[:, 0, 0] , alt_data_array[: ,1, 0] , yerr = alt_data_array[:, 1, 1], color = 'g', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.plot([],[],color='#ffffff')
-            nonzero_ones = freya_data[np.where(np.nan_to_num(freya_data[:,1]) != 0)]
-            plt.xlim( min(nonzero_ones[:,0])-5 , max(nonzero_ones[:,0])+5)
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
-            plt.xscale(element[7])
+            #  plt.xscale(element[7])
             #  plt.yscale(element[7])
-            lg = plt.legend(("FREYA",str(element[1]),str(alt_element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
+            if key == "n_Af":
+                plt.annotate('$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)',(140,4),fontsize=14)
+                lg = plt.legend(("FREYA",str(element[1]),str(alt_element[1])),fontsize=14,numpoints=1)
+            else:
+                lg = plt.legend(("FREYA",str(element[1]),str(alt_element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
             lg.draw_frame(False)
             #  plt.title(str(key) + ' ' + str(iso[0]))
 
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
+            plt.plot([],[],color='#ffffff')
             plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'b') 
             plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.plot(alt_ratio_array[:,0] , alt_ratio_array[:,1] , '^' , color = 'g') 
@@ -484,13 +499,17 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             if len(ranges_y[key]) > 2:
                 plt.ylim( ranges_y[key][2] , ranges_y[key][3] + 0.2)
                 print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")
-            plt.xscale(element[7])
+            #  plt.xscale(element[7])
             plt.axhline(1, color='black')
+            reduced_chi_sq = chisq_array[5][key]
+            lg = plt.legend((r'$\chi^2_n = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1)
+            lg.draw_frame(False)
+            nonzero_ones = freya_data[np.where(np.nan_to_num(freya_data[:,1]) != 0)]
+            plt.xlim( min(nonzero_ones[:,0])-5, max(nonzero_ones[:,0])+5)
 
             plt.subplots_adjust(hspace=0)
             plt.savefig(str(key)+'_double' + '.pdf',bbox_inches='tight')
             plt.close()
-
 
     print('Begin generating plots of Chi-Squared distributions...')
 
