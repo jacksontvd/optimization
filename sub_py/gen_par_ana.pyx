@@ -728,6 +728,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     freya_output['TKE'] = np.array(freya_TKE)
     freya_output['neutrons'] = np.array(neutrons)
     freya_output['n_TKE_alt'] = freya_output['n_TKE']
+    freya_output['n_Af_alt'] = freya_output['n_Af']
 
 
     times['gen_time'] = gen_time
