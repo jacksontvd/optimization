@@ -194,7 +194,7 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
 
                 dof += len(chi_sq_array)
                 red_chisq = np.sum(np.nan_to_num(chi_sq_array)) / (len(chi_sq_array) - 5)
-                reduced_chisq_dict[key] = red_chisq
+                reduced_chisq_dict[key] = round(red_chisq,2)
                 clean_chisq_added = np.sum(chi_sq_array)
                 total_clean_chisq += np.nan_to_num(clean_chisq_added)
     

@@ -11,7 +11,7 @@ cwd = os.getcwd()
 
 from ranges import * 
 from gen_par_ana import gpa
-from error import error
+from error import *
 from data_parse import data_parse
 from isotope import isotope
 from plot import plot
@@ -22,6 +22,11 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
     print('starting')
     reac_t = kwargs['reaction_type']
     os.chdir(cwd+'/../fission_v2.0.3/data_freya/')
+
+    #  Energy = kwargs["energy"]
+    #  if int(Energy) == -1:
+        #  string_energy = 0
+    string_energy = 0
 
     infile = open("inputparameters.dat","r+")
    
@@ -168,6 +173,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
     freya = chisq_array[4]
     #  freya = gpa(Z,A,Energy,'cf.plot',generate_number = generate_number)
     freya_dict = freya[0]    
+    times = freya[1]
 
     opt_end = time.time()
 
@@ -176,32 +182,172 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
     opt_stats.write(
         '\\documentclass[12pt]{letter} \n \\usepackage{amsmath} ' + 
         '\n \\begin{document} '
-        '\n $$\\begin{aligned} ' + 
-        '\\text{Final Set of Parameters: } & ' + 
-        '\n\\\\ & ' +
-        'e & = & ' + str(      finalparams[0]   ) +
-        '\n\\\\ & ' +
-        'x & = & ' + str(        finalparams[1]     ) + 
-        '\n\\\\ & ' +
-        'c &= & ' + str(         finalparams[2]     ) +
-        '\n\\\\ & ' +
-        'c_s & = & ' + str(      finalparams[3]         ) + 
-        '\n\\\\ & ' +
-        'dTKE & = & ' + str(        finalparams[4]      ) + 
-        '\n\\end{aligned} $$ \n' +
-        '$$ \\begin{aligned} \n' +
+        '\n\\[\\begin{tabular}{|c|c|c|c|c|}' + 
+        '\n\hline\n' + 
+        '$e_0 \\text{(1/MeV)}$ & $x$ & $c$ & $c_S$ & $d\\text{TKE} \\text{(MeV)}$ \\\\ \n' + 
+        '\hline\hline\n' + 
+        str(      finalparams[0]   ) +
+        ' & ' +
+        str(        finalparams[1]     ) + 
+        ' & ' +
+        str(         finalparams[2]     ) +
+        ' & ' +
+        str(      finalparams[3]         ) + 
+        ' & ' +
+        str(        finalparams[4]      ) + 
+        '\n\\\\\hline' + 
+        '\n \\end{tabular} \] \n' +
+        '\[ \\begin{aligned} \n' +
         '\\text{Final Chi-Squared Estimation: } & ' +
         '\n\\\\ & ' +
         '\\tilde\\chi^2 & = & ' + str(    chisq_array[0]      ) +
         '\n\\\\ & ' +
         '\\chi^2 & = & ' + str(    chisq_array[2]      ) +
-        '\n\\end{aligned} $$'
-        '$$ \\begin{aligned} \n' +
+        '\n\\end{aligned} \]'
+        '\[ \\begin{aligned} \n' +
         '\\text{Times: } & ' +
         '\n\\\\ & ' +
         '\\text{Events} & = & ' + str(        generate_number        ) +
+        '\n\\end{aligned}\\]' 
+        '\n\\end{document}')
+
+    opt_stats_2 =open(opt_path+'/statistics_2.tex', 'w+')
+    opt_stats_2.write('\\documentclass[12pt]{letter} \n' +
+        '\\usepackage{amsmath}'+
+        '\\usepackage{amsfonts}'+
+        '\\usepackage{amssymb}'+
+        '\\usepackage[english]{babel}'+
+        '\\usepackage{graphicx}'+
+        '\\usepackage{color} '+
+        '\\usepackage{todonotes}'+
+        '\\usepackage{cleveref}'+
+        '\\usepackage{array}'+
+        '\\usepackage{lipsum}\n'+
+        '\\newcommand{\code}{$\mathtt{FREYA}$}'+
+        '\\newcolumntype{L}{>{$}l<{$}}'+
+        '\\newcolumntype{C}{>{$}c<{$}}'+
+        '\\newcolumntype{R}{>{$}r<{$}}'+
+        '\n \\begin{document} '+
+        '\n $$\\begin{aligned} ' +
+        '\\text{Reaction: } & ' +
+        '\n\\\\ & ' +
+        'Z & = & ' + str(Z) +
+        '\n\\\\ & ' +
+        'A & = & ' + str(A) +
+        '\n\\\\ & ' +
+        '\\text{Energy} & = & ' + str(string_energy) +
+        '\n\\end{aligned} $$ \n' +
+        '\n\[\\begin{tabular}{CCCC} ' +
+        '\n\hline'
+        '\n & \\text{ Consensus Value } &\\text{\code\ Result} & \\text{C/E} \\\\'
+        '\n\hline'
+        '\n\\bar\\nu &' + 
+#  print out data in the first column
+        str(parsed_data[0]['nubar_moments'][0][0,1,0])+ 
+        '\pm '+ str(parsed_data[0]['nubar_moments'][0][0,1,1])
+        + '&' +
+#  print out freya in the second column
+        str(round(freya_dict[ 'nubar' ][0][0,1,0],2)) +
+        '\pm ' + str(round(freya_dict[ 'nubar' ][0][0,2,0],2)) 
+        + '&' +
+#  print out C/E in the third column
+        str(round(freya_dict[ 'nubar' ][0][0,1,0]/parsed_data[0]['nubar_moments'][0][0,1,0],2))+ 
+        '\pm '+ str(round(ratio_bar_scheme(
+            freya_dict[ 'nubar' ][0][0,1,0],
+            freya_dict[ 'nubar' ][0][0,2,0],
+            parsed_data[0]['nubar_moments'][0][0,1,0],
+            parsed_data[0]['nubar_moments'][0][0,1,1]
+            ),2))+
+# next line
+        '\\\\' + '\n \hline'
+        '\n\\nu_2 &' + 
+#  print out data in the first column
+        str(parsed_data[0]['nubar_moments'][0][1,1,0])+
+        '\pm '+ str(parsed_data[0]['nubar_moments'][0][1,1,1])+ '&' +
+#  print out freya in the second column
+        str(round(freya_dict[ 'nu2' ][0],2)) +
+        '\pm ' + str(round(freya_dict[ 'nu2' ][1],2)) + '&' +
+#  print out C/E in the third column
+        str(round(freya_dict[ 'nu2' ][0]
+            /parsed_data[0]['nubar_moments'][0][1,1,0],2))+
+        '\pm '+ str(round(ratio_bar_scheme(
+            freya_dict[ 'nu2' ][0],
+            freya_dict[ 'nu2' ][1],
+            parsed_data[0]['nubar_moments'][0][1,1,0],
+            parsed_data[0]['nubar_moments'][0][1,1,1]
+            ),2))+
+# next line
+        '\\\\' + '\n \hline'
+        '\n\\nu_3 &'+
+#  print out data in the first column
+        str(parsed_data[0]['nubar_moments'][0][2,1,0])+
+        '\pm '+ str(parsed_data[0]['nubar_moments'][0][2,1,1])+ '&' +
+#  print out freya in the second column
+        str(round(freya_dict[ 'nu3' ][0],2)) +
+        '\pm ' + str(round(freya_dict[ 'nu3' ][1],2))+ '&' +
+#  print out C/E in the third column
+        str(round(freya_dict[ 'nu3' ][0]
+            /parsed_data[0]['nubar_moments'][0][2,1,0],2))+
+        '\pm '+ str(round(ratio_bar_scheme(
+            freya_dict[ 'nu3' ][0],
+            freya_dict[ 'nu3' ][1],
+            parsed_data[0]['nubar_moments'][0][2,1,0],
+            parsed_data[0]['nubar_moments'][0][2,1,1]
+            ),2))+
+        '\\\\' + '\n \hline' +
+        '\n\\end{tabular} \]' +
+# next table
+        '\n\[\\begin{tabular}{CCCC} ' +
+        '\n\hline'
+        '\n& \\text{ Data } &\\text{\code\ Result} & \\text{C/E} \\\\'
+        '\n\hline'
+        '\n\overline{N}_{\gamma} &' + 
+#  print out data in the first column
+        str(parsed_data[0]['gammabar'][0][0,1,0])+
+        '\pm '+ str(parsed_data[0]['gammabar'][0][0,1,1])+ '&' +
+#  print out freya in the second column
+        str(round(freya_dict[ 'gammabar' ][0][0,1,0],2)) +
+        '\pm ' + str(round(freya_dict[ 'gammabar' ][0][0,2,0],2))+ '&' +
+#  print out C/E in the third column
+        str(round(freya_dict[ 'gammabar' ][0][0,1,0]
+            /parsed_data[0]['gammabar'][0][0,1,0],2))+
+        '\pm '+ str(round(ratio_bar_scheme(
+            freya_dict[ 'gammabar' ][0][0,1,0],
+            freya_dict[ 'gammabar' ][0][0,2,0],
+            parsed_data[0]['gammabar'][0][0,1,0],
+            parsed_data[0]['gammabar'][0][0,2,0]
+            ),2))+
+# next line
+        '\\\\' + '\n \hline'
+        '\n\overline{\epsilon_\gamma} \\text{(MeV)}&' + 
+#  print out data in the first column
+        str(parsed_data[0]['average_photon_energy'][0][0,1,0])+
+        '\pm '+ str(parsed_data[0]['average_photon_energy'][0][0,1,1])+ '&' +
+#  print out freya in the second column
+        str(round(freya_dict[ 'average_photon_energy' ][0][0,1,0],2)) +
+        '\pm ' + str(round(freya_dict[ 'average_photon_energy' ][0][0,2,0],2))+ '&' +
+#  print out C/E in the third column
+        str(round(freya_dict[ 'average_photon_energy' ][0][0,1,0]
+            /parsed_data[0]['average_photon_energy'][0][0,1,0],2))+
+        '\pm '+ str(round(ratio_bar_scheme(
+            freya_dict[ 'average_photon_energy' ][0][0,1,0],
+            freya_dict[ 'average_photon_energy' ][0][0,2,0],
+            parsed_data[0]['average_photon_energy'][0][0,1,0],
+            parsed_data[0]['average_photon_energy'][0][0,1,1]
+            ),2))+
+        '\\\\' + '\n \hline'
+        '\n\\end{tabular} \]' +
+        '$$ \\begin{aligned} \n' +
+        '\\text{Times: } & ' +
+        '\n\\\\ & ' +
+        '\\text{Events} & = &' + str(freya_dict['number_of_events']) +
+        '\n\\\\ & ' +
+        '\\text{Generation Time} & = & ' + str(round(float( times[ 'gen_time' ] ),5)) + '\\text{ sec}' +
+        '\n\\\\ & '
+        '\\text{Parse Time} & = &' + str(round(float( times[ 'parse_time'  ] )/60,5)) + '\\text{ min}' +
         '\n\\end{aligned} $$'
         '\n\\end{document}')
+
     print("Successful.")
     print("Statistics generated (as LaTeX) in: \n"+opt_path)
 

@@ -19,8 +19,8 @@ def freya_hessian(Z,A,generate_number,h,reac_t):
     parameters = param_ranges[str(Z)+str(A)]
     parsed_data = data_parse(Z,A,reac_t)
     def objective(parameters):
-        #  error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
-        error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number,None, reaction_type = reac_t)
+        error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+        #  error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number,None, reaction_type = reac_t)
         error = error_array[0]
         #  print(error)
         dof = error_array[6]
@@ -32,6 +32,45 @@ def freya_hessian(Z,A,generate_number,h,reac_t):
     #  blockPrint()
     result = calc_cov(objective,parameters,h)
     #  enablePrint()
+
+    correlation_array = result
+
+    print_path = cwd + '/../output/optimization/' + 'Z=' + str(Z) + 'A=' + str(A) + "_" + str(reac_t) + '/'
+    if not os.path.exists(print_path):
+        os.makedirs(print_path)
+
+    document =open(print_path+'/matrix.tex', 'w+')
+    document.write(
+    '$e_0$ &'+ 
+    str(round(correlation_array[0,0],3)) +'&' +
+    str(round(correlation_array[0,1],3)) +'&' +
+    str(round(correlation_array[0,2],3)) +'&' +
+    str(round(correlation_array[0,3],3)) +'&' +
+    str(round(correlation_array[0,4],3)) +
+    '\\\\ \n\hline\n' +'$x$ &' +
+    str(round(correlation_array[1,0],3)) +'&' +
+    str(round(correlation_array[1,1],3)) +'&' +
+    str(round(correlation_array[1,2],3)) +'&' +
+    str(round(correlation_array[1,3],3)) +'&' +
+    str(round(correlation_array[1,4],3)) +
+    '\\\\ \n\hline\n' +'$c$ &' +
+    str(round(correlation_array[2,0],3)) +'&' +
+    str(round(correlation_array[2,1],3)) +'&' +
+    str(round(correlation_array[2,2],3)) +'&' +
+    str(round(correlation_array[2,3],3)) +'&' +
+    str(round(correlation_array[2,4],3)) +
+    '\\\\ \n\hline\n' + '$c_S$ &'+
+    str(round(correlation_array[3,0],3)) +'&' +
+    str(round(correlation_array[3,1],3)) +'&' +
+    str(round(correlation_array[3,2],3)) +'&' +
+    str(round(correlation_array[3,3],3)) + '&' +
+    str(round(correlation_array[3,4],3)) +
+    '\\\\ \n\hline\n' + '$d$TKE &' +
+    str(round(correlation_array[4,0],3)) +'&' +
+    str(round(correlation_array[4,1],3)) + '&' +
+    str(round(correlation_array[4,2],3)) +'&' +
+    str(round(correlation_array[4,3],3)) +'&' +
+    str(round(correlation_array[4,4],3)))
     return result
 
 def calc_cov(func, x, h):

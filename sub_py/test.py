@@ -16,7 +16,7 @@ param_ranges['98252'] = [10.37,1.27,1.18,0.87,0.52]
 
 def test_error(Z, A, e ,x ,c ,T,d, generate_number, parsed_data, **kwargs):
     error = 1
-    error += abs(e - 10.37)
+    error += abs(e + x- 10.37)
     error += abs(x - 1.27)
     error += abs(c - 1.18)
     error += abs(T - 0.87)

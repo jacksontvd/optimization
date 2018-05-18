@@ -76,6 +76,7 @@ def plot(Z, A, Energy, output_file, **kwargs):
         '\\text{Parse Time} & = &' + str(round(float( times[ 'parse_time'  ] )/60,5)) + '\\text{ min}' +
         '\n\\end{aligned} $$'
         '\n\\end{document}')
+
     print("Successful.")
     print("Statistics generated (as LaTeX) in: \n"+plot_path)
 
