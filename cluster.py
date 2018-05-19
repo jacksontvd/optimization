@@ -14,14 +14,15 @@ from covmatrix import freya_hessian
 
 Zinput = 98
 Ainput = 252
-generate_number = 1000000
+generate_number = 1
 reaction_type = 'spontaneous'
-#  optimization_type = 'grid'
+optimization_type = 'grid'
 #  optimization_type = 'anneal'
-optimization_type = 'process'
+#  optimization_type = 'process'
 stochastic_type = 0
 resolution = 10
-hessian_h = 0.01
+#  hessian_h = [1,0.1,0.1,0.1,1]
+hessian_h = 1.e1
 
 def opti(opt_method):
     result = opt(Zinput,
@@ -113,7 +114,7 @@ else:
     job_type = None
 
 if job_type == 'opt':
-    print(opti(optimization_type))
+    opti(optimization_type)
 elif job_type == 'plot':
     print(cluster_plot())
 elif job_type == 'var':
