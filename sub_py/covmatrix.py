@@ -29,9 +29,9 @@ def freya_hessian(Z,A,generate_number,h,reac_t):
         log_prob = np.log(prob)
         #  print(log_prob)
         return log_prob
-    #  blockPrint()
+    blockPrint()
     result = calc_cov(objective,parameters,h)
-    #  enablePrint()
+    enablePrint()
 
     correlation_array = result
 
