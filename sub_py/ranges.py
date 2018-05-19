@@ -135,7 +135,7 @@ ranges_y['m_spectrum'] = [0,1.3]
 #  ranges_y['mannhart'] = [0.01,2]
 #  ranges_y['mannhart'] = [0.01,None]
 ranges_y['mannhart'] = [-0.2,0.5,0,2.2]
-ranges_y['n_A_TKE'] = [100, 250]
+ranges_y['n_A_TKE'] = [100, 300]
 
 ranges_y['nubar'] = [0,10]
 ranges_y['nubar_moments'] = [0,40]
