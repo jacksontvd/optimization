@@ -61,10 +61,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     recipe_input = str(Z)+'\n'+str(A)+'\n'+str(Energy)+'\n'+ str(generate_number) + '\n'+str(output_file)+'\n'
     brecipe_input = recipe_input.encode()
 
+    #  change directory to current working directory
     os.chdir(cwd )
 
+    #  call the actual executable
     p = Popen("cd ../fission_v2.0.3/ \n ./recipe", shell = True, stdout=PIPE, stdin=PIPE, stderr=STDOUT)
-    #  p = Popen("ls", shell = True, stdout=PIPE, stdin=PIPE, stderr=STDOUT)
 
     grep_stdout = p.communicate(input=b''+brecipe_input)[0]
 
@@ -74,6 +75,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         #  print(grep_stdout)
         print('Successful.')
 
+    #  record and print the time at the end of generating events
     generate_end = time.time()
     gen_time = generate_end - generate_begin
     print('Time: ' + str(gen_time) + " sec")
@@ -85,9 +87,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     initial_line = file.readline()
     initial_words = initial_line.split()
 
+    #  define empty dictionary for the freya output and associated times
     freya_output = {}
     times = {}
 
+    #  take the output file from FREYA and define a list where each element is a line from the document
     lines = file.readlines()
     lines = lines[0:len(lines)]
     file.close()
@@ -108,7 +112,6 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     TKE_A = np.copy(Fragment_A)
 
-    #  egrid = np.logspace(-3,2,bin_number['mannhart'])
     egrid = np.zeros((bin_number['mannhart']+1))
     egrid[1:] = np.array(mannhart_bins)
     degrid = egrid[1:]-egrid[:-1]
@@ -172,7 +175,8 @@ def gpa(Z, A, Energy, output_file, **kwargs):
             event = [line.strip()]
             n += 1
 
-    lines = [] #clear this portion of memory
+    #clear this portion of memory
+    lines = [] 
 
     print(initial_words[3] + ' events imported.')
     import_end = time.time()
@@ -228,7 +232,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         else:
             ngl_tf = 0
 
-        #  if we have (resp. don't have) neutrons for the fragments for an event we have (resp. don't have) additional lines to include in what we separate out as belonging to this event
+        #  if we do (resp. don't) have neutrons for the fragments for an event we do (resp. don't) have additional lines to include in what we separate out as belonging to this event
         light = event[nn_tf+2:nn_tf+2+nnl_tf+ngl_tf+2]
         
         #  now we do the same thing for the heavy fragment

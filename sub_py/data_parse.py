@@ -78,8 +78,8 @@ def data_parse(Z,A,reaction_type):
 
             #  define empty array
             #  length corresponds to number of "bins"
-            #  width corresponds to number of things to be binned (values, variances)
-            #  depth corresponds to the uncertainty on these values (note variances sometimes have uncertainties as well)
+            #  width corresponds to number of things to be binned
+            #  depth corresponds to the uncertainty on these values (there is sometimes "x uncertainty" as well)
             data = np.zeros((len(lines)-2,4,2))
 
             citation_line = lines[0]
@@ -88,7 +88,7 @@ def data_parse(Z,A,reaction_type):
             if is3d == True:
                 labels = lines[1].split(':')
                 case = len(labels)
-                #  first we deal with the 3-d case, where we are given two binnings at once (n_A_TKE for example)
+                #  first we deal with the 3-d case, where we are given two "binnings" at once (n_A_TKE for example)
                 #  case corresponds to how many columns there are. This will determine what data is in what columns. 
                 #  3 case: bins 1 - bins 2 - data
                 #  4 case: bins 1 - bins 2 - data - uncertainty
@@ -170,7 +170,7 @@ def data_parse(Z,A,reaction_type):
                         print('Data failed to parse for: ' + str(datafile))
                 data = np.array(data, dtype = np.float)
 
-
+            #  we want to plot some things with different scales on the axes, here we define a variable for this
             if file_name_words[1] == 'mannhart':
                 scale = 'log'
             elif file_name_words[1] == 'n_spectrum':

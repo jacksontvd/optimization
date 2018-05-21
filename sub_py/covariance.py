@@ -98,8 +98,8 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
 
     #  set finalparams to be the 0th output of the brute routine
     finalparams = x0
-    #  error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
-    error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+    error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+    #  error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
     dof = error_array[6]
     #  set grid_values to be the final element of the output list of the brute routine
     grid_values = Jout

@@ -9,41 +9,6 @@ from covariance import covariance
 from ranges import *
 from isotope import *
 
-def covariance_plot(Zinput, Ainput, generate_number , some_type, resolution, reaction_type, parameter1, parameter2):
-    covar, grid, x , y = covariance(Zinput,
-            Ainput,
-            generate_number,
-            "grid",
-            resolution,
-            reaction_type = reaction_type,
-            parameter = parameter1,
-            parameter2 = parameter2)
-    
-    #  create appropriate directory if it does not already exist 
-
-    var_path = cwd + '/../output/contours/' + 'Z=' + str(Zinput) + ' A=' + str(Ainput)
-
-    if not os.path.exists(var_path):
-        os.makedirs(var_path)
-
-    os.chdir(var_path)
-    plt.figure()
-    CS = plt.contour(x,y,grid)
-    plt.clabel(CS, inline=1, fontsize=10)
-    #  plt.title('$\chi^2$ error ('+'$'+parameter_labels[parameter1]+'$'+" vs. "+'$'+parameter_labels[parameter2]+"$)")
-
-    #  labels = ['line1', 'line2','line3','line4',
-               #  'line5', 'line6']
-    #  for i in range(len(labels)):
-        #  CS.collections[i].set_label(labels[i])
-    #  plt.legend(loc='upper left')
-
-    plt.savefig( parameter1 + parameter2 + '.pdf' )
-    plt.close()
-    os.chdir(cwd)
-    
-    return grid
-
 def prerun_plot(Zinput, Ainput , filename, parameter1 , parameter2):
     file = open(filename,"r")
     lines = file.readlines()
@@ -90,7 +55,6 @@ def prerun_plot(Zinput, Ainput , filename, parameter1 , parameter2):
     #  ax = fig.add_subplot(111, projection='3d')
     #  ax.contour(x_array, y_array,error_array)
     #  ax.contour(x_array, y_array,prob_array)
-
 
     plt.xlabel('$'+parameter_labels[parameter1]+'$',fontsize=15)
     plt.ylabel('$'+parameter_labels[parameter2]+'$',fontsize=15)
