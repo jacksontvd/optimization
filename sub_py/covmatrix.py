@@ -22,16 +22,17 @@ def freya_hessian(Z,A,generate_number,h,reac_t):
         error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
         #  error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number,None, reaction_type = reac_t)
         error_value = error_array[0]
-        #  print(error)
+        #  print(error_value)
         dof = error_array[6]
         prob = probability(error_value,1,dof)
         #  print(prob)
         log_prob = np.log(prob)
-        #  print(log_prob)
-        return log_prob
-    blockPrint()
+        print(log_prob)
+        #  return log_prob
+        return prob
+    #  blockPrint()
     result = calc_cov(objective,parameters,h)
-    enablePrint()
+    #  enablePrint()
 
     correlation_array = result
 

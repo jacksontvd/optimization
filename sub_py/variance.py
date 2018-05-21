@@ -62,8 +62,8 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     #  see error.py for the details of this error calculation
     def err_opt(parameter):
         parameters[special_index] = parameter
-        #  error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
-        error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+        error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+        #  error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
         error = error_array[0]
         dof = error_array[6]
         return error
