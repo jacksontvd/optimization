@@ -11,6 +11,7 @@ from covariance import covariance
 from grid_plot import *
 from plot import plot
 from covmatrix import freya_hessian
+from grid_run import grid_run
 
 Zinput = 98
 #  Zinput = 94
@@ -19,13 +20,15 @@ Ainput = 252
 #  generate_number = 1000000
 #  generate_number = 100000
 generate_number = 10000
+#  generate_number = 10
 reaction_type = 'spontaneous'
 optimization_type = 'grid'
 #  optimization_type = 'anneal'
 #  optimization_type = 'process'
 stochastic_type = 0
 resolution = 4
-hessian_h = [0.5,0.1,0.1,0.1,0.5]
+#  hessian_h = [0.5,0.1,0.1,0.1,0.5]
+hessian_h = [1.037,0.127,0.11,0.87,0.05]
 #  hessian_h = 1.e-1
 
 def opti(opt_method):
@@ -108,6 +111,13 @@ def well_2():
             cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/cT',
             "c","d","T","d")
 
+def grid_runn(parameter,parameter2):
+    grid_run(str(Zinput),str(Ainput),generate_number,None,resolution,
+            reaction_type = reaction_type,
+            parameter = parameter,
+            parameter2 = parameter2)
+
+
 os.chdir(cwd+"/..")
 os.system('./restore.sh')
 
@@ -136,6 +146,10 @@ elif job_type == 'well':
     well()
 elif job_type == 'well2':
     well_2()
+elif job_type == 'grid':
+    arg1 = sys.argv[2]
+    arg2 = sys.argv[3]
+    grid_runn(str(arg1),str(arg2))
 else:
     print("ERROR: Job type not recognized.")
 

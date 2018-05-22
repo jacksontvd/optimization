@@ -1,7 +1,8 @@
 from __future__ import print_function
 
-import numpy
+import numpy as np
 from numpy import exp, array, linalg, zeros, isscalar
+from math import gamma
 from ranges import *
 from error import *
 from test import *
@@ -13,7 +14,22 @@ def enablePrint():
     sys.stdout = sys.__stdout__
 
 def probability(chi_sq_array,number,dof):
-    return (chi_sq_array)**(dof/2 - 1)*np.exp(-chi_sq_array/(2*number))
+    factor = 1/(2**(dof/2)*gamma(dof/2))
+    #  print(factor)
+    exponential = np.exp(-chi_sq_array/(2*number))
+    #  print(exponential)
+    final = factor * exponential * (chi_sq_array)**(dof/2 - 1)
+    #  print(final)
+    return final
+
+def log_probability(chi_sq,dof):
+    factor = -np.log(gamma(dof/2)*(2**(dof/2)))
+    print(factor)
+    power = (1/2)*(dof-2)*np.log(chi_sq)
+    print(power)
+    exponential = -chi_sq/2
+    print(exponential)
+    return factor + power + exponential
 
 def freya_hessian(Z,A,generate_number,h,reac_t):
     parameters = param_ranges[str(Z)+str(A)]
@@ -23,15 +39,11 @@ def freya_hessian(Z,A,generate_number,h,reac_t):
         #  error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number,None, reaction_type = reac_t)
         error_value = error_array[0]
         print("ERROR:",error_value)
-
         dof = error_array[6]
         print("DOF:",dof)
-        prob = probability(error_value,1,dof)
-        print("PROB:",prob)
-
-        log_prob = np.log(prob)
+        log_prob = log_probability(error_value/100,dof/10)
         print("LOG_PROB:",log_prob)
-
+        print("PROB:",np.exp(log_prob))
         return log_prob
         #  return prob
 
