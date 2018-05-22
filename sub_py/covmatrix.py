@@ -25,6 +25,7 @@ def freya_hessian(Z,A,generate_number,h,reac_t):
         print("ERROR:",error_value)
 
         dof = error_array[6]
+        print("DOF:",dof)
         prob = probability(error_value,1,dof)
         print("PROB:",prob)
 
