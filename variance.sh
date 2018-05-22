@@ -22,3 +22,4 @@ python cluster.py var x
 python cluster.py var c
 python cluster.py var T
 python cluster.py var d
+sacct -j $SLURM_JOB_ID --format=JobID%16,Elapsed

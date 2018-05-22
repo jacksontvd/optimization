@@ -13,16 +13,20 @@ from plot import plot
 from covmatrix import freya_hessian
 
 Zinput = 98
+#  Zinput = 94
 Ainput = 252
-generate_number = 1
+#  Ainput = 240
+#  generate_number = 1000000
+#  generate_number = 100000
+generate_number = 10000
 reaction_type = 'spontaneous'
 optimization_type = 'grid'
 #  optimization_type = 'anneal'
 #  optimization_type = 'process'
 stochastic_type = 0
-resolution = 10
-#  hessian_h = [1,0.1,0.1,0.1,1]
-hessian_h = 1.e1
+resolution = 4
+hessian_h = [0.5,0.1,0.1,0.1,0.5]
+#  hessian_h = 1.e-1
 
 def opti(opt_method):
     result = opt(Zinput,
@@ -77,33 +81,32 @@ def cov_plot(parameter1 , parameter2):
     return result
 
 def pre_plot():
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',"T","d")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/cT',"c","T")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/cd',"c","d")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/eT',"e","T")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/ec',"e","c")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/ed',"e","d")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/ex',"e","x")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/xT',"x","T")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/xc',"x","c")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/xd',"x","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',"T","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/cT',"c","T")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/cd',"c","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/eT',"e","T")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/ec',"e","c")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/ed',"e","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/ex',"e","x")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/xT',"x","T")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/xc',"x","c")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/xd',"x","d")
     return 
 
 def well():
     #  well_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Te',"T","d")
     well_plot(str(Zinput),str(Ainput),
-            "/Users/jacksontvd/Documents/nuclear/freya/optimization_v2.1/output/grids/"+str(Zinput)+str(Ainput)+"-1/cd",
-            "/Users/jacksontvd/Documents/nuclear/freya/optimization_v2.1/output/grids/"+str(Zinput)+str(Ainput)+"-1/Td",
+            cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/cd',
+            cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',
             "c","d","T","d")
 
 def well_2():
     #  well_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Te',"T","d")
     well_plot_2(str(Zinput),str(Ainput),
-            "/Users/jacksontvd/Documents/nuclear/freya/optimization_v2.1/output/grids/"+str(Zinput)+str(Ainput)+"-1/eT",
-            "/Users/jacksontvd/Documents/nuclear/freya/optimization_v2.1/output/grids/"+str(Zinput)+str(Ainput)+"-1/Td",
-            "/Users/jacksontvd/Documents/nuclear/freya/optimization_v2.1/output/grids/"+str(Zinput)+str(Ainput)+"-1/cT",
+            cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/eT',
+            cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',
+            cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/cT',
             "c","d","T","d")
-
 
 os.chdir(cwd+"/..")
 os.system('./restore.sh')

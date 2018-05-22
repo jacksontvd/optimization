@@ -18,3 +18,4 @@ module load python/2.7/numpy
 module load python/2.7/scipy
 module load python/2.7/cython
 python cluster.py opt
+sacct -j $SLURM_JOB_ID --format=JobID%16,Elapsed

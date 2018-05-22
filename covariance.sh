@@ -27,3 +27,4 @@ python cluster.py covar x d
 python cluster.py covar c T
 python cluster.py covar c d
 python cluster.py covar T d
+sacct -j $SLURM_JOB_ID --format=JobID%16,Elapsed
