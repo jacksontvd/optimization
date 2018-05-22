@@ -178,16 +178,18 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
 
                     #  total_chisq +=np.nan_to_num( chi_sq_added )
 
-                if key is 'n_Af':
+                dirty_chi_sq_array = np.nan_to_num(dirty_chi_sq_array)
+                if key == 'n_Af':
                     chi_sq_added = np.mean(dirty_chi_sq_array[45:85,1])
                     #  105 - 145
                 else:
                     chi_sq_added = np.mean(dirty_chi_sq_array[:,1])
 
                 chi_sq_added = chi_sq_added * weights[key]
+                #  chi_sq_added = np.nan_to_num(chi_sq_added)
 
                 print("average",key,"error: ",chi_sq_added)
-                total_chisq += np.nan_to_num( chi_sq_added )
+                total_chisq += chi_sq_added
 
                 ratio_dict[key] = ratio
                 chisq_dict[key] = chi_sq_array

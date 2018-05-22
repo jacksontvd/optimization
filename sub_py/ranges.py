@@ -52,7 +52,7 @@ pu240sf_weights = {}
 pu240sf_weights['m_mult'] = 1
 pu240sf_weights['m_mult_smudge'] = 0
 pu240sf_weights['n_Af'] = 1
-pu240sf_weights['n_mult'] = 1
+pu240sf_weights['n_mult'] = 100
 #  pu240sf_weights['n_mult'] = 10
 pu240sf_weights['n_TKE'] = 1
 pu240sf_weights['n_TKE_alt'] = 1
@@ -61,11 +61,11 @@ pu240sf_weights['n_Af_alt'] = 1
 pu240sf_weights['n_spectrum'] = 0
 pu240sf_weights['product_A'] = 1
 #  pu240sf_weights['nubar'] = 1/170
-pu240sf_weights['nubar'] = 1
-pu240sf_weights['nubar_moments'] = 10
-pu240sf_weights['gammabar'] = 1/18
+pu240sf_weights['nubar'] = 1/300
+pu240sf_weights['nubar_moments'] = 1/40
+pu240sf_weights['gammabar'] = 3/2
 #  pu240sf_weights['average_photon_energy'] = 1/8
-pu240sf_weights['average_photon_energy'] = 1/4
+pu240sf_weights['average_photon_energy'] = 3/10
 error_weights['94240'] = pu240sf_weights
 
 
