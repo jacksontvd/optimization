@@ -17,14 +17,14 @@ module load python/2.7
 module load python/2.7/numpy
 module load python/2.7/scipy
 module load python/2.7/cython
-python cluster.py covar e x
-python cluster.py covar e c
-python cluster.py covar e T
-python cluster.py covar e d
-python cluster.py covar x c
-python cluster.py covar x T
-python cluster.py covar x d
-python cluster.py covar c T
-python cluster.py covar c d
-python cluster.py covar T d
+python cluster.py grid e x
+python cluster.py grid e c
+python cluster.py grid e T
+python cluster.py grid e d
+python cluster.py grid x c
+python cluster.py grid x T
+python cluster.py grid x d
+python cluster.py grid c T
+python cluster.py grid c d
+python cluster.py grid T d
 sacct -j $SLURM_JOB_ID --format=JobID%16,Elapsed
