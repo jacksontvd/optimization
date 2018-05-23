@@ -33,6 +33,7 @@ def log_probability(chi_sq,dof):
 
 def freya_hessian(Z,A,generate_number,h,reac_t):
     parameters = param_ranges[str(Z)+str(A)]
+    print("Using Hessian to calculate correlation matrix at the point: ",parameters)
     parsed_data = data_parse(Z,A,reac_t)
     def objective(parameters):
         error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
