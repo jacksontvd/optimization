@@ -1,0 +1,5 @@
+\cite{Santi Miller evaluation}
+Moment number : nubar and moments : Error
+1  	2.71        0.01
+2  	5.941       0.0188
+3	10.112      0.175

@@ -1,0 +1,3 @@
+\cite{Oberstedt data}
+N/A : Average Gamma multiplicity : Error
+1   6.72     0.07

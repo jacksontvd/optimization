@@ -1,0 +1,3 @@
+\cite{NA}
+NA : Average gamma energy : Error
+1  	0	0

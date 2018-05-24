@@ -11,7 +11,7 @@ def isotope(Z, A, reac_type = None):
         reaction_type = '(n,f)'
         reaction_word = 'induced'
     elif int(A) == 238 and int(Z) == 92 :
-        name = 'U238'
+        name = 'U238sf'
         i = 3
         reaction_type = 'sf'
         reaction_word = 'spontaneous'

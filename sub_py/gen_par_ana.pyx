@@ -107,6 +107,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     Product_A = np.copy(Fragment_A)
 
     n_Af = np.copy(Fragment_A)
+    totn_Af = np.copy(Fragment_A[int(np.floor(len(Fragment_A)/3)):])
 
     m_Af = np.copy(Fragment_A)
 
@@ -264,6 +265,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
         n_Af[Afrag_h - ranges_x['A'][0] ][1] += nnh
         n_Af[Afrag_h - ranges_x['A'][0] ][2] += nnh**2
+
+        totn_Af[Afrag_h - int(min(totn_Af[:,0])) ][1] += nnh + nnl
+        totn_Af[Afrag_h - int(min(totn_Af[:,0])) ][2] += (nnh+nnl)**2
 
         m_Af[Afrag_l - ranges_x['A'][0] ][1] += ngl
         m_Af[Afrag_l - ranges_x['A'][0] ][2] += ngl**2
@@ -502,6 +506,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         n_Af[:,2] = np.subtract(n_Af[:,2],np.square(n_Af[:,1]))
         n_Af[:,2] = np.sqrt(n_Af[:,2])
 
+        totn_Af[:,1] = np.divide(totn_Af[:,1] , Fragment_A[int(np.floor(len(Fragment_A)/3)):,1])
+        totn_Af[:,2] = np.divide(totn_Af[:,2] , Fragment_A[int(np.floor(len(Fragment_A)/3)):,1])
+        totn_Af[:,2] = np.subtract(totn_Af[:,2],np.square(totn_Af[:,1]))
+        totn_Af[:,2] = np.sqrt(totn_Af[:,2])
+
         TKE_A[:,1] = np.divide(TKE_A[:,1] , Fragment_A[:,1])
         TKE_A[:,2] = np.divide(TKE_A[:,2] , Fragment_A[:,1])
         TKE_A[:,2] = np.subtract(TKE_A[:,2],np.square(TKE_A[:,1]))
@@ -709,6 +718,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                     r'$Neutron \ Multiplicity \ vs. \ Fragment \ Mass \ for: \ $'+freya_output['isotope'], 
                     'Fragment Mass A', 
                     r'$\bar \nu(A)$']
+    freya_output['totn_Af'] = [totn_Af,
+                    r'$\bar \nu_T (A)$',
+                    r'$Total \ Neutron \ Multiplicity \ vs. \ Fragment \ Mass \ for: \ $'+freya_output['isotope'], 
+                    'Fragment Mass A', 
+                    r'$\bar \nu_T (A)$']
     freya_output['TKE_A'] = [TKE_A,
                     r'$  TKE(A)$',
                     r'$Total \ Kinetic \ Energy vs. \ Fragment \ Mass \ for: \ $'+freya_output['isotope'], 

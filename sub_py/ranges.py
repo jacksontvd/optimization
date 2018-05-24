@@ -1,4 +1,5 @@
 import numpy as np
+from copy import copy
 
 #  this script contains all of the ranges for the plots of given observables. This allows us to standardize the bounds for the plots of any observable across the board for freya, data, and error. 
 
@@ -33,6 +34,7 @@ cf252_weights = {}
 cf252_weights['m_mult'] = 4
 cf252_weights['m_mult_smudge'] = 0
 cf252_weights['n_Af'] = 1/100
+cf252_weights['totn_Af'] = 0
 #  cf252_weights['n_mult'] = 1/1.7
 cf252_weights['n_mult'] = 100
 cf252_weights['n_TKE'] = 1/1.8
@@ -48,6 +50,7 @@ cf252_weights['nubar_moments'] = 2
 cf252_weights['gammabar'] = 1
 cf252_weights['average_photon_energy'] = 1
 error_weights['98252'] = cf252_weights
+
 pu240sf_weights = {}
 pu240sf_weights['m_mult'] = 1
 pu240sf_weights['m_mult_smudge'] = 0
@@ -68,6 +71,36 @@ pu240sf_weights['gammabar'] = 3/2
 pu240sf_weights['average_photon_energy'] = 3/10
 error_weights['94240'] = pu240sf_weights
 
+cm244_weights = {}
+cm244_weights['gammabar'] = 0
+cm244_weights['average_photon_energy'] = 0
+cm244_weights['n_spectrum'] = 1/29121
+cm244_weights['n_mult'] = 20
+cm244_weights['nubar_moments'] = 4
+cm244_weights['totn_Af'] = 1/7
+error_weights['96244'] = cm244_weights
+
+u238sf_weights = {}
+u238sf_weights['gammabar'] = 0
+u238sf_weights['average_photon_energy'] = 0
+u238sf_weights['nubar_moments'] = 10
+u238sf_weights['n_mult'] = 20
+error_weights['92238'] = u238sf_weights
+
+pu238sf_weights = {}
+pu238sf_weights['gammabar'] = 0
+pu238sf_weights['average_photon_energy'] = 0
+pu238sf_weights['n_mult'] = 7
+pu238sf_weights['nubar_moments'] = 1/20
+error_weights['94238'] = pu238sf_weights
+
+pu242sf_weights = {}
+pu242sf_weights['gammabar'] = 1/10
+pu242sf_weights['average_photon_energy'] = 1/113
+pu242sf_weights['n_mult'] = 5
+pu242sf_weights['nubar_moments'] = 1/3
+pu242sf_weights['n_spectrum'] = 1/1320
+error_weights['94242'] = pu242sf_weights
 
 ranges_x = {} 
 
@@ -77,6 +110,8 @@ ranges_x['Product_A'] = ranges_x['A']
 ranges_x['Fragment_A'] = np.copy(ranges_x['Product_A'])
 
 ranges_x['n_Af'] = np.copy(ranges_x['Product_A'])
+ranges_x['totn_Af'] = [ranges_x['A'][0] + np.floor(ranges_x['A'][1]/3),
+        ranges_x['A'][1],120,170]
 ranges_x['n_Af_alt'] = np.copy(ranges_x['Product_A'])
 ranges_x['m_Af'] = np.copy(ranges_x['Product_A'])
 ranges_x['TKE_A'] = np.copy(ranges_x['Product_A'])
@@ -112,6 +147,7 @@ ranges_y['Product_A'] = [0,12]
 ranges_y['Fragment_A'] = np.copy(ranges_y['Product_A'])
 
 ranges_y['n_Af'] = [0,5,0,2.5]
+ranges_y['totn_Af'] = [0,5,0,2.5]
 ranges_y['n_Af_alt'] = [0,5,0,2.5]
 ranges_y['m_Af'] = [0,8]
 ranges_y['TKE_A'] = [100,240]

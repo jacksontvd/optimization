@@ -503,7 +503,9 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
                 #  ratio_array[:-1,2] = ratio_array[:-1,2] / MaxwellianSpectrum(maxwell_temp)
                 #  data_array[:,1,1] = data_array[:,1,1]*MaxwellianSpectrum(maxwell_temp)
             if key == "n_spectrum":
-                total_count = np.sum(np.multiply(data_array[:,0,0],data_array[:,1,0]))*0.05
+                bin_differences = np.subtract(data_array[1:,0,0],data_array[:-1,0,0])
+                areas = bin_differences * data_array[:-1,1,0]
+                total_count = np.sum(areas) + bin_differences[-1] * data_array[-1,1,0]
                 data_array[:,1,0] = data_array[:,1,0] / total_count 
                 data_array[:,1,1] = data_array[:,1,1] / total_count
                 ratio_array[:,1] = ratio_array[:,1] * total_count
@@ -603,12 +605,18 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             print('plotting alternative',key,"data")
             dim_status = element[5]
             data_array = element[0]
-            alt_element = parsed_data[0][key+"_alt"]
-            alt_data_array = alt_element[0]
             translated_key = key_translator[key]
             freya_data = freya_dict[translated_key][0]
             ratio_array = chisq_array[3][translated_key]
-            alt_ratio_array = chisq_array[3][translated_key+"_alt"]
+
+            if str(key)+"_alt" in [parsed_data[0]]:
+                alt_element = parsed_data[0][key+"_alt"]
+                alt_data_array = alt_element[0]
+                alt_ratio_array = chisq_array[3][translated_key+"_alt"]
+            else:
+                alt_element = element
+                alt_data_array = data_array
+                alt_ratio_array = ratio_array
 
             matplotlib.rcParams.update({'font.size': 14})
             plt.figure(figsize=(6,6))
