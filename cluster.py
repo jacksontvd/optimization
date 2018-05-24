@@ -13,14 +13,25 @@ from plot import plot
 from covmatrix import freya_hessian
 from grid_run import grid_run
 
-Zinput = 98
+#  cf
+#  Zinput = 98
+#  cm
+#  Zinput=96
+#  pu
 #  Zinput = 94
-Ainput = 252
+#  u
+#  Zinput=92
+
+#  Ainput = 238
 #  Ainput = 240
+#  Ainput = 242
+#  Ainput = 244
+#  Ainput = 252
+
 #  generate_number = 1000000
 #  generate_number = 100000
-generate_number = 10000
-#  generate_number = 10
+#  generate_number = 10000
+generate_number = 10
 reaction_type = 'spontaneous'
 optimization_type = 'grid'
 #  optimization_type = 'anneal'
