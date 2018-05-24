@@ -66,23 +66,18 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     #       DEFINE PARAMETER RANGES
 
     e_range = param_ranges['e']
-    #  e_range = [10,11,0]
     e_range[2] = e_range[1] - e_range[0]
 
     x_range = param_ranges['x']
-    #  x_range = [1.2,1.35,0]
     x_range[2] = x_range[1] - x_range[0]
 
     c_range = param_ranges['c']
-    #  c_range = [1.1,1.2,0]
     c_range[2] = c_range[1] - c_range[0]
 
     T_range = param_ranges['T']
-    #  T_range = [0.8,1,0]
     T_range[2] = T_range[1] - T_range[0]
 
     d_range = param_ranges['d']
-    #  d_range = [-1,1,0]
     d_range[2] = d_range[1] - d_range[0]
 
     #  define function which takes in a set of parameters and returns the raw chi-squared error (total sum)
