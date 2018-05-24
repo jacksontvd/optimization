@@ -24,16 +24,18 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     if e is not None:
         print("Begin Rewriting Parameter File...")
         if Energy == '-1' or -1:
-            reac_type = 'sf'
+            reac_type = 'spontaneous'
         else:
-            reac_type = '(n,f)'
-        i = isotope(Z,A)[1]
+            reac_type = 'induced'
+        iso = isotope(Z,A,reac_type = reac_type)
+        i = iso[1]
+        reaction_type = iso[2]
 
         os.chdir(cwd+'/../fission_v2.0.3/data_freya/')
         infile = open("inputparameters.dat","r+") 
         
         content = infile.readlines() #reads line by line and outputs a list of each line
-        content[i] = str(Z)+"  "+str(A)+"   '"+str(reac_type)+"'      "+str(e)+"     "+str(x)+"  "+str(c)+" "+str(T)+" 0.150  -                "+str(d)+"\n" 
+        content[i] = str(Z)+"  "+str(A)+"   '"+str(reaction_type)+"'      "+str(e)+"     "+str(x)+"  "+str(c)+" "+str(T)+" 0.150  -                "+str(d)+"\n" 
         #replaces content of the (i+1)th line with chosen parameter values
         infile.close()
         infile = open("inputparameters.dat", 'w') #clears content of file. 
