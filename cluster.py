@@ -31,13 +31,16 @@ from grid_run import grid_run
 #  generate_number = 1000000
 #  generate_number = 100000
 #  generate_number = 10000
-generate_number = 10
+#  generate_number = 10
 reaction_type = 'spontaneous'
+#  reaction_type = 'induced'
 optimization_type = 'grid'
 #  optimization_type = 'anneal'
 #  optimization_type = 'process'
 stochastic_type = 0
 resolution = 4
+#  resolution = 10
+
 #  hessian_h = [0.5,0.1,0.1,0.1,0.5]
 hessian_h = [1.037,0.127,0.11,0.87,0.05]
 #  hessian_h = 1.e-1
@@ -95,31 +98,29 @@ def cov_plot(parameter1 , parameter2):
     return result
 
 def pre_plot():
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',"T","d")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/cT',"c","T")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/cd',"c","d")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/eT',"e","T")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/ec',"e","c")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/ed',"e","d")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/ex',"e","x")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/xT',"x","T")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/xc',"x","c")
-    prerun_plot(str(Zinput),str(Ainput),cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/xd',"x","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/Td',"T","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/cT',"c","T")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/cd',"c","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/eT',"e","T")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/ec',"e","c")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/ed',"e","d")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/ex',"e","x")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/xT',"x","T")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/xc',"x","c")
+    prerun_plot(str(Zinput),str(Ainput),cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/xd',"x","d")
     return 
 
 def well():
-    #  well_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Te',"T","d")
     well_plot(str(Zinput),str(Ainput),
-            cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/cd',
-            cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',
+            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/cd',
+            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/Td',
             "c","d","T","d")
 
 def well_2():
-    #  well_plot(str(Zinput),str(Ainput),cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',cwd+'/output/grids/'+str(Zinput)+str(Ainput)+'-1/Te',"T","d")
     well_plot_2(str(Zinput),str(Ainput),
-            cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/eT',
-            cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/Td',
-            cwd+'/../output/grids/'+str(Zinput)+str(Ainput)+'-1/cT',
+            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/eT',
+            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/Td',
+            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/cT',
             "c","d","T","d")
 
 def grid_runn(parameter,parameter2):

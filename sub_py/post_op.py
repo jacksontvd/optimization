@@ -21,7 +21,7 @@ from maxwellian import *
 def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting')
     reac_t = kwargs['reaction_type']
-    os.chdir(cwd+'/../fission_v2.0.3/data_freya/')
+    os.chdir(cwd+'/../../freya/data_freya/')
 
     #  Energy = kwargs["energy"]
     #  if int(Energy) == -1:
@@ -52,7 +52,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
     line_split = content[i].split()
 
     # create directory for the plots to be placed
-    data_path = cwd + '/../output/data_plots/' + 'Z=' + str(Z) + 'A=' + str(A) + '/'
+    data_path = cwd + '/../../output/data_plots/' + 'Z=' + str(Z) + 'A=' + str(A) + '/'
     if not os.path.exists(data_path):
         os.makedirs(data_path)
 
@@ -154,7 +154,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
     res = None
 
     #  define path for optimization output to be placed
-    opt_path = cwd + '/../output/optimization/' + 'Z=' + str(Z) + ' A=' + str(A) + '_E=' + str(Energy) + '_' + 'post_op'
+    opt_path = cwd + '/../../output/optimization/' + 'Z=' + str(Z) + ' A=' + str(A) + '_E=' + str(Energy) + '_' + 'post_op'
 
     #  create appropriate directory if it does not already exist 
     if not os.path.exists(opt_path):

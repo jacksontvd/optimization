@@ -18,10 +18,31 @@ else:
 
 if job_type == 'process':
     print("Processing...")
-    Zinput=98
-    Ainput= 252
+
+    #  Cf252
+    #  Zinput=98
+    #  Ainput= 252
+
+    #  Pu238
+    #  Zinput=94
+    #  Ainput=238
+
+    #  Pu240
     #  Zinput=94
     #  Ainput=240
+
+    #  Pu242
+    Zinput=94
+    Ainput=242
+
+    #  Cm244
+    #  Zinput=96
+    #  Ainput=244
+
+    #  U238
+    #  Zinput = 92
+    #  Ainput = 238
+
     #  generate_number = 1000000
     #  generate_number = 200000
     generate_number = 10000
@@ -97,6 +118,5 @@ elif taskl == 'optimize':
         optimize_bool = False
     else:
         opt(Zinput,Ainput, generate_number, method, resolution, reaction_type = reaction_type,stochastic_type = 1, iteration_number = 100)
-
 else:
     print('ERROR: Input is not supported')

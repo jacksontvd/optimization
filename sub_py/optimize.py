@@ -24,7 +24,7 @@ def enablePrint():
 def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting')
     reac_t = kwargs['reaction_type']
-    os.chdir(cwd+'/../fission_v2.0.3/data_freya/')
+    os.chdir(cwd+'/../../freya/data_freya/')
 
     infile = open("inputparameters.dat","r+")
    
@@ -166,7 +166,7 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
 
 
     #  define path for optimization output to be placed
-    opt_path = cwd + '/../output/optimization/' + 'Z=' + str(Z) + ' A=' + str(A) + '_E=' + str(Energy) + '_' + str(method)
+    opt_path = cwd + '/../../output/optimization/' + 'Z=' + str(Z) + ' A=' + str(A) + '_E=' + str(Energy) + '_' + str(method)
 
     #  create appropriate directory if it does not already exist 
     if not os.path.exists(opt_path):

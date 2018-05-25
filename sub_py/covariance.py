@@ -42,7 +42,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
 
     resolution = np.float(resolution)
 
-    os.chdir(cwd+'/../fission_v2.0.3/data_freya/')
+    os.chdir(cwd+'/../../freya/data_freya/')
 
     infile = open("inputparameters.dat","r+")
    
@@ -111,7 +111,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     ### stop optimizing
 
     #  define path for output to be placed
-    var_path = cwd + '/../output/covariance/' + str(Z) + str(A) + str(Energy)
+    var_path = cwd + '/../../output/covariance/' + str(Z) + str(A) + str(Energy)
 
     #  create appropriate directory if it does not already exist 
     if not os.path.exists(var_path):

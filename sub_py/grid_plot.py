@@ -48,7 +48,7 @@ def prerun_plot(Zinput, Ainput , filename, parameter1 , parameter2):
 
     #  create appropriate directory if it does not already exist 
 
-    var_path = cwd + '/../output/contours/' + 'Z=' + str(Zinput) + ' A=' + str(Ainput)
+    var_path = cwd + '/../../output/contours/' + 'Z=' + str(Zinput) + ' A=' + str(Ainput)
     if not os.path.exists(var_path):
         os.makedirs(var_path)
     os.chdir(var_path)
@@ -102,7 +102,7 @@ def well_plot(Zinput, Ainput , filename1, filename2, parameter1 , parameter2 , p
 
     #  create appropriate directory if it does not already exist 
 
-    var_path = cwd + '/../output/contours/' + 'Z=' + str(Zinput) + ' A=' + str(Ainput)
+    var_path = cwd + '/../../output/contours/' + 'Z=' + str(Zinput) + ' A=' + str(Ainput)
 
     if not os.path.exists(var_path):
         os.makedirs(var_path)
@@ -198,7 +198,7 @@ def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, parameter1 , p
     x_array3 = np.arange(range_array3_2[0] , range_array3_2[1] , (range_array3_2[1] - range_array3_2[0])/resolution)
 
     #  create appropriate directory if it does not already exist 
-    var_path = cwd + '/../output/contours/' + 'Z=' + str(Zinput) + ' A=' + str(Ainput)
+    var_path = cwd + '/../../output/contours/' + 'Z=' + str(Zinput) + ' A=' + str(Ainput)
 
     if not os.path.exists(var_path):
         os.makedirs(var_path)

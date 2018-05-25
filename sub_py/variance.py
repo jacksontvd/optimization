@@ -35,7 +35,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
 
     fixed_value = copy.copy(parameters[special_index])
 
-    os.chdir(cwd+'/../fission_v2.0.3/data_freya/')
+    os.chdir(cwd+'/../../freya/data_freya/')
     infile = open("inputparameters.dat","r+")
    
     #  parse appropriate data with fuction from data_parse.py
@@ -97,7 +97,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     ### stop optimizing
 
     #  define path for output to be placed
-    var_path = cwd + '/../output/variance/' + 'Z=' + str(Z) + ' A=' + str(A) + '_E=' + str(Energy) + '_' + str(method)
+    var_path = cwd + '/../../output/variance/' + 'Z=' + str(Z) + ' A=' + str(A) + '_E=' + str(Energy) + '_' + str(method)
 
     #  create appropriate directory if it does not already exist 
     if not os.path.exists(var_path):

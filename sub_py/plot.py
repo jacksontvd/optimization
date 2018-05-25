@@ -19,7 +19,7 @@ def plot(Z, A, Energy, output_file, **kwargs):
     times = freya[1]
 
     #  define, make path for plots to be placed
-    plot_path = cwd+'/../output/'+str(output_file)
+    plot_path = cwd+'/../../output/'+str(output_file)
     if not os.path.exists(plot_path):
         os.makedirs(plot_path)
     print("Begin Printing Statistics...")
