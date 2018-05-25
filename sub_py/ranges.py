@@ -84,6 +84,7 @@ cm244_weights['n_spectrum'] = 1/29121
 cm244_weights['n_mult'] = 20
 cm244_weights['nubar_moments'] = 4
 cm244_weights['totn_Af'] = 1/7
+cm244_weights['n_Af'] = 1/50
 error_weights['96244'] = cm244_weights
 
 u238sf_weights = {}
