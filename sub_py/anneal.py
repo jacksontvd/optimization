@@ -8,7 +8,8 @@ from random import random
 cwd = os.getcwd()
 
 def acceptance_probability(old_error , new_error , T):
-    return np.exp(-(old_error - new_error)**2/(2*T))
+    #  return np.exp(-(old_error - new_error)**2/(2*T))
+    return T/(((old_error-new_error)**2 + T**2)**3)
 
 def neighbor(old):
     sigma = old/100
