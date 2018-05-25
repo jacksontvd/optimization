@@ -32,7 +32,7 @@ def log_probability(chi_sq,dof):
     return factor + power + exponential
 
 def freya_hessian(Z,A,generate_number,h,reac_t):
-    parameters = param_ranges[str(Z)+str(A)]
+    parameters = param_list(Z,A,reac_t)
     print("Using Hessian to calculate correlation matrix at the point: ",parameters)
     parsed_data = data_parse(Z,A,reac_t)
     def objective(parameters):

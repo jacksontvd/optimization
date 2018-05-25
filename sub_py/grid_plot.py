@@ -39,12 +39,13 @@ def prerun_plot(Zinput, Ainput , filename, parameter1 , parameter2):
     x_array = np.arange(range_array[0] , range_array[1] , (range_array[1] - range_array[0])/resolution)
     y_array = np.arange(range_array_2[0] , range_array_2[1] , (range_array_2[1] - range_array_2[0])/resolution)
 
-    zoompercent = 90
+    zoompercent = 80
     zoomshift1 = 0
     zoomshift2 = 0
     x_array = zoom(x_array,zoompercent,zoomshift1)
     y_array = zoom(y_array,zoompercent,zoomshift2)
     error_array = zoom2d(error_array,zoompercent,zoomshift1,zoomshift2)
+    #  error_array = np.log(error_array)
 
     #  create appropriate directory if it does not already exist 
 
@@ -61,7 +62,7 @@ def prerun_plot(Zinput, Ainput , filename, parameter1 , parameter2):
     plt.close()
     os.chdir(cwd)
 
-def well_plot(Zinput, Ainput , filename1, filename2, parameter1 , parameter2 , parameter3 , parameter4):
+def well_plot(Zinput, Ainput , filename1, filename2, p1_list , p2_list,zoompercent):
     file = open(filename1,"r")
     lines1 = file.readlines()
     file.close()
@@ -86,19 +87,19 @@ def well_plot(Zinput, Ainput , filename1, filename2, parameter1 , parameter2 , p
         element_array = np.array(elements)
         error_array2[line_number] = element_array
 
-    range_array1 = param_ranges[parameter1]
-    range_array1_2 = param_ranges[parameter2]
+    range_array1 = param_ranges[p1_list[0][0]]
+    range_array1_2 = param_ranges[p1_list[0][1]]
 
-    range_array2 = param_ranges[parameter1]
-    range_array2_2 = param_ranges[parameter2]
+    range_array2 = param_ranges[p2_list[0][0]]
+    range_array2_2 = param_ranges[p2_list[0][1]]
 
     resolution  = len(lines1)
 
     x_array1 = np.arange(range_array1[0] , range_array1[1] , (range_array1[1] - range_array1[0])/resolution)
     y_array1 = np.arange(range_array1_2[0] , range_array1_2[1] , (range_array1_2[1] - range_array1_2[0])/resolution)
 
-    y_array2 = np.arange(range_array2[0] , range_array2[1] , (range_array2[1] - range_array2[0])/resolution)
-    x_array2 = np.arange(range_array2_2[0] , range_array2_2[1] , (range_array2_2[1] - range_array2_2[0])/resolution)
+    x_array2 = np.arange(range_array2[0] , range_array2[1] , (range_array2[1] - range_array2[0])/resolution)
+    y_array2 = np.arange(range_array2_2[0] , range_array2_2[1] , (range_array2_2[1] - range_array2_2[0])/resolution)
 
     #  create appropriate directory if it does not already exist 
 
@@ -109,26 +110,35 @@ def well_plot(Zinput, Ainput , filename1, filename2, parameter1 , parameter2 , p
 
     os.chdir(var_path)
 
-    #  objective_array = error_array1 + 5 * np.fliplr(error_array2)
     def concoction(first, second):
-        return  1.2 * first + 1 * second
-
-    xs = concoction(x_array1,x_array2) - 1
-    ys = concoction(y_array1,y_array2) + 1
-    zs = concoction(error_array1,np.transpose(error_array2))
+        return  p1_list[1] * first + p2_list[1] * second
+    
+    xs = concoction(x_array1,x_array2)
+    ys = concoction(y_array1,y_array2)
+    zs = concoction(error_array1,error_array2)
     zs = np.log(zs)
+
+    parameters = param_list(Zinput,Ainput,reac_t)
+    num_first_x_param = p1_list[2]
+    num_second_x_param = p2_list[2]
+    num_first_y_param = p1_list[3]
+    num_second_y_param = p2_list[3]
+    sol_x = concoction(parameters[num_first_x_param],parameters[num_second_x_param])
+    sol_y = concoction(parameters[num_first_y_param],parameters[num_second_y_param])
 
     plt.contourf(xs,ys,zs,cmap=plt.cm.Reds)
     plt.colorbar()
-    plt.plot([1.7594],[1.43834], 'bo')
-    plt.errorbar(1.7594 , 1.43834 , xerr = 1.8 , yerr = 2.36,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
-    plt.xlabel('$1.2 \\times c + d$TKE(MeV)',fontsize=15)
-    plt.ylabel('$1.2 \\times d$TKE (MeV) $ + c_S$',fontsize=15)
+    plt.plot(sol_x,sol_y, 'bo')
+    plt.errorbar(sol_x,sol_y ,
+            xerr = 0.01 , yerr = 0.01,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
+    plt.xlabel('$'+str(p1_list[1])+'\\times '+str(p1_list[4])+' + '
+            +str(p2_list[1])+'\\times '+str(p2_list[4])+'$',fontsize=15)
+    plt.ylabel('$'+str(p1_list[1])+'\\times '+str(p1_list[5])+' + '
+            +str(p2_list[1])+'\\times '+str(p2_list[5])+'$',fontsize=15)
     plt.annotate("$^{252}$Cf(sf)",(2.5,7),fontsize=18)
     plt.savefig('well.pdf')
     plt.close()
 
-    zoompercent = 50
     zoomshift1 = 2
     zoomshift2 = -1
     close_xs = zoom(xs,zoompercent,zoomshift1)
@@ -137,16 +147,18 @@ def well_plot(Zinput, Ainput , filename1, filename2, parameter1 , parameter2 , p
 
     plt.contourf(close_xs,close_ys,close_zs,cmap=plt.cm.Reds)
     plt.colorbar()
-    plt.plot([1.7594],[1.43834], 'bo')
-    plt.xlabel('$1.2 \\times c + d$TKE (MeV)',fontsize=15)
-    plt.ylabel('$1.2 \\times d$TKE (MeV) $ + c_S$',fontsize=15)
+    plt.plot(sol_x,sol_y, 'bo')
+    plt.xlabel('$'+str(p1_list[1])+'\\times '+str(p1_list[4])+' + '
+            +str(p2_list[1])+'\\times '+str(p2_list[4])+'$',fontsize=15)
+    plt.ylabel('$'+str(p1_list[1])+'\\times '+str(p1_list[5])+' + '
+            +str(p2_list[1])+'\\times '+str(p2_list[5])+'$',fontsize=15)
     plt.annotate("$^{252}$Cf(sf)",(2.5,7),fontsize=18)
     plt.savefig('well_closeup.pdf')
     plt.close()
 
     os.chdir(cwd)
 
-def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, parameter1 , parameter2 , parameter3 , parameter4):
+def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, p1_list,p2_list,p3_list,zoompercent):
     file = open(filename1,"r")
     lines1 = file.readlines()
     file.close()
@@ -156,6 +168,9 @@ def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, parameter1 , p
     file = open(filename3,"r")
     lines3 = file.readlines()
     file.close()
+
+    reac_t = 'spontaneous'
+    iso = isotope(Zinput,Ainput,reac_t)
 
     error_array1 = np.zeros((len(lines1),len(lines1)))
     error_array2 = np.zeros((len(lines2),len(lines2)))
@@ -177,25 +192,25 @@ def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, parameter1 , p
         element_array = np.array(elements)
         error_array3[line_number] = element_array
 
-    range_array1 = param_ranges[parameter1]
-    range_array1_2 = param_ranges[parameter2]
+    range_array1 = param_ranges[p1_list[0][0]]
+    range_array1_2 = param_ranges[p1_list[0][1]]
 
-    range_array2 = param_ranges[parameter1]
-    range_array2_2 = param_ranges[parameter2]
+    range_array2 = param_ranges[p2_list[0][0]]
+    range_array2_2 = param_ranges[p2_list[0][1]]
 
-    range_array3 = param_ranges[parameter1]
-    range_array3_2 = param_ranges[parameter2]
+    range_array3 = param_ranges[p3_list[0][0]]
+    range_array3_2 = param_ranges[p3_list[0][1]]
 
     resolution  = len(lines1)
 
     x_array1 = np.arange(range_array1[0] , range_array1[1] , (range_array1[1] - range_array1[0])/resolution)
     y_array1 = np.arange(range_array1_2[0] , range_array1_2[1] , (range_array1_2[1] - range_array1_2[0])/resolution)
 
-    y_array2 = np.arange(range_array2[0] , range_array2[1] , (range_array2[1] - range_array2[0])/resolution)
-    x_array2 = np.arange(range_array2_2[0] , range_array2_2[1] , (range_array2_2[1] - range_array2_2[0])/resolution)
+    x_array2 = np.arange(range_array2[0] , range_array2[1] , (range_array2[1] - range_array2[0])/resolution)
+    y_array2 = np.arange(range_array2_2[0] , range_array2_2[1] , (range_array2_2[1] - range_array2_2[0])/resolution)
 
-    y_array3 = np.arange(range_array3[0] , range_array2[1] , (range_array2[1] - range_array2[0])/resolution)
-    x_array3 = np.arange(range_array3_2[0] , range_array3_2[1] , (range_array3_2[1] - range_array3_2[0])/resolution)
+    x_array3 = np.arange(range_array3[0] , range_array3[1] , (range_array3[1] - range_array3[0])/resolution)
+    y_array3 = np.arange(range_array3_2[0] , range_array3_2[1] , (range_array3_2[1] - range_array3_2[0])/resolution)
 
     #  create appropriate directory if it does not already exist 
     var_path = cwd + '/../../output/contours/' + 'Z=' + str(Zinput) + ' A=' + str(Ainput)
@@ -205,36 +220,68 @@ def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, parameter1 , p
 
     os.chdir(var_path)
 
-    def concoction(first, second,third):
-        return  8 * first + 1 * second + 15 * third
+    def concoction(first,second,third):
+        return  p1_list[1] *first + p2_list[1] * second + p3_list[1] * third
 
-    xs = concoction(x_array1,x_array2,x_array3) - 1
-    ys = concoction(y_array1,y_array2 ,y_array3) + 1
-    #  zs = concoction(error_array1,error_array2,error_array3)
-    zs = concoction(error_array1,np.transpose(error_array2),np.transpose(error_array3))
-    #  zs = concoction(np.transpose(error_array1),error_array2,error_array3)
+    xs = concoction(x_array1,x_array2,x_array3) 
+    ys = concoction(y_array1,y_array2 ,y_array3) 
+    zs = concoction(error_array1,error_array2,error_array3)
+    #  zs = np.log(zs)
+
+    parameters = param_list(Zinput,Ainput,reac_t)
+    num_first_x_param = p1_list[2]
+    num_second_x_param = p2_list[2]
+    num_third_x_param = p3_list[2]
+    num_first_y_param = p1_list[3]
+    num_second_y_param = p2_list[3]
+    num_third_y_param = p3_list[3]
+    sol_x = concoction(parameters[num_first_x_param],
+            parameters[num_second_x_param],parameters[num_third_x_param])
+    sol_y = concoction(parameters[num_first_y_param],
+            parameters[num_second_y_param],parameters[num_third_y_param])
 
     plt.contourf(xs,ys,zs,cmap=plt.cm.Reds)
     plt.colorbar()
-    #  plt.plot([50.61],[16.94], 'bo')
-    #  plt.errorbar( 50.61 , 16.94 , xerr = 11.4 , yerr = 21 ,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
-    plt.xlabel('$8 \\times e_0 $(MeV)$ + d$TKE (MeV)$ + 15 \\times c_s$',fontsize=15)
-    plt.ylabel('$d$TKE (MeV) $ + 23 \\times c_S$',fontsize=15)
+    plt.plot(sol_x,sol_y, 'bo')
+    plt.errorbar( sol_x , sol_y ,
+            xerr = 0.01 , yerr = 0.01 ,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
+    plt.xlabel('$'+str(p1_list[1])+'\\times '+str(p1_list[4])+
+            ' + '+str(p2_list[1])+'\\times '+str(p2_list[4])+
+            ' + '+str(p3_list[1])+'\\times '+str(p3_list[4])+
+            '$',fontsize=15)
+    plt.ylabel('$'+str(p1_list[1])+'\\times '+str(p1_list[5])+
+            ' + '+str(p2_list[1])+'\\times '+str(p2_list[5])+
+            ' + '+str(p3_list[1])+'\\times '+str(p3_list[5])+
+            '$',fontsize=15)
     plt.savefig('well.pdf')
     plt.close()
 
-    zoompercent = 20
-    zoomshift1 = 1
-    zoomshift2 = -1
+    zoomshift1 = 0
+    zoomshift2 = 0 
     close_xs = zoom(xs,zoompercent,zoomshift1)
     close_ys = zoom(ys,zoompercent,zoomshift2)
     close_zs = zoom2d(zs,zoompercent,zoomshift1,zoomshift2)
 
-    plt.contourf(close_xs,close_ys,close_zs,cmap=plt.cm.Reds)
+    #  plt.contourf(close_xs,close_ys,close_zs,cmap=plt.cm.Reds)
+    for number in range(0,len(zs)):
+        for numberr in range(0,len(zs)):
+            if zs[number,numberr] > np.max(close_zs):
+                zs[number,numberr] = np.max(close_zs)
+    print(np.max(zs))
+    plt.contourf(xs,ys,zs,cmap=plt.cm.Reds)
     plt.colorbar()
-    #  plt.plot([50.61],[16.94], 'bo')
-    plt.xlabel('$8 \\times e_0 $(MeV)$ + d$TKE (MeV)$ + 15 \\times c_s$',fontsize=15)
-    plt.ylabel('$d$TKE (MeV) $ + 23 \\times c_S$',fontsize=15)
+    print(np.min(zs),np.max(close_zs))
+    plt.plot(sol_x,sol_y,'bo')
+    plt.xlabel('$'+str(p1_list[1])+'\\times '+str(p1_list[4])+
+            ' + '+str(p2_list[1])+'\\times '+str(p2_list[4])+
+            ' + '+str(p3_list[1])+'\\times '+str(p3_list[4])+
+            '$',fontsize=15)
+    plt.ylabel('$'+str(p1_list[1])+'\\times '+str(p1_list[5])+
+            ' + '+str(p2_list[1])+'\\times '+str(p2_list[5])+
+            ' + '+str(p3_list[1])+'\\times '+str(p3_list[5])+
+            '$',fontsize=15)
+    plt.xlim(0.9 * sol_x ,1.1 * sol_x)
+    plt.ylim(0.9 * sol_y ,1.1 * sol_y)
     plt.savefig('well_closeup.pdf')
     plt.close()
 

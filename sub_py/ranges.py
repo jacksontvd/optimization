@@ -1,5 +1,8 @@
 import numpy as np
+import os
 from copy import copy
+from isotope import *
+cwd = os.getcwd()
 
 #  this script contains all of the ranges for the plots of given observables. This allows us to standardize the bounds for the plots of any observable across the board for freya, data, and error. 
 
@@ -13,27 +16,28 @@ parameter_labels['d'] = 'dTKE'
 param_ranges = {}
 
 param_ranges['c'] = [1,3,2]
-#  param_ranges['c'] = [1.1,1.2,0]
-#  c = 3 for pu240
 
 param_ranges['e0'] = [7,12,0]
-#  param_ranges['e0'] = [10,11,0]
 param_ranges['e'] = param_ranges['e0']
 
 param_ranges['x'] = [1,1.5,1]
-#  param_ranges['x'] = [1.2,1.35,0]
 
 param_ranges['dTKE'] = [-5, 5,4]
-#  param_ranges['dTKE'] = [-1,1,0]
 param_ranges['d'] = param_ranges['dTKE']
 
 param_ranges['cS'] = [0.5, 1.5,3]
-#  param_ranges['cS'] = [0.8,1,0]
 param_ranges['T'] = param_ranges['cS'] 
 
-param_ranges['98252'] = [10.37,1.27,1.18,0.87,0.52]
-param_ranges['94240'] = [10.0724,1.3,3.0,0.87,-3.07119]
-
+def param_list(Z,A,reac_type):
+    iso = isotope(int(Z),int(A),reac_type = reac_type)
+    i = iso[1]
+    infile = open(cwd+'/../inputparameters.dat','r')
+    content = infile.readlines() #reads line by line and outputs a list of each line
+    line = content[i]
+    elems = line.split()
+    plist = [float(elems[3]),float(elems[4]),float(elems[5]),float(elems[6]),float(elems[9])]
+    print("Parameter list for Z=",Z," A=",A," is: ",plist)
+    return plist
 
 error_weights = {}
 cf252_weights = {}

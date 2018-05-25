@@ -28,7 +28,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     print('starting variance calculation')
     reac_t = kwargs['reaction_type']
     parameter = kwargs['parameter']
-    parameters = param_ranges[str(Z)+str(A)]
+    parameters = param_list(Z,A,reac_t)
 
     range_array = param_ranges[parameter]
     special_index = param_ranges[parameter][2]

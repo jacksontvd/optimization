@@ -30,7 +30,7 @@ def covariance(Z,A, generate_number = None, method = None, resolution = None, **
     reac_t = kwargs['reaction_type']
     parameter = kwargs['parameter']
     parameter_2 = kwargs['parameter2']
-    parameters = param_ranges[str(Z)+str(A)]
+    parameters = param_list(Z,A,reac_t)
 
     range_array = param_ranges[parameter]
     special_index = param_ranges[parameter][2]

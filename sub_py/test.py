@@ -9,10 +9,7 @@ from ranges import *
 
 cwd = os.getcwd()
 
-real_par = param_ranges['98252'] 
-
-
-param_ranges['98252'] = [10.37,1.27,1.18,0.87,0.52]
+#  parameters = param_list(98,252,"spontaneous")
 
 def test_error(Z, A, e ,x ,c ,T,d, generate_number, parsed_data, **kwargs):
     error = 1
