@@ -25,8 +25,8 @@ def neighbor(old):
 def anneal(objective_function , guess):
     old_error = objective_function(guess)
     T = 1.0
-    T_min = 1E-5
-    alpha = 0.8
+    T_min = 1E-2
+    alpha = 0.7
     best_error = objective_function(guess)
     best_guess = guess
     print("Guess:",guess,"Error:",best_error)
