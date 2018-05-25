@@ -31,18 +31,22 @@ from grid_run import grid_run
 #  generate_number = 1000000
 #  generate_number = 100000
 #  generate_number = 10000
-#  generate_number = 10
+#  generate_number = 1
+
 reaction_type = 'spontaneous'
 #  reaction_type = 'induced'
-optimization_type = 'grid'
-#  optimization_type = 'anneal'
+
+#  optimization_type = 'grid'
+optimization_type = 'anneal'
+#  optimization_type = 'basinhopping'
 #  optimization_type = 'process'
 stochastic_type = 0
-resolution = 4
+
+#  resolution = 4
 #  resolution = 10
 
-#  hessian_h = [0.5,0.1,0.1,0.1,0.5]
-hessian_h = [1.037,0.127,0.11,0.87,0.05]
+#  hessian_h = [1.037,0.127,0.11,0.87,0.05]
+#  hessian_h = [0.100724,0.013,0.03,0.0087,0.0307119]
 #  hessian_h = 1.e-1
 
 def opti(opt_method):

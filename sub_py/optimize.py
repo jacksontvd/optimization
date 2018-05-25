@@ -133,7 +133,9 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
         grid_values = Jout
 
     elif method == 'anneal':
+        #  blockPrint()
         finalparams , this_error = anneal(err_opt , guesses)
+        #  enablePrint()
         grid_values = None
 
     #  this is a hidden feature of the optimization routine, which allows the user to simply plot the data (alone and along with freya) without waiting for the optimization to happen
@@ -143,7 +145,7 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
         res = None
 
     #  the default optimization routine is the stochastic method
-    else: 
+    elif method == 'basinhopping': 
         #  the following lines can be commented/uncommented (leave only one uncommented) to try different optimization methods
         methods = ["BFGS","Nelder-Mead","Powell","Cobyla"]
         minimizer_kwargs = {"method": methods[int(kwargs['stochastic_type'])]}
