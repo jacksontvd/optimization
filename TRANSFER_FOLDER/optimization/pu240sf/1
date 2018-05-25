@@ -1,0 +1,67 @@
+'inputparameters.dat' -> 'fission_v2.0.3/data_freya/inputparameters.dat'
+'inputparameters.dat' -> 'fission_v2.0.3/data_freya/inputparameters.dat'
+starting
+Begin Parsing Data...
+('Parsing:', 'nubar')
+('Parsing:', 'n_mult')
+('Parsing:', 'average_photon_energy')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'gammabar')
+('Time:', 0.13932490348815918)
+Begin Optimizing FREYA (This may take a while...)
+('Time:', 2157.941241979599)
+Successful initial optimization.
+Calling for final error estimation...
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.59840202332 sec
+Importing Events...
+1000 events imported.
+Time: 0.0173208713531 sec
+Parsing events...
+All events parsed.
+Time: 0.14146399498 sec
+Calculating Statistics... 
+Time: 0.00366687774658 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 0.0)
+Calculating error for:nubar
+('nubar', 'error:', 0.0)
+Calculating error for:gammabar
+('gammabar', 'error:', 13.838399999999989)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', 0.0)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 0.0)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 7.8637004995737545)
+('Time:', 0.0012960433959960938)
+('Total Weighted Error: ', 21.702100499573746)
+('Total Error: ', 1910.2067784654796)
+Successful.
+('Final Set of Parameters: ', array([ 10.7506586 ,   1.27501086,   1.15007609,   0.94995432,  -0.99994278]))
+('Final Chi-Squared Error Estimation: ', '21.7021004996')
+('These values, and further statistics/visuals generated in ', '/global/home/users/jayteeveedee/pu240/optimization/sub_py/../output/optimization/Z=94 A=240_E=-1_grid')
+Begin Generating, Analyzing, Plotting Events with Final Set of Parameters
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.69263100624 sec
+Importing Events...
+1000 events imported.
+Time: 0.0172410011292 sec
+Parsing events...
+All events parsed.
+Time: 0.144284009933 sec
+Calculating Statistics... 
+Time: 0.00393581390381 sec
+Begin printing statistics...
+Successful.
+Statistics generated (as LaTeX) in: 
+/global/home/users/jayteeveedee/pu240/optimization/sub_py/../output/optimization/Z=94 A=240_E=-1_grid
+           JobID    Elapsed 
+---------------- ---------- 
+         3005481   00:36:31 
