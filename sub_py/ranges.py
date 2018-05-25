@@ -12,8 +12,9 @@ parameter_labels['d'] = 'dTKE'
 
 param_ranges = {}
 
-param_ranges['c'] = [1,2,2]
+param_ranges['c'] = [1,3,2]
 #  param_ranges['c'] = [1.1,1.2,0]
+#  c = 3 for pu240
 
 param_ranges['e0'] = [7,12,0]
 #  param_ranges['e0'] = [10,11,0]
