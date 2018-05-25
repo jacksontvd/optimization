@@ -1,0 +1,96 @@
+'inputparameters.dat' -> 'fission_v2.0.3/data_freya/inputparameters.dat'
+/global/home/users/jayteeveedee/cf252/2optimization/sub_py/error.py:133: RuntimeWarning: divide by zero encountered in double_scalars
+  this_ratio = anal_array_depcolumn[row] / element[1,0]
+/global/home/users/jayteeveedee/cf252/2optimization/sub_py/error.py:133: RuntimeWarning: invalid value encountered in double_scalars
+  this_ratio = anal_array_depcolumn[row] / element[1,0]
+/global/home/users/jayteeveedee/cf252/2optimization/sub_py/error.py:147: RuntimeWarning: invalid value encountered in double_scalars
+  potential_ratio_bar = np.sqrt(((x**2 + a**2)*b**2 - a**2 * (y**2 + b**2))
+/global/home/users/jayteeveedee/cf252/2optimization/sub_py/error.py:148: RuntimeWarning: invalid value encountered in double_scalars
+  /(b**2*(y**2 + b**2)))
+'inputparameters.dat' -> 'fission_v2.0.3/data_freya/inputparameters.dat'
+starting
+Begin Parsing Data...
+('Parsing:', 'm_mult_smudge')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'n_TKE')
+('Parsing:', 'n_Af_alt')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'n_mult')
+('Parsing:', 'm_mult')
+('Parsing:', 'n_TKE_alt')
+('Parsing:', 'average_photon_energy')
+('Parsing:', 'n_Af')
+('Parsing:', 'mannhart')
+('Parsing:', 'gammabar')
+('Parsing:', 'rest_n_spectrum')
+('Time:', 0.018872976303100586)
+Begin Optimizing FREYA (This may take a while...)
+('Time:', 5204.405059099197)
+Successful initial optimization.
+Calling for final error estimation...
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 4.55183315277 sec
+Importing Events...
+10000 events imported.
+Time: 0.0978860855103 sec
+Parsing events...
+All events parsed.
+Time: 1.34220099449 sec
+Calculating Statistics... 
+Time: 0.0141160488129 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 0.0)
+calculating error for: rest_n_spectrum
+('average', 'rest_n_spectrum', 'error: ', 0.0)
+calculating error for: mannhart
+('average', 'mannhart', 'error: ', 13792.891166944808)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', 0.63425672520613996)
+Calculating error for:gammabar
+('gammabar', 'error:', 0.21855625000000062)
+calculating error for: m_mult_smudge
+('average', 'm_mult_smudge', 'error: ', 0.0)
+calculating error for: m_mult
+('average', 'm_mult', 'error: ', 0.39095205487359103)
+calculating error for: n_Af_alt
+('average', 'n_Af_alt', 'error: ', 0.0)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 2.4667070438751706)
+calculating error for: n_TKE_alt
+('average', 'n_TKE_alt', 'error: ', 0.0)
+calculating error for: n_Af
+('average', 'n_Af', 'error: ', 0.0)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 1.4633352540329037)
+calculating error for: n_TKE
+('average', 'n_TKE', 'error: ', 2.0853603877752978)
+('Time:', 0.01978898048400879)
+('Total Weighted Error: ', 13800.150334660571)
+('Total Error: ', 1974044.298935679)
+Successful.
+('Final Set of Parameters: ', array([ 9.95002996,  1.23240052,  1.10769834,  0.95666039,  0.50348286]))
+('Final Chi-Squared Error Estimation: ', '13800.1503347')
+('These values, and further statistics/visuals generated in ', '/global/home/users/jayteeveedee/cf252/2optimization/sub_py/../output/optimization/Z=98 A=252_E=-1_grid')
+Begin Generating, Analyzing, Plotting Events with Final Set of Parameters
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 4.69409680367 sec
+Importing Events...
+10000 events imported.
+Time: 0.0997819900513 sec
+Parsing events...
+All events parsed.
+Time: 1.3564889431 sec
+Calculating Statistics... 
+Time: 0.0144491195679 sec
+Begin printing statistics...
+Successful.
+Statistics generated (as LaTeX) in: 
+/global/home/users/jayteeveedee/cf252/2optimization/sub_py/../output/optimization/Z=98 A=252_E=-1_grid
+           JobID    Elapsed 
+---------------- ---------- 
+         3009744   01:27:00 
