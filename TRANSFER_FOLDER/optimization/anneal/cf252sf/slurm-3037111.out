@@ -1,0 +1,96 @@
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/error.py:133: RuntimeWarning: divide by zero encountered in double_scalars
+  this_ratio = anal_array_depcolumn[row] / element[1,0]
+/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/error.py:133: RuntimeWarning: invalid value encountered in double_scalars
+  this_ratio = anal_array_depcolumn[row] / element[1,0]
+/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/error.py:148: RuntimeWarning: invalid value encountered in double_scalars
+  /(b**2*(y**2 + b**2)))
+/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/error.py:147: RuntimeWarning: invalid value encountered in double_scalars
+  potential_ratio_bar = np.sqrt(((x**2 + a**2)*b**2 - a**2 * (y**2 + b**2))
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+starting
+Begin Parsing Data...
+('Parsing:', 'n_Af_alt')
+('Parsing:', 'mannhart')
+('Parsing:', 'n_TKE_alt')
+('Parsing:', 'n_mult')
+('Parsing:', 'm_mult_smudge')
+('Parsing:', 'n_Af')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'average_photon_energy')
+('Parsing:', 'm_mult')
+('Parsing:', 'rest_n_spectrum')
+('Parsing:', 'n_TKE')
+('Parsing:', 'gammabar')
+('Parsing:', 'nubar_moments')
+('Time:', 0.016383886337280273)
+Begin Optimizing FREYA (This may take a while...)
+('Time:', 20225.563280820847)
+Successful initial optimization.
+Calling for final error estimation...
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 6.5950820446 sec
+Importing Events...
+50000 events imported.
+Time: 0.744776964188 sec
+Parsing events...
+All events parsed.
+Time: 6.57918691635 sec
+Calculating Statistics... 
+Time: 0.0509760379791 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 0.0)
+Calculating error for:gammabar
+('gammabar', 'error:', 0.8007565225000004)
+calculating error for: rest_n_spectrum
+('average', 'rest_n_spectrum', 'error: ', 0.0)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 2.7153398727334968)
+calculating error for: n_Af
+('average', 'n_Af', 'error: ', 0.0)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', 0.41792559947080482)
+calculating error for: m_mult_smudge
+('average', 'm_mult_smudge', 'error: ', 0.0)
+calculating error for: m_mult
+('average', 'm_mult', 'error: ', 0.49184312956217008)
+calculating error for: n_Af_alt
+('average', 'n_Af_alt', 'error: ', 0.0)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 5.6480170677730088)
+calculating error for: n_TKE_alt
+('average', 'n_TKE_alt', 'error: ', 0.0)
+calculating error for: mannhart
+('average', 'mannhart', 'error: ', 13917.320043360487)
+calculating error for: n_TKE
+('average', 'n_TKE', 'error: ', 2.9325550718319069)
+('Time:', 0.016531944274902344)
+('Total Weighted Error: ', 13930.326480624357)
+('Total Error: ', 2227641.8263734994)
+Successful.
+('Final Set of Parameters: ', array([ 10.4056531 ,   1.27552631,   1.1870983 ,   0.87557155,   0.52088884]))
+('Final Chi-Squared Error Estimation: ', '13930.3264806')
+('These values, and further statistics/visuals generated in ', '/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/../../output/optimization/Z=98 A=252_E=-1_anneal')
+Begin Generating, Analyzing, Plotting Events with Final Set of Parameters
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 6.64265394211 sec
+Importing Events...
+50000 events imported.
+Time: 0.684579849243 sec
+Parsing events...
+All events parsed.
+Time: 6.58516597748 sec
+Calculating Statistics... 
+Time: 0.0562591552734 sec
+Begin printing statistics...
+Successful.
+Statistics generated (as LaTeX) in: 
+/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/../../output/optimization/Z=98 A=252_E=-1_anneal
+           JobID    Elapsed 
+---------------- ---------- 
+         3037111   05:37:42 
