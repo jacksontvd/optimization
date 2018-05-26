@@ -84,11 +84,11 @@ error_weights['94240'] = pu240sf_weights
 cm244_weights = {}
 cm244_weights['gammabar'] = 0
 cm244_weights['average_photon_energy'] = 0
-cm244_weights['n_spectrum'] = 1/29121
+cm244_weights['n_spectrum'] = 1/29000
 cm244_weights['n_mult'] = 20
 cm244_weights['nubar_moments'] = 4
-cm244_weights['totn_Af'] = 1/7
-cm244_weights['n_Af'] = 1/50
+cm244_weights['totn_Af'] = 1/14
+cm244_weights['n_Af'] = 1/25
 error_weights['96244'] = cm244_weights
 
 u238sf_weights = {}
