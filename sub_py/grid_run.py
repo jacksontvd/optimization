@@ -105,7 +105,7 @@ def grid_run(Z,A, generate_number = None, method = None, resolution = None, **kw
     ### stop optimizing
 
     #  define path for output to be placed
-    var_path = cwd + '/../../output/covariance/' + str(Z) + str(A) + str(Energy)
+    var_path = cwd + '/../../output/grid_values/' + str(Z) + str(A) + str(Energy)
 
     #  create appropriate directory if it does not already exist 
     if not os.path.exists(var_path):

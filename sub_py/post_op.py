@@ -609,7 +609,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             freya_data = freya_dict[translated_key][0]
             ratio_array = chisq_array[3][translated_key]
 
-            if str(key)+"_alt" in [parsed_data[0]]:
+            if str(key)+"_alt" in parsed_data[0]:
                 alt_element = parsed_data[0][key+"_alt"]
                 alt_data_array = alt_element[0]
                 alt_ratio_array = chisq_array[3][translated_key+"_alt"]
@@ -636,7 +636,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             #  plt.xscale(element[7])
             #  plt.yscale(element[7])
             if key == "n_Af":
-                plt.annotate('$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)',(140,4),fontsize=14)
+                plt.annotate('$^{'+str(iso[0][2:5])+'}$'+str(iso[0][0:2])+'(sf)',(140,4),fontsize=14)
                 lg = plt.legend(("FREYA",str(element[1]),str(alt_element[1])),fontsize=14,numpoints=1)
             else:
                 lg = plt.legend(("FREYA",str(element[1]),str(alt_element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
