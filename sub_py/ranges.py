@@ -82,6 +82,7 @@ cm244_weights['average_photon_energy'] = 0
 cm244_weights['n_spectrum'] = 1
 cm244_weights['n_mult'] = 20
 cm244_weights['nubar_moments'] = 4
+cm244_weights['nubar'] = 4
 cm244_weights['totn_Af'] = 1
 cm244_weights['n_Af'] = 1
 error_weights['96244'] = cm244_weights
@@ -90,6 +91,7 @@ u238sf_weights = {}
 u238sf_weights['gammabar'] = 0
 u238sf_weights['average_photon_energy'] = 0
 u238sf_weights['nubar_moments'] = 10
+u238sf_weights['nubar'] = 10
 u238sf_weights['n_mult'] = 20
 error_weights['92238'] = u238sf_weights
 
@@ -98,6 +100,7 @@ pu238sf_weights['gammabar'] = 0
 pu238sf_weights['average_photon_energy'] = 0
 pu238sf_weights['n_mult'] = 7
 pu238sf_weights['nubar_moments'] = 1
+pu238sf_weights['nubar'] = 1
 error_weights['94238'] = pu238sf_weights
 
 pu242sf_weights = {}
@@ -105,6 +108,7 @@ pu242sf_weights['gammabar'] = 1
 pu242sf_weights['average_photon_energy'] = 1
 pu242sf_weights['n_mult'] = 5
 pu242sf_weights['nubar_moments'] = 1
+pu242sf_weights['nubar'] = 1
 pu242sf_weights['n_spectrum'] = 1
 error_weights['94242'] = pu242sf_weights
 
