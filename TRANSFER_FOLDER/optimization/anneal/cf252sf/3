@@ -1,0 +1,96 @@
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/error.py:133: RuntimeWarning: divide by zero encountered in double_scalars
+  this_ratio = anal_array_depcolumn[row] / element[1,0]
+/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/error.py:133: RuntimeWarning: invalid value encountered in double_scalars
+  this_ratio = anal_array_depcolumn[row] / element[1,0]
+/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/error.py:148: RuntimeWarning: invalid value encountered in double_scalars
+  /(b**2*(y**2 + b**2)))
+/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/error.py:147: RuntimeWarning: invalid value encountered in double_scalars
+  potential_ratio_bar = np.sqrt(((x**2 + a**2)*b**2 - a**2 * (y**2 + b**2))
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+starting
+Begin Parsing Data...
+('Parsing:', 'n_Af_alt')
+('Parsing:', 'mannhart')
+('Parsing:', 'n_TKE_alt')
+('Parsing:', 'n_mult')
+('Parsing:', 'm_mult_smudge')
+('Parsing:', 'n_Af')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'average_photon_energy')
+('Parsing:', 'm_mult')
+('Parsing:', 'rest_n_spectrum')
+('Parsing:', 'n_TKE')
+('Parsing:', 'gammabar')
+('Parsing:', 'nubar_moments')
+('Time:', 0.12183785438537598)
+Begin Optimizing FREYA (This may take a while...)
+('Time:', 17882.823539972305)
+Successful initial optimization.
+Calling for final error estimation...
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 6.42816400528 sec
+Importing Events...
+50000 events imported.
+Time: 0.705513954163 sec
+Parsing events...
+All events parsed.
+Time: 6.05948019028 sec
+Calculating Statistics... 
+Time: 0.0484011173248 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 0.0)
+Calculating error for:gammabar
+('gammabar', 'error:', 0.80478841000000312)
+calculating error for: rest_n_spectrum
+('average', 'rest_n_spectrum', 'error: ', 0.0)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 3.4279708775443978)
+calculating error for: n_Af
+('average', 'n_Af', 'error: ', 53.637200941902577)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', 0.4045794795314353)
+calculating error for: m_mult_smudge
+('average', 'm_mult_smudge', 'error: ', 0.0)
+calculating error for: m_mult
+('average', 'm_mult', 'error: ', 0.49900930300601887)
+calculating error for: n_Af_alt
+('average', 'n_Af_alt', 'error: ', 0.0)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 3.2285038160868056)
+calculating error for: n_TKE_alt
+('average', 'n_TKE_alt', 'error: ', 122.70878517265041)
+calculating error for: mannhart
+('average', 'mannhart', 'error: ', 13919.036692075755)
+calculating error for: n_TKE
+('average', 'n_TKE', 'error: ', 5.282368535079196)
+('Time:', 0.01511693000793457)
+('Total Weighted Error: ', 14109.029898611556)
+('Total Error: ', 2223381.2468322907)
+Successful.
+('Final Set of Parameters: ', array([ 10.54416816,   1.28401964,   1.20087721,   0.88329699,   0.52478399]))
+('Final Chi-Squared Error Estimation: ', '14109.0298986')
+('These values, and further statistics/visuals generated in ', '/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/../../output/optimization/Z=98 A=252_E=-1_anneal')
+Begin Generating, Analyzing, Plotting Events with Final Set of Parameters
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 6.46704816818 sec
+Importing Events...
+50000 events imported.
+Time: 0.647305011749 sec
+Parsing events...
+All events parsed.
+Time: 5.95425105095 sec
+Calculating Statistics... 
+Time: 0.0500149726868 sec
+Begin printing statistics...
+Successful.
+Statistics generated (as LaTeX) in: 
+/global/home/users/jayteeveedee/sf/cf252/optimization/optimization/sub_py/../../output/optimization/Z=98 A=252_E=-1_anneal
+           JobID    Elapsed 
+---------------- ---------- 
+         3038265   04:58:36 
