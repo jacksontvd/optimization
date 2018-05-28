@@ -15,18 +15,18 @@ parameter_labels['d'] = 'dTKE'
 
 param_ranges = {}
 
-param_ranges['c'] = [1,3,2]
-
 param_ranges['e0'] = [7,12,0]
 param_ranges['e'] = param_ranges['e0']
 
 param_ranges['x'] = [1,1.5,1]
 
-param_ranges['dTKE'] = [-5, 5,4]
-param_ranges['d'] = param_ranges['dTKE']
+param_ranges['c'] = [1,3,2]
 
 param_ranges['cS'] = [0.5, 1.5,3]
 param_ranges['T'] = param_ranges['cS'] 
+
+param_ranges['dTKE'] = [-5, 5,4]
+param_ranges['d'] = param_ranges['dTKE']
 
 def param_list(Z,A,reac_type):
     iso = isotope(int(Z),int(A),reac_type = reac_type)
@@ -145,6 +145,7 @@ ranges_x['m_spectrum'] = [0,10]
 #  ranges_x['mannhart'] = [0.2500E-01, 0.1280E+02]
 ranges_x['mannhart'] = [0.2500E-01, 0.130E+02]
 ranges_x['n_A_TKE'] = np.copy(ranges_x['A'])
+ranges_x['n_TKE_A'] = np.copy(ranges_x['A'])
 
 ranges_x['nubar'] = [0,2]
 ranges_x['nubar_moments'] = [0,4]
@@ -182,6 +183,7 @@ ranges_y['m_spectrum'] = [0,1.3]
 #  ranges_y['mannhart'] = [0.01,None]
 ranges_y['mannhart'] = [-0.2,0.5,0,2.2]
 ranges_y['n_A_TKE'] = [100, 300]
+ranges_y['n_TKE_A'] = [100, 300]
 
 ranges_y['nubar'] = [0,10]
 ranges_y['nubar_moments'] = [0,40]
@@ -200,6 +202,7 @@ output_keys = ranges_x.keys()
 bin_number = {}
 
 bin_number['n_A_TKE'] = 400
+bin_number['n_TKE_A'] = 400
 bin_number['n_TKE'] = 70
 bin_number['n_TKE_alt'] = 70
 bin_number['n_angular'] = 20
