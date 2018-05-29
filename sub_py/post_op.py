@@ -92,7 +92,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
 
             maxwell_temp = 1.32
 
-            data_array[:,1,0] = data_array[:,1,0] * MaxwellianSpectrum(maxwell_temp)
+            #  data_array[:,1,0] = data_array[:,1,0] * MaxwellianSpectrum(maxwell_temp)
             #  data_array[:,1,1] = data_array[:,1,1] * MaxwellianSpectrum(maxwell_temp)
 ###
             plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , color = 'r' , label = None)

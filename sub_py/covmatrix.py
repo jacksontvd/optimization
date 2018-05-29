@@ -94,7 +94,10 @@ def freya_hessian(Z,A,generate_number,h,reac_t):
     str(round(correlation_array[4,2],3)) +'&' +
     str(round(correlation_array[4,3],3)) +'&' +
     str(round(correlation_array[4,4],3)))
-    return result,correlation_array
+
+    determinant = np.linalg.det(correlation_array)
+
+    return result,correlation_array, determinant
 
 def calc_cov(func, x, h):
     """
