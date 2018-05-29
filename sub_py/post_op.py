@@ -87,15 +87,13 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
         elif dim_status is True:
             print('plotting: ',key)
 #  #  #  #  ADD CONTOUR
-
-        if key == "mannhart":
+        if key == "alt_n_spectrum":
             print("plotting mannhart over alternative spectrum...")
 
             maxwell_temp = 1.32
 
             data_array[:,1,0] = data_array[:,1,0] * MaxwellianSpectrum(maxwell_temp)
             #  data_array[:,1,1] = data_array[:,1,1] * MaxwellianSpectrum(maxwell_temp)
-
 ###
             plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , color = 'r' , label = None)
             plt.plot( data_array[:, 0, 0] , data_array[:, 1, 0] , '^' , color = 'r')
@@ -498,9 +496,10 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             freya_data = freya_dict[translated_key][0]
             ratio_array = chisq_array[3][translated_key]
 
-            #  if key == "mannhart":
-                #  ratio_array[:-1,1] = ratio_array[:-1,1] / MaxwellianSpectrum(maxwell_temp)
-                #  ratio_array[:-1,2] = ratio_array[:-1,2] / MaxwellianSpectrum(maxwell_temp)
+            if key == "mannhart":
+                ratio_array[:-1,1] = ratio_array[:-1,1] / MaxwellianSpectrum(maxwell_temp)
+                ratio_array[:-1,2] = ratio_array[:-1,2] / MaxwellianSpectrum(maxwell_temp)
+                data_array[:,1,0] = data_array[:,1,0] * MaxwellianSpectrum(maxwell_temp)
                 #  data_array[:,1,1] = data_array[:,1,1]*MaxwellianSpectrum(maxwell_temp)
             if key == "n_spectrum":
                 bin_differences = np.subtract(data_array[1:,0,0],data_array[:-1,0,0])

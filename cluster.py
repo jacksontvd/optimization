@@ -18,18 +18,18 @@ from grid_run import grid_run
 #  cm
 #  Zinput=96
 #  pu
-#  Zinput = 94
+Zinput = 94
 #  u
 #  Zinput=92
 
 #  Ainput = 238
-#  Ainput = 240
+Ainput = 240
 #  Ainput = 242
 #  Ainput = 244
 #  Ainput = 252
 
 #  generate_number = 1000000
-#  generate_number = 100000
+generate_number = 200000
 #  generate_number = 10000
 #  generate_number = 1
 
@@ -43,11 +43,12 @@ optimization_type = 'anneal'
 stochastic_type = 0
 
 #  resolution = 4
-#  resolution = 10
+resolution = 10
 
 #  hessian_h = [1.037,0.127,0.11,0.87,0.05]
+#  hessian_h = [.01037,0.00127,0.0011,0.0087,0.0005]
 #  hessian_h = [0.100724,0.013,0.03,0.0087,0.0307119]
-#  hessian_h = 1.e-1
+#  hessian_h = 1.e-6
 
 def opti(opt_method):
     result = opt(Zinput,
@@ -114,18 +115,34 @@ def pre_plot():
     prerun_plot(str(Zinput),str(Ainput),cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/xd',"x","d")
     return 
 
+#  [string,weight,parameter_index_1,parameter_index_2,parameter_name_1,parameter_name_2]
+#  well1_1 = ['cd',1,   2,4,'c','dTKE']
+#  well1_2 = ['Td',1,   3,4,'c_S','dTKE']
+well1_1 = ['xT',1,  1,3,'x','c_S']
+well1_2 = ['eT',1,  0,3,'e_0','c_S']
+zoom = 50
+
 def well():
     well_plot(str(Zinput),str(Ainput),
-            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/cd',
-            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/Td',
-            "c","d","T","d")
+            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/'+well1_1[0],
+            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/'+well1_2[0],
+            well1_1,well1_2,zoom)
+
+#  [string,weight,parameter_index_1,parameter_index_2,parameter_name_1,parameter_name_2]
+well2_1 = ['cT',2,    1,3,'x','c_S']
+well2_2 = ['ex',10,    0,1,'e_0','x']
+well2_3 = ['xT',0.5,    1,3,'x','c_S']
+#  well2_1 = ['xc',1,    1,2,'x','c']
+#  well2_2 = ['Td',1,    3,4,'c_S','dTKE']
+#  well2_3 = ['ec',1,    0,4,'e_0','c']
+zoom = 40
 
 def well_2():
     well_plot_2(str(Zinput),str(Ainput),
-            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/eT',
-            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/Td',
-            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/cT',
-            "c","d","T","d")
+            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/'+well2_1[0],
+            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/'+well2_2[0],
+            cwd+'/../TRANSFER_FOLDER/grid_values/'+str(Zinput)+str(Ainput)+'-1/'+well2_3[0],
+            well2_1,well2_2,well2_3,zoom)
 
 def grid_runn(parameter,parameter2):
     grid_run(str(Zinput),str(Ainput),generate_number,None,resolution,

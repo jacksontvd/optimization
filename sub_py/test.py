@@ -9,7 +9,7 @@ from ranges import *
 
 cwd = os.getcwd()
 
-parameters = param_list(98,252,"spontaneous")
+#  parameters = param_list(98,252,"spontaneous")
 
 def test_error(Z, A, e ,x ,c ,T,d, generate_number, parsed_data, **kwargs):
     error = 1

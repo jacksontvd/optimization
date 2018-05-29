@@ -32,8 +32,8 @@ if job_type == 'process':
     #  Ainput=240
 
     #  Pu242
-    Zinput=94
-    Ainput=242
+    #  Zinput=94
+    #  Ainput=242
 
     #  Cm244
     #  Zinput=96
@@ -44,8 +44,9 @@ if job_type == 'process':
     #  Ainput = 238
 
     #  generate_number = 1000000
-    #  generate_number = 200000
-    generate_number = 10000
+    generate_number = 200000
+    #  generate_number = 10000
+    #  generate_number = 1000
     method='process'
     resolution=None
     reaction_type="spontaneous"

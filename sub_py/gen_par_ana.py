@@ -159,7 +159,6 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     n_TKE = np.zeros((bin_number['n_TKE'],4))
     n_TKE[:,0] = np.arange(ranges_x['n_TKE'][0], ranges_x['n_TKE'][1], bin_width['n_TKE'])
 
-
     import_begin = time.time()
 
     print('Importing Events...')
@@ -190,8 +189,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     print('Parsing events...')
 
     def rest_frame_boost(old_energy , dot_product , fragment_energy , fragment_mass):
-        new_energy = (np.sqrt(old_energy*2) + (dot_product * np.sqrt(fragment_energy * 2 * fragment_mass)))**2 / 2
-        #  new_energy = old_energy + (dot_product * np.sqrt(fragment_energy) * fragment_mass)
+        old_velocity = np.sqrt(old_energy*2) 
+        boost_velocity = dot_product * np.sqrt(2*fragment_energy/fragment_mass)
+        new_energy = (old_velocity + boost_velocity)**2 /2
         return new_energy
 
     for event in events:
@@ -383,7 +383,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                 momenta_n.append( momentum )
                 n_spec.append(En)
                 dot_product = np.sum(np.array(momentum) * np.array(light_direction))
-                rest_En = rest_frame_boost(En,dot_product , light_TKE,Afrag_l)
+                rest_En = rest_frame_boost(En,dot_product,light_TKE,Afrag_l)
                 rest_n_spec.append(rest_En)
         elif( ngl > 0 ):
             parts = light[2].split()
@@ -414,7 +414,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                 momenta_n.append( momentum )
                 n_spec.append(En)
                 dot_product = np.sum(np.array(momentum) * np.array(heavy_direction))
-                rest_En = rest_frame_boost(En , dot_product , heavy_TKE,Afrag_h)
+                rest_En = rest_frame_boost(En,dot_product,heavy_TKE,Afrag_h)
                 rest_n_spec.append(rest_En)
             parts = heavy[3].split()
             for j in range( 0,int(len(parts)/4) ):
@@ -612,10 +612,10 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     hist, bin_edges = np.histogram(rest_n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]))
     hist = hist.astype('float')
     hist[hist == 0] = None
-    normed_hist, bin_edges = np.histogram(rest_n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]), normed = True)
+    normed_hist, normed_bin_edges = np.histogram(rest_n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]), normed = True)
     rest_n_spectrum = np.zeros((number_of_bins ,3))
-    rest_n_spectrum[0] = [0,ranges_x['n_spectrum'][1],n_spectrum_bin_widths]
-    rest_n_spectrum[:,0] = bin_edges[:-1]
+    #  rest_n_spectrum[0] = [0,ranges_x['n_spectrum'][1],n_spectrum_bin_widths]
+    rest_n_spectrum[:,0] = normed_bin_edges[:-1]
     rest_n_spectrum[:,1] = normed_hist
     #  rest_n_spectrum[:,2] = rest_n_spectrum_bin_widths * 1/np.sqrt(hist)
     rest_n_spectrum[:,2] = np.nan
