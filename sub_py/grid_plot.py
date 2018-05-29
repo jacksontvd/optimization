@@ -54,7 +54,14 @@ def prerun_plot(Zinput, Ainput , filename, parameter1 , parameter2):
         os.makedirs(var_path)
     os.chdir(var_path)
 
-    plt.contourf(x_array,y_array,error_array)
+    num_x_param = param_ranges[parameter1][2]
+    num_y_param = param_ranges[parameter2][2]
+    parameters = param_list(Zinput,Ainput,'spontaneous')
+    sol_x = parameters[num_x_param]
+    sol_y = parameters[num_y_param]
+
+    plt.contourf(x_array,y_array,error_array,cmap=plt.cm.Reds)
+    plt.plot(sol_x,sol_y, 'bo')
     plt.colorbar()
     plt.xlabel('$'+parameter_labels[parameter1]+'$',fontsize=15)
     plt.ylabel('$'+parameter_labels[parameter2]+'$',fontsize=15)
@@ -239,6 +246,7 @@ def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, p1_list,p2_lis
             parameters[num_second_x_param],parameters[num_third_x_param])
     sol_y = concoction(parameters[num_first_y_param],
             parameters[num_second_y_param],parameters[num_third_y_param])
+    print("Solution:",sol_x,sol_y)
 
     plt.contourf(xs,ys,zs,cmap=plt.cm.Reds)
     plt.colorbar()
@@ -256,8 +264,8 @@ def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, p1_list,p2_lis
     plt.savefig('well.pdf')
     plt.close()
 
-    zoomshift1 = 0
-    zoomshift2 = 0 
+    zoomshift1 = 5
+    zoomshift2 = -2 
     close_xs = zoom(xs,zoompercent,zoomshift1)
     close_ys = zoom(ys,zoompercent,zoomshift2)
     close_zs = zoom2d(zs,zoompercent,zoomshift1,zoomshift2)
@@ -280,8 +288,8 @@ def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, p1_list,p2_lis
             ' + '+str(p2_list[1])+'\\times '+str(p2_list[5])+
             ' + '+str(p3_list[1])+'\\times '+str(p3_list[5])+
             '$',fontsize=15)
-    plt.xlim(0.9 * sol_x ,1.1 * sol_x)
-    plt.ylim(0.9 * sol_y ,1.1 * sol_y)
+    plt.xlim(0.85 * sol_x ,1.1 * sol_x)
+    plt.ylim(0.85 * sol_y ,1.1 * sol_y)
     plt.savefig('well_closeup.pdf')
     plt.close()
 

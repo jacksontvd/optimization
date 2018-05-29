@@ -36,7 +36,7 @@ def param_list(Z,A,reac_type):
     line = content[i]
     elems = line.split()
     plist = [float(elems[3]),float(elems[4]),float(elems[5]),float(elems[6]),float(elems[9])]
-    print("Parameter list for Z=",Z," A=",A," is: ",plist)
+    #  print("Parameter list for Z=",Z," A=",A," is: ",plist)
     return plist
 
 error_weights = {}
