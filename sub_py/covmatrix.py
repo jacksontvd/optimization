@@ -55,7 +55,7 @@ def freya_hessian(Z,A,generate_number,h,reac_t):
     correlation_array = np.zeros((5,5))
     for i in range(0,5):
         for j in range(0,5):
-            correlation_array[i,j] = result[i,j]/np.sqrt(result[i,i] * result[j,j])
+            correlation_array[i,j] = result[i,j]/np.sqrt(abs(result[i,i] * result[j,j]))
 
     print_path = cwd + '/../../output/optimization/' + 'Z=' + str(Z) + 'A=' + str(A) + "_" + str(reac_t) + '/'
     if not os.path.exists(print_path):
