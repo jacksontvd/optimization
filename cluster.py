@@ -18,18 +18,18 @@ from grid_run import grid_run
 #  cm
 #  Zinput=96
 #  pu
-Zinput = 94
+#  Zinput = 94
 #  u
 #  Zinput=92
 
 #  Ainput = 238
-Ainput = 240
+#  Ainput = 240
 #  Ainput = 242
 #  Ainput = 244
 #  Ainput = 252
 
 #  generate_number = 1000000
-generate_number = 200000
+#  generate_number = 200000
 #  generate_number = 10000
 #  generate_number = 1
 
