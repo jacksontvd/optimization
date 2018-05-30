@@ -45,8 +45,9 @@ stochastic_type = 0
 #  resolution = 4
 resolution = 10
 
-#  hessian_h = 1.e-6
-#  hessian_h = np.array(param_list(Zinput,Ainput,reaction_type))
+machine_epsilon = 2.22044604925E-16
+#  machine_epsilon = 7./3 - 4./3 -1
+hessian_h = np.array(param_list(Zinput,Ainput,reaction_type))*np.sqrt(machine_epsilon)
 
 def opti(opt_method):
     result = opt(Zinput,
@@ -133,10 +134,10 @@ if Zinput == 98:
     well2_3 = ['xT',0.5,    1,3,'x','c_S']
     zoom = 40
 elif Zinput == 94:
-    well2_1 = ['xT',7,    1,3,'x','c']
-    well2_2 = ['xd',1,    1,4,'e_0','c_S']
+    well2_1 = ['xT',3,    1,3,'x','c']
+    well2_2 = ['xd',0.5,    1,4,'e_0','c_S']
     well2_3 = ['eT',4,    0,3,'e_0','c']
-    zoom = 10
+    zoom = 15
 
 def well_2():
     well_plot_2(str(Zinput),str(Ainput),

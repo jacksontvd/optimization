@@ -252,7 +252,9 @@ def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, p1_list,p2_lis
     plt.colorbar()
     plt.plot(sol_x,sol_y, 'bo')
     plt.errorbar( sol_x , sol_y ,
-            xerr = 0.01 , yerr = 0.01 ,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
+            xerr = 10.4725 , yerr = 1.6025 ,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
+            #  xerr = 4.065 , yerr = 1.8315 ,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
+            #  xerr = 0.01 , yerr = 0.01 ,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
     plt.xlabel('$'+str(p1_list[1])+'\\times '+str(p1_list[4])+
             ' + '+str(p2_list[1])+'\\times '+str(p2_list[4])+
             ' + '+str(p3_list[1])+'\\times '+str(p3_list[4])+
