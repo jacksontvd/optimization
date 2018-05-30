@@ -24,11 +24,11 @@ def probability(chi_sq_array,number,dof):
 
 def log_probability(chi_sq,dof):
     factor = -np.log(gamma(dof/2)*(2**(dof/2)))
-    print(factor)
+    #  print(factor)
     power = (1/2)*(dof-2)*np.log(chi_sq)
-    print(power)
+    #  print(power)
     exponential = -chi_sq/2
-    print(exponential)
+    #  print(exponential)
     return factor + power + exponential
 
 def freya_hessian(Z,A,generate_number,h,reac_t):
@@ -43,7 +43,10 @@ def freya_hessian(Z,A,generate_number,h,reac_t):
         print("ERROR:",error_value)
         dof = error_array[6]
         print("DOF:",dof)
-        log_prob = log_probability(error_value/100,dof/10)
+        if dof > 100:
+                log_prob = log_probability(error_value/100,dof/10)
+        else:
+                log_prob = log_probability(error_value,dof)
         print("LOG_PROB:",log_prob)
         print("PROB:",np.exp(log_prob))
         return log_prob
