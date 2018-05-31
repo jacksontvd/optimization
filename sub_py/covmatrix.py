@@ -129,6 +129,7 @@ def calc_cov(func, x, h):
     The Hessian must be invertible
     """
     hess = calc_hess(func, x, h)
+    print("HESSIAN:",hess)
     cov = -linalg.inv(hess)
     return cov
 
