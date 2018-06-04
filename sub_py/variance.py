@@ -4,6 +4,7 @@ import os, sys, copy
 import numpy as np
 from scipy import optimize
 from scipy import integrate
+from math import gamma
 
 cwd = os.getcwd()
 
