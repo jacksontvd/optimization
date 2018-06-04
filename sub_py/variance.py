@@ -21,8 +21,17 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
-def probability(chi_sq_array,number,dof):
+def old_probability(chi_sq_array,number,dof):
     return (chi_sq_array)**(dof/2 - 1)*np.exp(-chi_sq_array/(2*number))
+
+def probability(chi_sq_array,number,dof):
+    factor = 1/(2**(dof/2)*gamma(dof/2))
+    #  print(factor)
+    exponential = np.exp(-chi_sq_array/(2*number))
+    #  print(exponential)
+    final = factor * exponential * (chi_sq_array)**(dof/2 - 1)
+    #  print(final)
+    return final
 
 def variance(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting variance calculation')
