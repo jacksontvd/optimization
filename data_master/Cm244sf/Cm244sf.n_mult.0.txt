@@ -1,5 +1,5 @@
 \cite{Santi Miller evaluation}
-Multiplicity : Probability : Error
+$\nu$ : $P(\nu)$ : Error
 0  0.0155      0.0082
 1  0.1154      0.0147
 2  0.2998      0.009

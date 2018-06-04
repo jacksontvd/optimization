@@ -1,6 +1,8 @@
 import numpy as np
+from matplotlib import rcParams
+rcParams['font.family'] = 'Times New Roman'
+rcParams['text.usetex'] = True
 import matplotlib.pyplot as plt
-#  from mpl_toolkits.mplot3d import Axes3D
 import time
 import os, sys
 

@@ -1,5 +1,8 @@
 import os, sys, time
 import numpy as np
+from matplotlib import rcParams
+rcParams['font.family'] = 'Times New Roman'
+rcParams['text.usetex'] = True
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from math import floor
@@ -133,15 +136,21 @@ def well_plot(Zinput, Ainput , filename1, filename2, p1_list , p2_list,zoomperce
     sol_x = concoction(parameters[num_first_x_param],parameters[num_second_x_param])
     sol_y = concoction(parameters[num_first_y_param],parameters[num_second_y_param])
 
+    parameter_variance = param_var(Zinput,Ainput,reac_t)
+    sol_x_error = concoction(parameter_variance[num_first_x_param],
+            parameter_variance[num_second_x_param])
+    sol_y_error = concoction(parameter_variance[num_first_y_param],
+            parameter_variance[num_second_y_param])
+
     plt.contourf(xs,ys,zs,cmap=plt.cm.Reds)
     plt.colorbar()
     plt.plot(sol_x,sol_y, 'bo')
     plt.errorbar(sol_x,sol_y ,
-            xerr = 0.01 , yerr = 0.01,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
-    plt.xlabel('$'+str(p1_list[1])+'\\times '+str(p1_list[4])+' + '
-            +str(p2_list[1])+'\\times '+str(p2_list[4])+'$',fontsize=15)
-    plt.ylabel('$'+str(p1_list[1])+'\\times '+str(p1_list[5])+' + '
-            +str(p2_list[1])+'\\times '+str(p2_list[5])+'$',fontsize=15)
+            xerr = sol_x_error , yerr = sol_y_error,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
+    plt.xlabel('$'+str(p1_list[1])+str(p1_list[4])+' + '
+            +str(p2_list[1])+str(p2_list[4])+'$',fontsize=15)
+    plt.ylabel('$'+str(p1_list[1])+str(p1_list[5])+' + '
+            +str(p2_list[1])+str(p2_list[5])+'$',fontsize=15)
     plt.annotate("$^{252}$Cf(sf)",(2.5,7),fontsize=18)
     plt.savefig('well.pdf')
     plt.close()
@@ -155,10 +164,10 @@ def well_plot(Zinput, Ainput , filename1, filename2, p1_list , p2_list,zoomperce
     plt.contourf(close_xs,close_ys,close_zs,cmap=plt.cm.Reds)
     plt.colorbar()
     plt.plot(sol_x,sol_y, 'bo')
-    plt.xlabel('$'+str(p1_list[1])+'\\times '+str(p1_list[4])+' + '
-            +str(p2_list[1])+'\\times '+str(p2_list[4])+'$',fontsize=15)
-    plt.ylabel('$'+str(p1_list[1])+'\\times '+str(p1_list[5])+' + '
-            +str(p2_list[1])+'\\times '+str(p2_list[5])+'$',fontsize=15)
+    plt.xlabel('$'+str(p1_list[1])+str(p1_list[4])+' + '
+            +str(p2_list[1])+str(p2_list[4])+'$',fontsize=15)
+    plt.ylabel('$'+str(p1_list[1])+str(p1_list[5])+' + '
+            +str(p2_list[1])+str(p2_list[5])+'$',fontsize=15)
     plt.annotate("$^{252}$Cf(sf)",(2.5,7),fontsize=18)
     plt.savefig('well_closeup.pdf')
     plt.close()
@@ -248,20 +257,30 @@ def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, p1_list,p2_lis
             parameters[num_second_y_param],parameters[num_third_y_param])
     print("Solution:",sol_x,sol_y)
 
+    parameter_variance = param_var(Zinput,Ainput,reac_t)
+    sol_x_error = concoction(parameter_variance[num_first_x_param],
+            parameter_variance[num_second_x_param],
+            parameter_variance[num_third_x_param])
+    sol_y_error = concoction(parameter_variance[num_first_y_param],
+            parameter_variance[num_second_y_param],
+            parameter_variance[num_third_y_param])
+
     plt.contourf(xs,ys,zs,cmap=plt.cm.Reds)
     plt.colorbar()
     plt.plot(sol_x,sol_y, 'bo')
     plt.errorbar( sol_x , sol_y ,
-            xerr = 10.4725 , yerr = 1.6025 ,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
+            #  cf:
+            #  xerr = 10.4725 , yerr = 1.6025 ,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
+            #  pu:
             #  xerr = 4.065 , yerr = 1.8315 ,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
-            #  xerr = 0.01 , yerr = 0.01 ,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
-    plt.xlabel('$'+str(p1_list[1])+'\\times '+str(p1_list[4])+
-            ' + '+str(p2_list[1])+'\\times '+str(p2_list[4])+
-            ' + '+str(p3_list[1])+'\\times '+str(p3_list[4])+
+            xerr = sol_x_error , yerr = sol_y_error ,color = 'b' , fmt = ' ' , capsize = 3 , elinewidth = 1)
+    plt.xlabel('$'+str(p1_list[1])+str(p1_list[4])+
+            ' + '+str(p2_list[1])+str(p2_list[4])+
+            ' + '+str(p3_list[1])+str(p3_list[4])+
             '$',fontsize=15)
-    plt.ylabel('$'+str(p1_list[1])+'\\times '+str(p1_list[5])+
-            ' + '+str(p2_list[1])+'\\times '+str(p2_list[5])+
-            ' + '+str(p3_list[1])+'\\times '+str(p3_list[5])+
+    plt.ylabel('$'+str(p1_list[1])+str(p1_list[5])+
+            ' + '+str(p2_list[1])+str(p2_list[5])+
+            ' + '+str(p3_list[1])+str(p3_list[5])+
             '$',fontsize=15)
     plt.savefig('well.pdf')
     plt.close()
@@ -282,13 +301,13 @@ def well_plot_2(Zinput, Ainput , filename1, filename2, filename3, p1_list,p2_lis
     plt.colorbar()
     print(np.min(zs),np.max(close_zs))
     plt.plot(sol_x,sol_y,'bo')
-    plt.xlabel('$'+str(p1_list[1])+'\\times '+str(p1_list[4])+
-            ' + '+str(p2_list[1])+'\\times '+str(p2_list[4])+
-            ' + '+str(p3_list[1])+'\\times '+str(p3_list[4])+
+    plt.xlabel('$'+str(p1_list[1])+str(p1_list[4])+
+            ' + '+str(p2_list[1])+str(p2_list[4])+
+            ' + '+str(p3_list[1])+str(p3_list[4])+
             '$',fontsize=15)
-    plt.ylabel('$'+str(p1_list[1])+'\\times '+str(p1_list[5])+
-            ' + '+str(p2_list[1])+'\\times '+str(p2_list[5])+
-            ' + '+str(p3_list[1])+'\\times '+str(p3_list[5])+
+    plt.ylabel('$'+str(p1_list[1])+str(p1_list[5])+
+            ' + '+str(p2_list[1])+str(p2_list[5])+
+            ' + '+str(p3_list[1])+str(p3_list[5])+
             '$',fontsize=15)
     plt.xlim(0.85 * sol_x ,1.1 * sol_x)
     plt.ylim(0.85 * sol_y ,1.1 * sol_y)

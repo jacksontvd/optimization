@@ -33,7 +33,7 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     range_array = param_ranges[parameter]
     special_index = param_ranges[parameter][2]
 
-    fixed_value = copy.copy(parameters[special_index])
+    fixed_value = copy(parameters[special_index])
 
     os.chdir(cwd+'/../../freya/data_freya/')
     infile = open("inputparameters.dat","r+")
@@ -64,9 +64,9 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
         parameters[special_index] = parameter
         error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
         #  error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
-        error = error_array[0]
+        error_value = error_array[0]
         dof = error_array[6]
-        return error
+        return error_value
 
     #  for grid search method initialize the brute source routine
     print("calculating errors on nodes...")
@@ -84,8 +84,8 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
 
     #  set finalparams to be the 0th output of the brute routine
     finalparams = x0
-    #  error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
-    error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+    error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+    #  error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
     dof = error_array[6]
     #  set grid_values to be the final element of the output list of the brute routine
     grid_values = Jout

@@ -2,6 +2,9 @@ import time
 from math import sqrt, pi
 import os, sys
 import matplotlib
+from matplotlib import rcParams
+rcParams['font.family'] = 'Times New Roman'
+rcParams['text.usetex'] = True
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
@@ -237,7 +240,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
         '\n\\end{aligned} $$ \n' +
         '\n\[\\begin{tabular}{CCCC} ' +
         '\n\hline'
-        '\n & \\text{ Consensus Value } &\\text{\code\ Result} & \\text{C/E} \\\\'
+        '\n & \\text{ Evaluation } &\\text{\code\ Result} & \\text{C/E} \\\\'
         '\n\hline'
         '\n\\bar\\nu &' + 
 #  print out data in the first column
@@ -359,7 +362,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
         element = parsed_data[0][str(key)]
         if element is None:
             continue
-        if key_translator[key] == 'nubar' or key == 'average_photon_energy' or key == 'gammabar':
+        if key_translator[key] in ['nubar','average_photon_energy','gammabar','nubar_moments']:
             continue
         elif key_translator[key] not in ["mannhart","n_spectrum","rest_n_spectrum","n_A_TKE"]:
             print('plotting: ',key)
@@ -382,7 +385,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.plot([],[],color='#ffffff')
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
-            lg = plt.legend(("FREYA",str(element[1]),'$^{'+str(iso[0][2:5])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
+            lg = plt.legend(("FREYA",str(element[1]),'$'+str(iso[4])),fontsize=14,numpoints=1)
             lg.draw_frame(False)
 
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
@@ -390,7 +393,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'k') 
             plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'k', fmt = ' ' , capsize = 3, elinewidth = 1)
             #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
-            if key in ['n_Af','n_TKE']:
+            if key in ['n_Af','n_Af_alt','n_TKE','n_TKE_alt']:
             #  if key in ['n_mult','m_mult','n_Af','m_mult_smudge','n_TKE']:
                 nonzero_ones = freya_data[np.where(np.nan_to_num(freya_data[:,1]) > 0.0001)]
                 plt.xlim( min(nonzero_ones[:,0]) , max(nonzero_ones[:,0]))
@@ -461,7 +464,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
                 #  plt.ylim( ranges_y[key][0] , ranges_y[key][1])
                 plt.xscale(element[7])
                 plt.yscale(element[7])
-                lg = plt.legend(("FREYA",str(element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
+                lg = plt.legend(("FREYA",str(element[1]),'$'+str(iso[4])),fontsize=14,numpoints=1)
                 lg.draw_frame(False)
 
                 plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
@@ -534,8 +537,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
             plt.xscale('log')
-            lg = plt.legend(("FREYA",str(element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),
-                    loc="upper right",fontsize=14,numpoints=1)
+            lg = plt.legend(("FREYA",str(element[1]),'$'+str(iso[4])),loc="upper right",fontsize=14,numpoints=1)
             lg.draw_frame(False)
 
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
@@ -552,7 +554,6 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             reduced_chi_sq = chisq_array[5][key]
             lg = plt.legend((r'$\chi^2_n = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1)
             lg.draw_frame(False)
-
 
             plt.subplots_adjust(hspace=0)
             plt.savefig(str(key) + "_x" + '.pdf',bbox_inches='tight')
@@ -577,7 +578,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.ylim( 1E-6 , ranges_y[key][1])
             plt.ylim(1E-4,None)
             plt.yscale('log')
-            lg = plt.legend(("FREYA",str(element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
+            lg = plt.legend(("FREYA",str(element[1]),'$'+str(iso[4])),fontsize=14,numpoints=1)
             lg.draw_frame(False)
 
             #  print(ratio_array)
@@ -601,7 +602,6 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
 
             continue
         if key in ["n_TKE","n_Af"]:
-            print('plotting alternative',key,"data")
             dim_status = element[5]
             data_array = element[0]
             translated_key = key_translator[key]
@@ -609,6 +609,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             ratio_array = chisq_array[3][translated_key]
 
             if str(key)+"_alt" in parsed_data[0]:
+                print('plotting alternative',key,"data")
                 alt_element = parsed_data[0][key+"_alt"]
                 alt_data_array = alt_element[0]
                 alt_ratio_array = chisq_array[3][translated_key+"_alt"]
@@ -616,6 +617,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
                 alt_element = element
                 alt_data_array = data_array
                 alt_ratio_array = ratio_array
+                continue
 
             matplotlib.rcParams.update({'font.size': 14})
             plt.figure(figsize=(6,6))
@@ -635,12 +637,11 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             #  plt.xscale(element[7])
             #  plt.yscale(element[7])
             if key == "n_Af":
-                plt.annotate('$^{'+str(iso[0][2:5])+'}$'+str(iso[0][0:2])+'(sf)',(140,4),fontsize=14)
+                plt.annotate('$'+iso[4],(140,4),fontsize=14)
                 lg = plt.legend(("FREYA",str(element[1]),str(alt_element[1])),fontsize=14,numpoints=1)
             else:
-                lg = plt.legend(("FREYA",str(element[1]),str(alt_element[1]),'$^{'+str(iso[0][2:])+'}$'+str(iso[0][0:2])+'(sf)'),fontsize=14,numpoints=1)
+                lg = plt.legend(("FREYA",str(element[1]),'$'+str(iso[4])),fontsize=14,numpoints=1)
             lg.draw_frame(False)
-            #  plt.title(str(key) + ' ' + str(iso[0]))
 
             plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
             plt.plot([],[],color='#ffffff')
@@ -678,7 +679,6 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
         plt.xlim(ranges_x[key_translator[key]][0], ranges_x[key_translator[key]][1])
         #  plt.xlabel()
         plt.ylabel('uncertainty',fontsize=15)
-        #  plt.title('Chi-Squared Error for: ' + str(key) + ' (' + str(iso[0]) + ')')
         if key_translator[key] is 'mannhart': 
             plt.xscale('log')
         plt.savefig('chisq_'+str(key)+'.pdf')

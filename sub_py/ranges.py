@@ -39,6 +39,14 @@ def param_list(Z,A,reac_type):
     #  print("Parameter list for Z=",Z," A=",A," is: ",plist)
     return plist
 
+def param_var(Z,A,reac_type):
+    iso = isotope(int(Z),int(A),reac_type = reac_type)
+    if iso[0] == "Cf252sf":
+        varlist = [1.022,0.109,0.247,0.205,1.841]
+    if iso[0] == "Pu240sf":
+        varlist = [0.811,0.155,0.287,0.206,2.06]
+    return varlist
+
 error_weights = {}
 cf252_weights = {}
 cf252_weights['m_mult'] = 4
