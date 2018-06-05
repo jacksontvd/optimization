@@ -133,6 +133,8 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     else:
         probability_array = probability(grid_values,big_number,dof)
 
+    print("PROBABILITY:",probability_array)
+
     def normalizer_function(x):
         index = np.searchsorted(grid,x)
         probability = probability_array[index-1]
