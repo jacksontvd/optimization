@@ -128,7 +128,10 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     average_error = sum(grid_values) / len(grid_values)
     big_number = average_error
     print("Number of Degrees of Freedom:",dof)
-    probability_array = probability(grid_values,big_number,dof)
+    if dof > 100:
+        probability_array = probability(grid_values,big_number,dof/10)
+    else:
+        probability_array = probability(grid_values,big_number,dof)
 
     def normalizer_function(x):
         index = np.searchsorted(grid,x)
