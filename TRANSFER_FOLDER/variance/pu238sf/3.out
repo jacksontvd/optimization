@@ -1,0 +1,71 @@
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+/global/home/users/jayteeveedee/sf/pu238/variance/optimization/sub_py/error.py:75: RuntimeWarning: divide by zero encountered in double_scalars
+  single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
+/global/home/users/jayteeveedee/sf/pu238/variance/optimization/sub_py/error.py:77: RuntimeWarning: invalid value encountered in double_scalars
+  chi_sq_added = chi_sq_added * weights[key]
+/global/home/users/jayteeveedee/sf/pu238/variance/optimization/sub_py/error.py:81: RuntimeWarning: divide by zero encountered in double_scalars
+  ratio = [freya_single/data_single]
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+we are here
+starting variance calculation
+Begin Parsing Data...
+('Parsing:', 'gammabar')
+('Parsing:', 'n_mult')
+('Parsing:', 'nubar')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'average_photon_energy')
+('Time:', 0.07153701782226562)
+Begin Optimizing FREYA (This may take a while...)
+calculating errors on nodes...
+Begin Rewriting Parameter File...
+Successful.
+Begin Generating Events...
+Successful.
+Time: 1.2964720726 sec
+Importing Events...
+1000000 events imported.
+Time: 12.5057618618 sec
+Parsing events...
+All events parsed.
+Time: 89.8252241611 sec
+Calculating Statistics... 
+Time: 0.647357940674 sec
+ Begin generating weighted chi-squared routine...
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', nan)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 2793.1674906384133)
+Calculating error for:gammabar
+('gammabar', 'error:', nan)
+Calculating error for:nubar
+('nubar', 'error:', 141.19176925734692)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 44.505230389581158)
+('Time:', 0.0008189678192138672)
+('Total Weighted Error: ', 2978.8644902853416)
+('Total Error: ', 11528.112011626496)
+Successful.
+Done.
+('optimized parameters:', array([-1.66666667]))
+('time:', 5738.134515047073)
+Begin printing output...
+Finished.
+Statistics generated in: 
+/global/home/users/jayteeveedee/sf/pu238/variance/optimization/sub_py/../../output/variance/Z=94 A=238_E=-1_grid
+Calculating variance...
+('Number of Degrees of Freedom:', 14)
+('PROBABILITY:', array([  1.75262630e+15,   1.46694625e+13,   3.55513877e+09,
+         8.37263360e-03,   5.94893211e+07,   2.21046310e+11,
+         1.28886736e+13,   1.50755945e+14,   7.80628546e+14,
+         2.42186740e+15]))
+('average', 1.8307087430722979)
+('average2', 20.874241997621219)
+('variance:', 17.522747495659864)
+('events: ', 1000000)
+d
+('resolution:', 10.0)
+(94, 238)
+None
+           JobID    Elapsed 
+---------------- ---------- 
+         3067619   01:35:41 
