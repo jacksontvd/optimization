@@ -1,0 +1,393 @@
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:75: RuntimeWarning: divide by zero encountered in double_scalars
+  single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:77: RuntimeWarning: invalid value encountered in double_scalars
+  chi_sq_added = chi_sq_added * weights[key]
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:81: RuntimeWarning: divide by zero encountered in double_scalars
+  ratio = [freya_single/data_single]
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+we are here
+starting variance calculation
+Begin Parsing Data...
+('Parsing:', 'gammabar')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'nubar')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'totn_Af')
+('Parsing:', 'n_Af')
+('Parsing:', 'n_mult')
+('Parsing:', 'average_photon_energy')
+('Time:', 0.07876014709472656)
+Begin Optimizing FREYA (This may take a while...)
+calculating errors on nodes...
+Begin Rewriting Parameter File...
+Successful.
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.30873799324 sec
+Importing Events...
+100000 events imported.
+Time: 1.22561597824 sec
+Parsing events...
+All events parsed.
+Time: 12.1385331154 sec
+Calculating Statistics... 
+Time: 0.0933101177216 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 29121.434850913665)
+Calculating error for:nubar
+('nubar', 'error:', 98.684355999999525)
+calculating error for: totn_Af
+('average', 'totn_Af', 'error: ', 16.208026309690961)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', nan)
+Calculating error for:gammabar
+('gammabar', 'error:', nan)
+calculating error for: n_Af
+('average', 'n_Af', 'error: ', 92.948093585046962)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 49.758249731549235)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 2.0098667798809791)
+('Time:', 0.002437114715576172)
+('Total Weighted Error: ', 29381.043443319832)
+('Total Error: ', 11744620.920072891)
+Successful.
+Done.
+('optimized parameters:', array([ 10.33333333]))
+('time:', 942.2442560195923)
+Begin printing output...
+Finished.
+Statistics generated in: 
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/../../output/variance/Z=96 A=244_E=-1_grid
+Calculating variance...
+('Number of Degrees of Freedom:', 619)
+('PROBABILITY:', array([  5.76740772e+89,   3.95156332e+89,   3.34826247e+89,
+         2.56107678e+89,   2.42355988e+89,   2.25092613e+89,
+         2.10893945e+89,   2.16789157e+89,   2.23967752e+89,
+         2.40132535e+89]))
+('average', 9.1325194500200659)
+('average2', 85.705697408818764)
+('variance:', 2.3027859038239598)
+('events: ', 100000)
+e
+('resolution:', 10.0)
+(96, 244)
+None
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:75: RuntimeWarning: divide by zero encountered in double_scalars
+  single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:77: RuntimeWarning: invalid value encountered in double_scalars
+  chi_sq_added = chi_sq_added * weights[key]
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:81: RuntimeWarning: divide by zero encountered in double_scalars
+  ratio = [freya_single/data_single]
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+we are here
+starting variance calculation
+Begin Parsing Data...
+('Parsing:', 'gammabar')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'nubar')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'totn_Af')
+('Parsing:', 'n_Af')
+('Parsing:', 'n_mult')
+('Parsing:', 'average_photon_energy')
+('Time:', 0.006134986877441406)
+Begin Optimizing FREYA (This may take a while...)
+calculating errors on nodes...
+Begin Rewriting Parameter File...
+Successful.
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.40016198158 sec
+Importing Events...
+100000 events imported.
+Time: 1.26829385757 sec
+Parsing events...
+All events parsed.
+Time: 12.0904369354 sec
+Calculating Statistics... 
+Time: 0.0956029891968 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 29121.514029819522)
+Calculating error for:nubar
+('nubar', 'error:', 127.78041599999956)
+calculating error for: totn_Af
+('average', 'totn_Af', 'error: ', 18.300192697102744)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', nan)
+Calculating error for:gammabar
+('gammabar', 'error:', nan)
+calculating error for: n_Af
+('average', 'n_Af', 'error: ', 180.63839422398581)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 44.088605722470128)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 3.1607139550799594)
+('Time:', 0.002362966537475586)
+('Total Weighted Error: ', 29495.482352418156)
+('Total Error: ', 11752586.614763752)
+Successful.
+Done.
+('optimized parameters:', array([ 1.27777778]))
+('time:', 770.9006869792938)
+Begin printing output...
+Finished.
+Statistics generated in: 
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/../../output/variance/Z=96 A=244_E=-1_grid
+Calculating variance...
+('Number of Degrees of Freedom:', 619)
+('PROBABILITY:', array([  2.30039620e+89,   2.22265974e+89,   2.23338927e+89,
+         2.05268449e+89,   2.05080558e+89,   2.03059233e+89,
+         2.16624521e+89,   2.17227587e+89,   2.30956017e+89,
+         2.67231399e+89]))
+('average', 1.2529185900258786)
+('average2', 1.5917677643095218)
+('variance:', 0.021962771077086218)
+('events: ', 100000)
+x
+('resolution:', 10.0)
+(96, 244)
+None
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:75: RuntimeWarning: divide by zero encountered in double_scalars
+  single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:77: RuntimeWarning: invalid value encountered in double_scalars
+  chi_sq_added = chi_sq_added * weights[key]
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:81: RuntimeWarning: divide by zero encountered in double_scalars
+  ratio = [freya_single/data_single]
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+we are here
+starting variance calculation
+Begin Parsing Data...
+('Parsing:', 'gammabar')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'nubar')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'totn_Af')
+('Parsing:', 'n_Af')
+('Parsing:', 'n_mult')
+('Parsing:', 'average_photon_energy')
+('Time:', 0.006320953369140625)
+Begin Optimizing FREYA (This may take a while...)
+calculating errors on nodes...
+Begin Rewriting Parameter File...
+Successful.
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.27391195297 sec
+Importing Events...
+100000 events imported.
+Time: 1.27835488319 sec
+Parsing events...
+All events parsed.
+Time: 11.6754381657 sec
+Calculating Statistics... 
+Time: 0.101490020752 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 29121.418604589147)
+Calculating error for:nubar
+('nubar', 'error:', 28.686736000000053)
+calculating error for: totn_Af
+('average', 'totn_Af', 'error: ', 11.472423046053708)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', nan)
+Calculating error for:gammabar
+('gammabar', 'error:', nan)
+calculating error for: n_Af
+('average', 'n_Af', 'error: ', 64.591065566368684)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 305.63266691787794)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 27.941351486164073)
+('Time:', 0.0023720264434814453)
+('Total Weighted Error: ', 29559.742847605608)
+('Total Error: ', 11743492.70903636)
+Successful.
+Done.
+('optimized parameters:', array([ 1.44444444]))
+('time:', 764.7813639640808)
+Begin printing output...
+Finished.
+Statistics generated in: 
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/../../output/variance/Z=96 A=244_E=-1_grid
+Calculating variance...
+('Number of Degrees of Freedom:', 619)
+('PROBABILITY:', array([  2.40321032e+89,   2.25398132e+89,   2.11730035e+89,
+         2.22144050e+89,   2.43604221e+89,   2.39424037e+89,
+         2.48936785e+89,   2.72506685e+89,   2.74041335e+89,
+         2.84833256e+89]))
+('average', 2.0462940180573872)
+('average2', 4.5281278274100574)
+('variance:', 0.34080861907261095)
+('events: ', 100000)
+c
+('resolution:', 10.0)
+(96, 244)
+None
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:75: RuntimeWarning: divide by zero encountered in double_scalars
+  single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:77: RuntimeWarning: invalid value encountered in double_scalars
+  chi_sq_added = chi_sq_added * weights[key]
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:81: RuntimeWarning: divide by zero encountered in double_scalars
+  ratio = [freya_single/data_single]
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+we are here
+starting variance calculation
+Begin Parsing Data...
+('Parsing:', 'gammabar')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'nubar')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'totn_Af')
+('Parsing:', 'n_Af')
+('Parsing:', 'n_mult')
+('Parsing:', 'average_photon_energy')
+('Time:', 0.007151126861572266)
+Begin Optimizing FREYA (This may take a while...)
+calculating errors on nodes...
+Begin Rewriting Parameter File...
+Successful.
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.2451570034 sec
+Importing Events...
+100000 events imported.
+Time: 1.30319619179 sec
+Parsing events...
+All events parsed.
+Time: 12.3986151218 sec
+Calculating Statistics... 
+Time: 0.108673095703 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 29121.29155634352)
+Calculating error for:nubar
+('nubar', 'error:', 985.33210000000167)
+calculating error for: totn_Af
+('average', 'totn_Af', 'error: ', 10.893920505622321)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', nan)
+Calculating error for:gammabar
+('gammabar', 'error:', nan)
+calculating error for: n_Af
+('average', 'n_Af', 'error: ', 59.21880920123381)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 693.25808709517128)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 6.2260963046825708)
+('Time:', 0.002321004867553711)
+('Total Weighted Error: ', 30876.220569450234)
+('Total Error: ', 11744411.434379051)
+Successful.
+Done.
+('optimized parameters:', array([ 0.83333333]))
+('time:', 741.5164852142334)
+Begin printing output...
+Finished.
+Statistics generated in: 
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/../../output/variance/Z=96 A=244_E=-1_grid
+Calculating variance...
+('Number of Degrees of Freedom:', 619)
+('PROBABILITY:', array([  3.86879870e+89,   3.18716386e+89,   2.54328365e+89,
+         2.12788124e+89,   2.22068680e+89,   2.48565364e+89,
+         3.06238134e+89,   3.85744317e+89,   5.96101291e+89,
+         9.91752262e+89]))
+('average', 1.092772391601283)
+('average2', 1.2978211538749542)
+('variance:', 0.10366965402896633)
+('events: ', 100000)
+T
+('resolution:', 10.0)
+(96, 244)
+None
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:75: RuntimeWarning: divide by zero encountered in double_scalars
+  single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:77: RuntimeWarning: invalid value encountered in double_scalars
+  chi_sq_added = chi_sq_added * weights[key]
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/error.py:81: RuntimeWarning: divide by zero encountered in double_scalars
+  ratio = [freya_single/data_single]
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+we are here
+starting variance calculation
+Begin Parsing Data...
+('Parsing:', 'gammabar')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'nubar')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'totn_Af')
+('Parsing:', 'n_Af')
+('Parsing:', 'n_mult')
+('Parsing:', 'average_photon_energy')
+('Time:', 0.006206035614013672)
+Begin Optimizing FREYA (This may take a while...)
+calculating errors on nodes...
+Begin Rewriting Parameter File...
+Successful.
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.28815793991 sec
+Importing Events...
+100000 events imported.
+Time: 1.20130419731 sec
+Parsing events...
+All events parsed.
+Time: 10.3895478249 sec
+Calculating Statistics... 
+Time: 0.0722470283508 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 29120.698759135008)
+Calculating error for:nubar
+('nubar', 'error:', 54613.820415999995)
+calculating error for: totn_Af
+('average', 'totn_Af', 'error: ', 92.947861688305238)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', nan)
+Calculating error for:gammabar
+('gammabar', 'error:', nan)
+calculating error for: n_Af
+('average', 'n_Af', 'error: ', 156.78745359575436)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 28158.101580561459)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 409.2350694956437)
+('Time:', 0.0024139881134033203)
+('Total Weighted Error: ', 112551.59114047616)
+('Total Error: ', 11827104.234289268)
+Successful.
+Done.
+('optimized parameters:', array([-5.]))
+('time:', 782.9222929477692)
+Begin printing output...
+Finished.
+Statistics generated in: 
+/global/home/users/jayteeveedee/sf/cm244/variance/optimization/sub_py/../../output/variance/Z=96 A=244_E=-1_grid
+Calculating variance...
+('Number of Degrees of Freedom:', 619)
+('PROBABILITY:', array([  3.69928124e+089,   4.12264506e+089,   5.12500218e+090,
+         4.44825717e+092,   6.94680924e+094,   1.40824953e+097,
+         4.11099636e+099,   7.73628700e+101,   1.27852549e+104,
+         1.23846088e+106]))
+('average', 4.9706333803717477)
+('average2', 24.739329612322365)
+('variance:', 0.032133410256495409)
+('events: ', 100000)
+d
+('resolution:', 10.0)
+(96, 244)
+None
+           JobID    Elapsed 
+---------------- ---------- 
+         3061348   01:06:52 
