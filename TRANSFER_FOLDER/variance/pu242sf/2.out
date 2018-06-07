@@ -1,0 +1,333 @@
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+we are here
+starting variance calculation
+Begin Parsing Data...
+('Parsing:', 'n_mult')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'nubar')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'gammabar')
+('Parsing:', 'average_photon_energy')
+('Time:', 0.07122302055358887)
+Begin Optimizing FREYA (This may take a while...)
+calculating errors on nodes...
+Begin Rewriting Parameter File...
+Successful.
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.28410983086 sec
+Importing Events...
+500000 events imported.
+Time: 5.79725718498 sec
+Parsing events...
+All events parsed.
+Time: 51.4569430351 sec
+Calculating Statistics... 
+Time: 0.36891913414 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 1320.5097813259677)
+Calculating error for:nubar
+('nubar', 'error:', 75.09522306250048)
+Calculating error for:gammabar
+('gammabar', 'error:', 0.87979040081632631)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', 109.07427529458337)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 33.041048959958275)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 1.1878558932265877)
+('Time:', 0.0009160041809082031)
+('Total Weighted Error: ', 1539.7879749370529)
+('Total Error: ', 531579.31390747766)
+Successful.
+Done.
+('optimized parameters:', array([ 9.22222222]))
+('time:', 3698.9321348667145)
+Begin printing output...
+Finished.
+Statistics generated in: 
+/global/home/users/jayteeveedee/sf/pu242/variance/optimization/sub_py/../../output/variance/Z=94 A=242_E=-1_grid
+Calculating variance...
+('Number of Degrees of Freedom:', 415)
+('PROBABILITY:', array([  2.36296890e+37,   1.02592361e+37,   5.43867020e+36,
+         4.29492065e+36,   3.65876388e+36,   4.04476764e+36,
+         4.90344203e+36,   6.52741624e+36,   1.11945052e+37,
+         1.69484750e+37]))
+('average', 9.4585175420355405)
+('average2', 92.701759924861676)
+('variance:', 3.2382058318676314)
+('events: ', 500000)
+e
+('resolution:', 10.0)
+(94, 242)
+None
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+we are here
+starting variance calculation
+Begin Parsing Data...
+('Parsing:', 'n_mult')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'nubar')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'gammabar')
+('Parsing:', 'average_photon_energy')
+('Time:', 0.0064849853515625)
+Begin Optimizing FREYA (This may take a while...)
+calculating errors on nodes...
+Begin Rewriting Parameter File...
+Successful.
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.24763298035 sec
+Importing Events...
+500000 events imported.
+Time: 5.70800590515 sec
+Parsing events...
+All events parsed.
+Time: 48.962250948 sec
+Calculating Statistics... 
+Time: 0.459533214569 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 1320.5315663437223)
+Calculating error for:nubar
+('nubar', 'error:', 71.005902250000062)
+Calculating error for:gammabar
+('gammabar', 'error:', 1.4300059722448866)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', 47.406194125699585)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 3.7425445298139888)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 8.4419898873694486)
+('Time:', 0.0012900829315185547)
+('Total Weighted Error: ', 1452.5582031088502)
+('Total Error: ', 533056.96604741935)
+Successful.
+Done.
+('optimized parameters:', array([ 1.27777778]))
+('time:', 2969.1885969638824)
+Begin printing output...
+Finished.
+Statistics generated in: 
+/global/home/users/jayteeveedee/sf/pu242/variance/optimization/sub_py/../../output/variance/Z=94 A=242_E=-1_grid
+Calculating variance...
+('Number of Degrees of Freedom:', 415)
+('PROBABILITY:', array([  5.00543255e+36,   4.97017817e+36,   4.57504415e+36,
+         4.18050535e+36,   3.84642041e+36,   3.61358732e+36,
+         4.40001849e+36,   6.03871812e+36,   6.61485230e+36,
+         5.69781458e+36]))
+('average', 1.2645125888231656)
+('average2', 1.6222177058768104)
+('variance:', 0.023225618584546082)
+('events: ', 500000)
+x
+('resolution:', 10.0)
+(94, 242)
+None
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+we are here
+starting variance calculation
+Begin Parsing Data...
+('Parsing:', 'n_mult')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'nubar')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'gammabar')
+('Parsing:', 'average_photon_energy')
+('Time:', 0.003907918930053711)
+Begin Optimizing FREYA (This may take a while...)
+calculating errors on nodes...
+Begin Rewriting Parameter File...
+Successful.
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.24176001549 sec
+Importing Events...
+500000 events imported.
+Time: 6.4807908535 sec
+Parsing events...
+All events parsed.
+Time: 51.7818028927 sec
+Calculating Statistics... 
+Time: 0.447857141495 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 1320.4877594058257)
+Calculating error for:nubar
+('nubar', 'error:', 9.8737350625000815)
+Calculating error for:gammabar
+('gammabar', 'error:', 2.5497702399999937)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', 98.08197873707401)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 1.33881180578894)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 0.60465521262892463)
+('Time:', 0.0011510848999023438)
+('Total Weighted Error: ', 1432.9367104638177)
+('Total Error: ', 531156.15692662366)
+Successful.
+Done.
+('optimized parameters:', array([ 3.]))
+('time:', 3314.478823184967)
+Begin printing output...
+Finished.
+Statistics generated in: 
+/global/home/users/jayteeveedee/sf/pu242/variance/optimization/sub_py/../../output/variance/Z=94 A=242_E=-1_grid
+Calculating variance...
+('Number of Degrees of Freedom:', 415)
+('PROBABILITY:', array([  8.34738586e+38,   8.88375382e+37,   2.38266458e+37,
+         1.17055801e+37,   7.57884978e+36,   5.87085910e+36,
+         5.14142502e+36,   4.65562966e+36,   4.56687058e+36,
+         4.56637251e+36]))
+('average', 1.156448295887365)
+('average2', 1.4532806082551657)
+('variance:', 0.11590794719437514)
+('events: ', 500000)
+c
+('resolution:', 10.0)
+(94, 242)
+None
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+we are here
+starting variance calculation
+Begin Parsing Data...
+('Parsing:', 'n_mult')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'nubar')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'gammabar')
+('Parsing:', 'average_photon_energy')
+('Time:', 0.004019975662231445)
+Begin Optimizing FREYA (This may take a while...)
+calculating errors on nodes...
+Begin Rewriting Parameter File...
+Successful.
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.10984706879 sec
+Importing Events...
+500000 events imported.
+Time: 6.02526807785 sec
+Parsing events...
+All events parsed.
+Time: 54.6682338715 sec
+Calculating Statistics... 
+Time: 0.413705825806 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 1320.4869823836716)
+Calculating error for:nubar
+('nubar', 'error:', 408.96972899999969)
+Calculating error for:gammabar
+('gammabar', 'error:', 307.91525760734692)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', 33.60598017218139)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 175.39543843856359)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 5.6606112491447043)
+('Time:', 0.0009970664978027344)
+('Total Weighted Error: ', 2252.0339988509077)
+('Total Error: ', 533541.28085032944)
+Successful.
+Done.
+('optimized parameters:', array([ 0.94444444]))
+('time:', 2913.7075328826904)
+Begin printing output...
+Finished.
+Statistics generated in: 
+/global/home/users/jayteeveedee/sf/pu242/variance/optimization/sub_py/../../output/variance/Z=94 A=242_E=-1_grid
+Calculating variance...
+('Number of Degrees of Freedom:', 415)
+('PROBABILITY:', array([  1.62677467e+39,   1.16741929e+38,   2.03204236e+37,
+         6.24175214e+36,   4.82111510e+36,   8.13890475e+36,
+         2.90212793e+37,   2.09087842e+38,   1.36314287e+39,
+         2.02942955e+40]))
+('average', 1.4058776075538195)
+('average2', 2.0427778335317472)
+('variance:', 0.066285986110495854)
+('events: ', 500000)
+T
+('resolution:', 10.0)
+(94, 242)
+None
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+'inputparameters.dat' -> '../freya/data_freya/inputparameters.dat'
+we are here
+starting variance calculation
+Begin Parsing Data...
+('Parsing:', 'n_mult')
+('Parsing:', 'nubar_moments')
+('Parsing:', 'nubar')
+('Parsing:', 'n_spectrum')
+('Parsing:', 'gammabar')
+('Parsing:', 'average_photon_energy')
+('Time:', 0.004223823547363281)
+Begin Optimizing FREYA (This may take a while...)
+calculating errors on nodes...
+Begin Rewriting Parameter File...
+Successful.
+Begin Generating Events...
+WARNING: 1,000,000 events is recommended
+Successful.
+Time: 1.21797585487 sec
+Importing Events...
+500000 events imported.
+Time: 5.47293782234 sec
+Parsing events...
+All events parsed.
+Time: 45.9429149628 sec
+Calculating Statistics... 
+Time: 0.317761898041 sec
+ Begin generating weighted chi-squared routine...
+calculating error for: n_spectrum
+('average', 'n_spectrum', 'error: ', 1320.4221958996313)
+Calculating error for:nubar
+('nubar', 'error:', 12403.722384000001)
+Calculating error for:gammabar
+('gammabar', 'error:', 45.734690951836647)
+Calculating error for:average_photon_energy
+('average_photon_energy', 'error:', 65.033594889860169)
+calculating error for: nubar_moments
+('average', 'nubar_moments', 'error: ', 4003.1345005900021)
+calculating error for: n_mult
+('average', 'n_mult', 'error: ', 214.46565319820152)
+('Time:', 0.0009779930114746094)
+('Total Weighted Error: ', 18052.513019529531)
+('Total Error: ', 599253.47060804348)
+Successful.
+Done.
+('optimized parameters:', array([-1.66666667]))
+('time:', 2850.848326921463)
+Begin printing output...
+Finished.
+Statistics generated in: 
+/global/home/users/jayteeveedee/sf/pu242/variance/optimization/sub_py/../../output/variance/Z=94 A=242_E=-1_grid
+Calculating variance...
+('Number of Degrees of Freedom:', 415)
+('PROBABILITY:', array([  1.61007404e+50,   7.55010131e+44,   1.69186637e+39,
+         6.23601287e+36,   7.48581144e+39,   2.90005410e+44,
+         3.68285939e+48,   8.61017685e+51,   6.65750916e+54,
+         1.52613441e+57]))
+('average', 4.9875083869202683)
+('average2', 24.889005811919212)
+('variance:', 0.013765902319196499)
+('events: ', 500000)
+d
+('resolution:', 10.0)
+(94, 242)
+None
+           JobID    Elapsed 
+---------------- ---------- 
+         3061366   04:22:39 
