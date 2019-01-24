@@ -28,7 +28,10 @@ def plot(Z, A, Energy, output_file, **kwargs):
     plot_begin = time.time()
     if int(Energy) == -1:
         string_energy = 0
+    else:
+        string_energy= str(Energy)
 
+    #  print the .tex output from the run
     stats =open(plot_path+'/Statistics.tex', 'w+')
     stats.write('\\documentclass[12pt]{letter} \n \\usepackage{amsmath} ' +
         '\n \\begin{document} '
@@ -85,6 +88,8 @@ def plot(Z, A, Energy, output_file, **kwargs):
     print("Begin Plotting...")
 
     for key in freya_output:
+        #  for each key (i.e. observable) we plot the output
+        print("plotting: ",str(key))
         #  give mannhart a logarithmic scaling
         if key == 'mannhart':
             scale_var = 'log'

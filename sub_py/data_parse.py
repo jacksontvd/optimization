@@ -9,8 +9,9 @@ cwd = os.getcwd()
 from isotope import isotope
 from ranges import *
 from maxwellian import *
+from induced_data_parse import *
 
-def data_parse(Z,A,reaction_type):
+def data_parse(Z,A,reaction_type,energy):
 
     #  use imported isotope function to get string of the isotope which corresponds to our Z,A
 
@@ -23,22 +24,15 @@ def data_parse(Z,A,reaction_type):
     data_begin = time.time()
 
     #  assign the variable energy to be a string which can be read by the gen_par_ana script so it produces the correct events for comparison
-    if reaction_type is 'induced':
-        if int(A) is not 240 or 242:
-            print('This isotope is not supported by Freya, or has no available data.')
-        else:
-            energy = 'induced'
-    else:
+    if reaction_type is 'spontaneous':
         energy = -1
-        data_parsing_path = cwd + "/../data_master/" + str(iso) + "/"
+    data_parsing_path = cwd + "/../data_master/" + str(iso) + "/"
 
     #  change the working directory to be the folder containing all of the data for this isotope
     os.chdir(cwd+'/../data_master/'+iso)
    
-
     #  set files to be a list of every file in the appropriate directory
     files = os.listdir(data_parsing_path)
-
 
     #  since there will be multiple data sets for each observable, this empty dictionary will bring the name of each data set, to the corresponding general name of the observable
     #  for example, the key 'n_mult_0' will correspond to the string 'n_mult'
@@ -50,7 +44,7 @@ def data_parse(Z,A,reaction_type):
     for datafile in files:
         #  only process files with the appropriate beginning matching the correct isotope (in case there are irrelevant files present) 
         file_name_words = datafile.split('.')
-        if file_name_words[0] == iso:
+        if file_name_words[-1] == 'txt':
             #  assign the variable is3d to determine whether the data will be plotted on 3-d axes or 2d axes. 
             if file_name_words[1] == 'n_A_TKE':
                 is3d = True
@@ -142,7 +136,7 @@ def data_parse(Z,A,reaction_type):
                         data[line_number, 1, 1] = (float(elems[3]) - float(elems[2])) / float(elems[2])
                         data[line_number, 2, 1] = elems[5]
                     else:
-                        print('Data failed to parse for: ' + str(datafile))
+                        print('Data Failed to parse for: ' + str(datafile))
             else:
                 #  now we parse the non 3-d case (non n_A_TKE case)
                 #  case 0: do nothing
@@ -192,6 +186,18 @@ def data_parse(Z,A,reaction_type):
                     scale,
                     z_label,
                     False] # sigma indicator
+        elif file_name_words[0] == iso:
+            data_key = file_name_words[1]
+            key_translator[data_key] = file_name_words[1]
+            key_translator[file_name_words[1]] = file_name_words[1]
+            print('Parsing:',data_key)
+            if len(file_name_words) > 2:
+                directory_name = file_name_words[1]+'.'+file_name_words[2]
+            else:
+                directory_name=file_name_words[1]
+            #  The directory name is the data_key plus the name of the data(this is because there are sometimes many different sources of the same observable, and it's difficult to keep the directories straight unless the actual directories are named after the authors that published them.)
+            print("From directory:",directory_name)
+            output_dict[str(data_key)] = induced_data_parse(Z,A,reaction_type,directory_name,energy)
 
     #  run through each element of the data_dictionary, and find the ones which contain only the variances for that observable
     #  these correspond to another element of the dictionary which contains the actual data, for which this original element contains the variance of

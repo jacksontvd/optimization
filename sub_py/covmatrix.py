@@ -8,11 +8,13 @@ from error import *
 from test import *
 from data_parse import *
 
+#  Define functions to block and enable printin (this is useful for when FREYA is called many times in a row during optimization or other calculations)
 def blockPrint():
     sys.stdout = open(os.devnull, 'w')
 def enablePrint():
     sys.stdout = sys.__stdout__
 
+#  Define a function which takes an array with chi squared error, a normalization constant, and the number of degrees of freedom and returns an array with the associated probabilities.
 def probability(chi_sq_array,number,dof):
     factor = 1/(2**(dof/2)*gamma(dof/2))
     #  print(factor)
@@ -22,6 +24,7 @@ def probability(chi_sq_array,number,dof):
     #  print(final)
     return final
 
+#  There are floating point issues when calculating the log of the probability using the above function, so we define a direct analytic calculation of this quantity instead.
 def log_probability(chi_sq,dof):
     factor = -np.log(gamma(dof/2)*(2**(dof/2)))
     #  print(factor)
@@ -31,11 +34,15 @@ def log_probability(chi_sq,dof):
     #  print(exponential)
     return factor + power + exponential
 
+#  Define a function which takes Z,A, a number of events to generate, a parameter h, and the type of reaction. This function will return the hessian matrix.
 def freya_hessian(Z,A,generate_number,h,reac_t):
+    #  pull a list with the optimized parameters from ranges.py
     parameters = param_list(Z,A,reac_t)
     print("Using Hessian to calculate correlation matrix at the point: ",parameters)
     print("Interval used to estimate derivatives: ",h)
+    #  pull the array of parsed data from data_parse.py
     parsed_data = data_parse(Z,A,reac_t)
+    #  define an objective function which takes the parameters and returns the logarithm of the probability.
     def objective(parameters):
         error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
         #  error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number,None, reaction_type = reac_t)
@@ -56,6 +63,7 @@ def freya_hessian(Z,A,generate_number,h,reac_t):
     result = calc_cov(objective,parameters,h)
     #  enablePrint()
 
+    #  Create an empty array which will be filled with a normalized version of the results.
     correlation_array = np.zeros((5,5))
     for i in range(0,5):
         for j in range(0,5):
@@ -65,6 +73,7 @@ def freya_hessian(Z,A,generate_number,h,reac_t):
     if not os.path.exists(print_path):
         os.makedirs(print_path)
 
+    #  print these results into a .tex document
     document =open(print_path+'/matrix.tex', 'w+')
     document.write(
     '$e_0$ &'+ 
@@ -256,35 +265,3 @@ def _get_x_and_h(x, h):
                              "dimensions: %d %d" % (h.size,x.size))
 
     return x, h
-
-
-def test():
-
-    covtrue=array( [ [ 400.0, 0.2, 0.1  ],
-                     [ 0.2,   2.0, 0.2  ],
-                     [ 0.1,   0.2, 1.0] ] )
-
-    cinvtrue=linalg.inv(covtrue)
-    xmean=array( [1.0, 2.0, 3.0] )
-
-    def calc_lnprob(x):
-        xdiff = x-xmean
-
-        chi2 = cinvtrue.dot( xdiff ).dot( xdiff )
-
-        return exp( -0.5*chi2 )
-
-    h=1.0e-3
-
-    covmeas = calc_cov(calc_lnprob, xmean, h)
-
-    print("true cov:")
-    print(covtrue)
-    print("meas cov:")
-    print(covmeas)
-
-    print("frac diff:")
-    print( (covmeas-covtrue)/covtrue )
-
-if __name__=="__main__":
-    test()

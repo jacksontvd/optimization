@@ -24,16 +24,19 @@ def enablePrint():
 
 def grid_run(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting grid calculation')
+    #  pull the reaction type, parameters, and list of parameters
     reac_t = kwargs['reaction_type']
     parameter = kwargs['parameter']
     parameter_2 = kwargs['parameter2']
     parameters = param_list(Z,A,reac_t)
 
+    #  pull array of ranges of parameters and index of the changing parameters
     range_array = param_ranges[parameter]
     special_index = param_ranges[parameter][2]
     range_array_2 = param_ranges[parameter_2]
     special_index_2 = param_ranges[parameter_2][2]
 
+    #  pull array of fixed value of the two changing parameters
     fixed_value_1 = parameters[special_index]
     fixed_value_2 = parameters[special_index_2]
 

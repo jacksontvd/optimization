@@ -14,7 +14,7 @@ from covmatrix import freya_hessian
 from grid_run import grid_run
 
 #  cf
-#  Zinput = 98
+Zinput = 98
 #  cm
 #  Zinput=96
 #  pu
@@ -26,11 +26,11 @@ from grid_run import grid_run
 #  Ainput = 240
 #  Ainput = 242
 #  Ainput = 244
-#  Ainput = 252
+Ainput = 252
 
 #  generate_number = 1000000
 #  generate_number = 200000
-#  generate_number = 10000
+generate_number = 10000
 #  generate_number = 1
 
 reaction_type = 'spontaneous'
@@ -129,7 +129,7 @@ def well():
 
 #  [string,weight,parameter_index_1,parameter_index_2,parameter_name_1,parameter_name_2]
 if Zinput == 98:
-    well2_1 = ['cT',2,      1,3,'x','c_S']
+    well2_1 = ['cT',2,      1,3,'c','c_S']
     well2_2 = ['ex',10,     0,1,'e_0','x']
     well2_3 = ['xT',0.5,    1,3,'x','c_S']
     zoom = 40

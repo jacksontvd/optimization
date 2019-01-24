@@ -25,13 +25,16 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
     #  is also a dictionary which is assigned to the name key_trans
     key_trans = data[1]
 
+    #  Read energy in directly from post_op (or whatever calls this)
+    Energy = kwargs['Energy']
+
     # the string for the isotope is assigned to be iso as given by the isotope function in the isotope.py script
     reaction_t = kwargs['reaction_type']
     iso = isotope(Z,A, reaction_t)
+
+    #  The function iso has the string for the reaction (i.e. either 'nf' or 'sf') as the third return
+    reaction_string = iso[2]
     
-    if int(iso[1]) is 9 or 10 or 11 or 7 or 5 or 3:
-            Energy = '-1'
-   
     #  initialize the total error to be 0. This will be added to as we calculate the error for each observable
     total_chisq = 0 
     total_clean_chisq = 0 
@@ -56,29 +59,45 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
 
     keys_for_error = data_dictionary.keys()
 
-    weights = error_weights[str(Z)+str(A)]
+    weights = error_weights[str(Z)+str(A)+str(reaction_string)]
 
     for key in keys_for_error:
         if data_dictionary[key] is None:
             continue
         else:
             #  separate error calculation for n_A_TKE out from the rest of the observables
-            if key_trans[key] == 'nubar' or key_trans[key] == 'average_photon_energy' or key_trans[key] == 'gammabar':
+            if key_trans[key] == 'nubar' or key_trans[key] == 'average_photon_energy' or key_trans[key] == 'gammabar' or key_trans[key] == 'TKE_bar':
                 print("Calculating error for:" + key)
                 data_array = data_dictionary[key][0]
                 data_single = data_array[0,1,0]
                 single_error = data_array[0,1,1]
+                if float(data_single) == 0:
+                    print("Data is zero for ",key)
+                    chi_sq_added = 0
+                    print(key,"error:",chi_sq_added)
+                elif single_error == 0 or single_error == 'NaN' or single_error is None:
+                    single_error = dummy_error
+                    anal_array = anal_dict[key_trans[key]][0]
+                    freya_single = anal_array[0,1,0]
 
-                anal_array = anal_dict[key_trans[key]][0]
-                freya_single = anal_array[0,1,0]
+                    single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
+                    chi_sq_added = single_chisq
+                    chi_sq_added = chi_sq_added * weights[key]
+                    print(key,"error:",chi_sq_added)
+                    total_chisq += np.nan_to_num( chi_sq_added )
 
-                single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
-                chi_sq_added = single_chisq
-                chi_sq_added = chi_sq_added * weights[key]
-                print(key,"error:",chi_sq_added)
-                total_chisq += np.nan_to_num( chi_sq_added )
+                    ratio = [freya_single/data_single]
+                else:
+                    anal_array = anal_dict[key_trans[key]][0]
+                    freya_single = anal_array[0,1,0]
 
-                ratio = [freya_single/data_single]
+                    single_chisq = (freya_single - data_single)**2 / ((single_error)**2)
+                    chi_sq_added = single_chisq
+                    chi_sq_added = chi_sq_added * weights[key]
+                    print(key,"error:",chi_sq_added)
+                    total_chisq += np.nan_to_num( chi_sq_added )
+
+                    ratio = [freya_single/data_single]
             else:
                 print('calculating error for: ' + key)
 
@@ -100,7 +119,6 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
                 ratio[:] = np.nan
 
                 for element in data_array:
-
                     if key == "n_A_TKE":
                         ratio = data_array
                         continue

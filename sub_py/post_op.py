@@ -7,6 +7,7 @@ rcParams['font.family'] = 'Times New Roman'
 rcParams['text.usetex'] = True
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 import numpy as np
 from scipy import optimize
 
@@ -21,20 +22,27 @@ from plot import plot
 from matplotlib.ticker import MaxNLocator
 from maxwellian import *
 
+def find_nearest(array, value):
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return idx
+
 def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting')
     reac_t = kwargs['reaction_type']
     os.chdir(cwd+'/../../freya/data_freya/')
 
-    #  Energy = kwargs["energy"]
-    #  if int(Energy) == -1:
-        #  string_energy = 0
-    string_energy = 0
+    Energy = kwargs["energy"]
+    if int(Energy) == -1:
+        string_energy = 0
+    else:
+        string_energy = str(Energy)
+
 
     infile = open("inputparameters.dat","r+")
    
     #  parse appropriate data with fuction from data_parse.py
-    parsed_data = data_parse(Z,A,reac_t)
+    parsed_data = data_parse(Z,A,reac_t,Energy)
 
     #  pull the data array out of the data_parse output list
     data_array = parsed_data[0]
@@ -42,8 +50,6 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
     #  pull the data key dictionary from the data_parse output list
     key_translator = parsed_data[1]
 
-    #  pull energy from the data_parse so the freya output matches the energy level of the comparison data
-    Energy = parsed_data[2]
 
     #  pull the line number for the isotope from the isotope function
     #  this is used to rewrite the appropriate line of the parameter file in each iteration of the optimization
@@ -163,8 +169,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
 
     print('Calling for final error estimation...')
 
-    print(reac_t)
-    chisq_array =  error(Z,A,None, None, None, None, None,generate_number, parsed_data , reaction_type = reac_t)
+    chisq_array =  error(Z,A,None, None, None, None, None,generate_number, parsed_data , reaction_type = reac_t, Energy = Energy)
     
     print('Final Chi-Squared Error Estimation: ',str(chisq_array[0]))
     print('These values, and further statistics/visuals generated in ',str(opt_path))
@@ -244,15 +249,15 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
         '\n\hline'
         '\n\\bar\\nu &' + 
 #  print out data in the first column
-        str(parsed_data[0]['nubar_moments'][0][0,1,0])+ 
-        '\pm '+ str(parsed_data[0]['nubar_moments'][0][0,1,1])
+        str(parsed_data[0]['nubar'][0][0,1,0])+ 
+        '\pm '+ str(parsed_data[0]['nubar'][0][0,1,1])
         + '&' +
 #  print out freya in the second column
         str(round(freya_dict[ 'nubar' ][0][0,1,0],2)) +
         '\pm ' + str(round(freya_dict[ 'nubar' ][0][0,2,0],2)) 
         + '&' +
 #  print out C/E in the third column
-        str(round(freya_dict[ 'nubar' ][0][0,1,0]/parsed_data[0]['nubar_moments'][0][0,1,0],2))+ 
+        str(round(freya_dict[ 'nubar' ][0][0,1,0]/parsed_data[0]['nubar'][0][0,1,0],2))+ 
         '\pm '+ str(round(ratio_bar_scheme(
             freya_dict[ 'nubar' ][0][0,1,0],
             freya_dict[ 'nubar' ][0][0,2,0],
@@ -337,6 +342,23 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             parsed_data[0]['average_photon_energy'][0][0,1,1]
             ),2))+
         '\\\\' + '\n \hline'
+        '\n\overline{TKE} \\text{(MeV)}&' + 
+#  print out data in the first column
+        str(parsed_data[0]['TKE_bar'][0][0,1,0])+
+        '\pm '+ str(parsed_data[0]['TKE_bar'][0][0,1,1])+ '&' +
+#  print out freya in the second column
+        str(round(freya_dict[ 'TKE_bar' ][0][0,1,0],2)) +
+        '\pm ' + str(round(freya_dict[ 'TKE_bar' ][0][0,2,0],2))+ '&' +
+#  print out C/E in the third column
+        str(round(freya_dict[ 'TKE_bar' ][0][0,1,0]
+            /parsed_data[0]['TKE_bar'][0][0,1,0],2))+
+        '\pm '+ str(round(ratio_bar_scheme(
+            freya_dict[ 'TKE_bar' ][0][0,1,0],
+            freya_dict[ 'TKE_bar' ][0][0,2,0],
+            parsed_data[0]['TKE_bar'][0][0,1,0],
+            parsed_data[0]['TKE_bar'][0][0,1,1]
+            ),2))+
+        '\\\\' + '\n \hline'
         '\n\\end{tabular} \]' +
         '$$ \\begin{aligned} \n' +
         '\\text{Times: } & ' +
@@ -360,9 +382,16 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
 
     for key in parsed_data[0]:
         element = parsed_data[0][str(key)]
+        if key in plot_location_dictionary.keys():
+            label_locations = plot_location_dictionary[key]
+        else:
+            label_locations = [1,4,1]
         if element is None:
             continue
-        if key_translator[key] in ['nubar','average_photon_energy','gammabar','nubar_moments']:
+        if key_translator[key] in ['nubar','average_photon_energy','gammabar','nubar_moments','TKE_bar']:
+            continue
+        elif len(element[0])<2:
+            print("Skipping plot with ",key," on account of a data file which seems to be too short.")
             continue
         elif key_translator[key] not in ["mannhart","n_spectrum","rest_n_spectrum","n_A_TKE"]:
             print('plotting: ',key)
@@ -383,20 +412,30 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]))
             plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
-            plt.plot([],[],color='#ffffff')
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
-            lg = plt.legend(("FREYA",str(element[1]),'$'+str(iso[4])),fontsize=14,numpoints=1)
+            lg = plt.legend(("FREYA",
+                str(element[1])
+                ,),fontsize=14,numpoints=1,loc=label_locations[0])
             lg.draw_frame(False)
+            if key in ['m_mult_smudge']:
+                label = AnchoredText('$(c)$',loc=2,frameon=False)
+                ax.add_artist(label)
+            else:
+                label = AnchoredText('$(a)$',loc=2,frameon=False)
+                ax.add_artist(label)
+            
+            iso_label = AnchoredText('$'+str(iso[4]),frameon=False,
+                    loc=label_locations[1])
+            ax.add_artist(iso_label)
 
-            plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
-            plt.plot([],[],color='#ffffff')
+            ax = plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
             plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'k') 
             plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'k', fmt = ' ' , capsize = 3, elinewidth = 1)
             #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
             if key in ['n_Af','n_Af_alt','n_TKE','n_TKE_alt']:
             #  if key in ['n_mult','m_mult','n_Af','m_mult_smudge','n_TKE']:
                 nonzero_ones = freya_data[np.where(np.nan_to_num(freya_data[:,1]) > 0.0001)]
-                plt.xlim( min(nonzero_ones[:,0]) , max(nonzero_ones[:,0]))
+                plt.xlim( min(nonzero_ones[:,0])-5 , max(nonzero_ones[:,0]))
             elif key in ['n_mult','m_mult','m_mult_smudge']: 
                 plt.xlim( ranges_x[key][2] , ranges_x[key][3])
             else:
@@ -406,109 +445,49 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
                 print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")
             # Print reduced chi squared on C/E plot
             reduced_chi_sq = chisq_array[5][key]
-            lg = plt.legend((r'$\chi^2_n = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1)
-            lg.draw_frame(False)
+            if key in ['m_mult_smudge']:
+                label = AnchoredText('$(d)$',loc=2,frameon=False)
+                ax.add_artist(label)
+            else:
+                label = AnchoredText('$(b)$',loc=2,frameon=False)
+                ax.add_artist(label)
+            cs_label = AnchoredText(r'$\chi^2_O = '+str(reduced_chi_sq)+'$',frameon=False,
+                    loc=label_locations[2])
+            cs_label.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+            cs_label.patch.set_alpha(0.8)
+            cs_label.patch.set_edgecolor('0.8')
+            ax.add_artist(cs_label)
             plt.axhline(1, color='black')
 
             plt.subplots_adjust(hspace=0)
             plt.savefig(str(key) + '.pdf',bbox_inches='tight')
             plt.close()
-        elif key == "n_A_TKE":
-            print("plotting nubar as function of TKE for given values of A...")
-
-            large_data_array = element[0]
-            large_data_array = large_data_array[np.where(large_data_array[:,2,0] != 0)]
-            large_freya_array = freya_dict[key][0]
-            A_min = min(large_data_array[:,0,0])
-            A_max = max(large_data_array[:,0,0])
-
-            translated_key = key_translator[key]
-
-            if not os.path.exists(opt_path+"/n_A_TKE"):
-                os.makedirs(opt_path+"/n_A_TKE")
-            os.chdir(opt_path+"/n_A_TKE")
-
-            #  nu = np.concatenate((freya_dict["light_neutrons"],freya_dict["heavy_neutrons"]))
-            #  A = np.concatenate((freya_dict['Al'],freya_dict['Ah']))
-            #  TKE = np.tile(freya_dict['TKE'],2)
-            #  large_freya_array, xedges, yedges = np.histogram2d(A, TKE, bins=(max(A) - min(A), 150),weights = nu,normed=True)
-            #  print(large_freya_array)
-            large_freya_array = freya_dict["n_A_TKE"][0]
-
-            for fixed_number in range(0,int(A_max) - int(A_min)):
-                fixed_A = range(int(A_min) , int(A_max))[fixed_number]
-                data_array = large_data_array[np.where(np.rint(large_data_array[:,0,0]) == fixed_A)]
-                data_array = data_array[:,1:]
-                #  freya_data = large_freya_array[np.where(np.rint(large_freya_array[:,0]) == fixed_A)]
-                #  freya_data = freya_data[:,1:]
-                #  freya_data = np.column_stack((yedges[:-1] , large_freya_array[fixed_number]))
-                freya_data = large_freya_array[np.where(np.rint(large_freya_array[:,0])== fixed_A)]
-                freya_data = freya_data[:,1:]
-                #  print(freya_data)
-
-                ratio_array = chisq_array[3][translated_key]
-
-                matplotlib.rcParams.update({'font.size': 14})
-                plt.figure(figsize=(6,6))
-
-                ax = plt.subplot(2,1,1,ylabel="Average Neutron Multiplicity")
-
-                ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-                ax.xaxis.set_visible(False)
-                plt.plot(freya_data[:,0] , freya_data[:,1] , '^-' , color = 'r' , label = 'FREYA Output')
-                #  plt.errorbar( freya_data[:,0] , freya_data[:,1] , yerr = freya_data[:,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
-                plt.plot(data_array[:,0,0] , data_array[:,1,0] , '^-' , color = 'b' , label = str(element[1]))
-                plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
-                plt.plot([],[],color='#ffffff')
-                #  plt.xlim( ranges_x[key][0] , ranges_x[key][1])
-                #  plt.ylim( ranges_y[key][0] , ranges_y[key][1])
-                plt.xscale(element[7])
-                plt.yscale(element[7])
-                lg = plt.legend(("FREYA",str(element[1]),'$'+str(iso[4])),fontsize=14,numpoints=1)
-                lg.draw_frame(False)
-
-                plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
-                plt.plot([],[],color='#ffffff')
-                #  plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'r')
-                #  plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'r', fmt = ' ' , capsize = 3, elinewidth = 1)
-                #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
-                #  plt.xlim( ranges_x[key][0] , ranges_x[key][1])
-                if len(ranges_y[key]) > 2:
-                    plt.ylim( ranges_y[key][2] , ranges_y[key][3] + 0.2)
-                    print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")
-                #  plt.xscale(element[7])
-                reduced_chi_sq = chisq_array[5][key]
-                lg = plt.legend((r'$\chi^2_n = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1)
-                lg.draw_frame(False)
-                plt.axhline(1, color='black')
-
-                plt.subplots_adjust(hspace=0)
-                plt.savefig(str(key)+ "_" +str(fixed_A) + '.pdf',bbox_inches='tight')
-                plt.close()
-
-            os.chdir(opt_path)
 
         else:
             print("Plotting log scale plots for: " + str(key) + "...")
-
             maxwell_temp = 1.32
-
             dim_status = element[5]
             data_array = element[0]
             translated_key = key_translator[key]
             freya_data = freya_dict[translated_key][0]
             ratio_array = chisq_array[3][translated_key]
-
             if key == "mannhart":
                 ratio_array[:-1,1] = ratio_array[:-1,1] / MaxwellianSpectrum(maxwell_temp)
                 ratio_array[:-1,2] = ratio_array[:-1,2] / MaxwellianSpectrum(maxwell_temp)
                 data_array[:,1,0] = data_array[:,1,0] * MaxwellianSpectrum(maxwell_temp)
                 #  data_array[:,1,1] = data_array[:,1,1]*MaxwellianSpectrum(maxwell_temp)
             if key == "n_spectrum":
+                largest_bin = data_array[-1,0,0]
+                lb_index_freya= find_nearest(freya_data[:,0],largest_bin)
+                freya_bin_differences = np.subtract(
+                        freya_data[1:lb_index_freya+2,0],
+                        freya_data[:lb_index_freya+1,0])
+                freya_areas = freya_bin_differences * freya_data[:lb_index_freya+1,1]
+                smaller_area = np.sum(freya_areas) + freya_bin_differences[lb_index_freya] * freya_data[lb_index_freya,1]
                 bin_differences = np.subtract(data_array[1:,0,0],data_array[:-1,0,0])
                 areas = bin_differences * data_array[:-1,1,0]
-                total_count = np.sum(areas) + bin_differences[-1] * data_array[-1,1,0]
-                data_array[:,1,0] = data_array[:,1,0] / total_count 
+                total_count = (np.sum(areas) + bin_differences[-1] * data_array[-1,1,0]) / smaller_area
+                data_array[:,1,0] = data_array[:,1,0] / total_count
                 data_array[:,1,1] = data_array[:,1,1] / total_count
                 ratio_array[:,1] = ratio_array[:,1] * total_count
             if key == "rest_n_spectrum":
@@ -516,13 +495,9 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
                 data_array[:,1,0] = data_array[:,1,0] / total_count 
                 data_array[:,1,1] = data_array[:,1,1] / total_count
                 ratio_array[:,1] = ratio_array[:,1] * total_count
-
             matplotlib.rcParams.update({'font.size': 14})
-
 ### MANNHART REGULAR LOG XSCALE
-
             plt.figure(figsize=(6,6))
-
             ax = plt.subplot(2,1,1,ylabel=element[3])
             ax.xaxis.set_major_locator(MaxNLocator(integer=True))
             ax.xaxis.set_visible(False)
@@ -531,17 +506,21 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.plot(data_array[:,0,0] , data_array[:,1,0], '^-' , color = 'b' , label = str(element[1]))
             plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0], 
                     yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
-            plt.plot([],[],color='#ffffff')
             plt.axhline(0, color='black')
-
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
             plt.xscale('log')
-            lg = plt.legend(("FREYA",str(element[1]),'$'+str(iso[4])),loc="upper right",fontsize=14,numpoints=1)
+            iso_label = AnchoredText('$'+str(iso[4]),frameon=False,loc=label_locations[1])
+            iso_label.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+            iso_label.patch.set_alpha(0.8)
+            iso_label.patch.set_edgecolor('0.8')
+            ax.add_artist(iso_label)
+            lg = plt.legend(("FREYA",str(element[1])),fontsize=14,numpoints=1,loc=label_locations[0])
             lg.draw_frame(False)
+            label = AnchoredText('$(a)$',loc=2,frameon=False)
+            ax.add_artist(label)
 
-            plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
-            plt.plot([],[],color='#ffffff')
+            ax = plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
             plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'k') 
             plt.errorbar( ratio_array[1:,0] , ratio_array[1:,1] , 
                     yerr = ratio_array[1:,2]
@@ -552,8 +531,13 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.xscale('log')
             plt.axhline(1, color='black')
             reduced_chi_sq = chisq_array[5][key]
-            lg = plt.legend((r'$\chi^2_n = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1)
-            lg.draw_frame(False)
+            cs_label = AnchoredText(r'$\chi^2_O = '+str(reduced_chi_sq)+'$',frameon=False,loc=label_locations[2])
+            cs_label.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+            cs_label.patch.set_alpha(0.8)
+            cs_label.patch.set_edgecolor('0.8')
+            ax.add_artist(cs_label)
+            label = AnchoredText('$(b)$',loc=2,frameon=False)
+            ax.add_artist(label)
 
             plt.subplots_adjust(hspace=0)
             plt.savefig(str(key) + "_x" + '.pdf',bbox_inches='tight')
@@ -571,19 +555,23 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.plot(data_array[:,0,0] , data_array[:,1,0], '^-' , color = 'b' , label = str(element[1]))
             plt.errorbar( data_array[:,0,0] , data_array[:,1,0], 
                     yerr = data_array[:,1,1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
-            plt.plot([],[],color='#ffffff')
             plt.axhline(0, color='black')
             plt.xlim( ranges_x[key][0] , ranges_x[key][1])
             #  plt.ylim( ranges_y[key][0] , ranges_y[key][1])
-            plt.ylim( 1E-6 , ranges_y[key][1])
-            plt.ylim(1E-4,None)
+            #  plt.ylim( 1E-6 , ranges_y[key][1])
+            plt.ylim(1E-4,3)
             plt.yscale('log')
-            lg = plt.legend(("FREYA",str(element[1]),'$'+str(iso[4])),fontsize=14,numpoints=1)
+            iso_label = AnchoredText('$'+str(iso[4]),frameon=False,loc=label_locations[1])
+            iso_label.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
+            iso_label.patch.set_alpha(0.8)
+            iso_label.patch.set_edgecolor('0.8')
+            ax.add_artist(iso_label)
+            lg = plt.legend(("FREYA",str(element[1])),fontsize=14,numpoints=1,loc=label_locations[0])
             lg.draw_frame(False)
+            label = AnchoredText('$(c)$',loc=2,frameon=False)
+            ax.add_artist(label)
 
-            #  print(ratio_array)
-            plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
-            plt.plot([],[],color='#ffffff')
+            ax = plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
             plt.plot(ratio_array[:-2,0] , ratio_array[:-2,1] , '^' , color = 'k') 
             plt.errorbar( ratio_array[1:-2,0] , ratio_array[1:-2,1] , 
                     yerr = ratio_array[1:-2,2], color = 'k', fmt = ' ' , capsize = 3, elinewidth = 1)
@@ -592,15 +580,19 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.ylim( ranges_y[key][2] , ranges_y[key][3])
             plt.axhline(1, color='black')
             reduced_chi_sq = chisq_array[5][key]
-            lg = plt.legend((r'$\chi^2_n = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1,loc="upper left")
-            lg.draw_frame(False)
-
+            cs_label = AnchoredText(r'$\chi^2_O = '+str(reduced_chi_sq)+'$',frameon=False,loc=label_locations[2])
+            ax.add_artist(cs_label)
+            label = AnchoredText('$(d)$',loc=2,frameon=False)
+            ax.add_artist(label)
 
             plt.subplots_adjust(hspace=0)
             plt.savefig(str(key) + "_y" + '.pdf',bbox_inches='tight')
             plt.close()
 
             continue
+
+### plot observables with alternates (double)
+
         if key in ["n_TKE","n_Af"]:
             dim_status = element[5]
             data_array = element[0]
@@ -609,7 +601,7 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             ratio_array = chisq_array[3][translated_key]
 
             if str(key)+"_alt" in parsed_data[0]:
-                print('plotting alternative',key,"data")
+                print('plotting double',key,"data")
                 alt_element = parsed_data[0][key+"_alt"]
                 alt_data_array = alt_element[0]
                 alt_ratio_array = chisq_array[3][translated_key+"_alt"]
@@ -632,34 +624,33 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
             plt.errorbar( data_array[:, 0, 0] , data_array[: ,1, 0] , yerr = data_array[:, 1, 1], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.plot(alt_data_array[:,0,0] , alt_data_array[:,1,0] , '^-' , color = 'g' , label = str(element[1]))
             plt.errorbar( alt_data_array[:, 0, 0] , alt_data_array[: ,1, 0] , yerr = alt_data_array[:, 1, 1], color = 'g', fmt = ' ' , capsize = 3, elinewidth = 1)
-            plt.plot([],[],color='#ffffff')
             plt.ylim( ranges_y[key][0] , ranges_y[key][1])
-            #  plt.xscale(element[7])
-            #  plt.yscale(element[7])
-            if key == "n_Af":
-                plt.annotate('$'+iso[4],(140,4),fontsize=14)
-                lg = plt.legend(("FREYA",str(element[1]),str(alt_element[1])),fontsize=14,numpoints=1)
+            if key == 'n_TKE':
+                iso_label = AnchoredText("$"+iso[4],frameon=False,loc=label_locations[1])
             else:
-                lg = plt.legend(("FREYA",str(element[1]),'$'+str(iso[4])),fontsize=14,numpoints=1)
+                iso_label = AnchoredText("$"+iso[4],frameon=False,loc=label_locations[1])
+            ax.add_artist(iso_label)
+            lg = plt.legend(("FREYA",str(element[1]),str(alt_element[1])),fontsize=14,numpoints=1,loc=label_locations[0])
             lg.draw_frame(False)
+            label = AnchoredText('$(a)$',loc=2,frameon=False)
+            ax.add_artist(label)
 
-            plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
-            plt.plot([],[],color='#ffffff')
+            ax = plt.subplot(2,1,2,xlabel=element[2],ylabel="C/E",sharex=ax)
             plt.plot(ratio_array[:,0] , ratio_array[:,1] , '^' , color = 'b') 
             plt.errorbar( ratio_array[1:None,0] , ratio_array[1:None,1] , yerr = ratio_array[1:None,2], color = 'b', fmt = ' ' , capsize = 3, elinewidth = 1)
             plt.plot(alt_ratio_array[:,0] , alt_ratio_array[:,1] , '^' , color = 'g') 
             plt.errorbar( alt_ratio_array[1:None,0] , alt_ratio_array[1:None,1] , yerr = alt_ratio_array[1:None,2], color = 'g', fmt = ' ' , capsize = 3, elinewidth = 1)
-            #  plt.ticklabel_format(style='plain',axis='x',useOffset=False)
             if len(ranges_y[key]) > 2:
                 plt.ylim( ranges_y[key][2] , ranges_y[key][3] + 0.2)
                 print("fixing y limits (" + str(ranges_y[key][2])+"," +str(ranges_y[key][3]) + ") for ratio plot...")
-            #  plt.xscale(element[7])
             plt.axhline(1, color='black')
             reduced_chi_sq = chisq_array[5][key]
-            lg = plt.legend((r'$\chi^2_n = '+str(reduced_chi_sq)+'$',),fontsize=14,numpoints=1)
-            lg.draw_frame(False)
+            cs_label = AnchoredText(r'$\chi^2_O = '+str(reduced_chi_sq)+'$',frameon=False,loc=label_locations[2])
+            ax.add_artist(cs_label)
             nonzero_ones = freya_data[np.where(np.nan_to_num(freya_data[:,1]) != 0)]
-            plt.xlim( min(nonzero_ones[:,0])-5, max(nonzero_ones[:,0])+5)
+            plt.xlim( min(nonzero_ones[:,0])-15, max(nonzero_ones[:,0])+5)
+            label = AnchoredText('$(b)$',loc=2,frameon=False)
+            ax.add_artist(label)
 
             plt.subplots_adjust(hspace=0)
             plt.savefig(str(key)+'_double' + '.pdf',bbox_inches='tight')

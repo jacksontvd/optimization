@@ -20,8 +20,8 @@ if job_type == 'process':
     print("Processing...")
 
     #  Cf252
-    #  Zinput=98
-    #  Ainput= 252
+    Zinput=98
+    Ainput= 252
 
     #  Pu238
     #  Zinput=94
@@ -43,10 +43,10 @@ if job_type == 'process':
     #  Zinput = 92
     #  Ainput = 238
 
-    #  generate_number = 1000000
-    generate_number = 200000
+    generate_number = 10000000
+    #  generate_number = 100000
     #  generate_number = 10000
-    #  generate_number = 1000
+    #  generate_number = 1
     method='process'
     resolution=None
     reaction_type="spontaneous"
@@ -97,11 +97,14 @@ elif taskl == 'optimize':
 
     Ainputraw = input('A = ')
     Ainput = int(Ainputraw)
-    if Ainput == 240 or 242:
-        reaction_type = input('Spontaneous or induced: ')
-        reaction_type = reaction_type.lower()
+
+    energyraw = input('Value of energy (in units of MeV, -1 for spontaneous fission): ')
+    energyinput = float(energyraw)
+    if energyinput == -1:
+        reaction_type = 'spontaneous'
     else:
-        reaction_type = isotope(Z,A)[3]
+        reaction_type = 'induced'
+
     print('Which method of optimization do you prefer?')
     method_raw = input('Stochastic or Grid: ')
     method_input = str(method_raw)
@@ -115,7 +118,7 @@ elif taskl == 'optimize':
     else:
         resolution = None
     if method == 'process':
-        post_opt(Zinput , Ainput , generate_number , method , resolution , reaction_type = reaction_type , stochastic_type = 1 , iteration_number = 100)
+        post_opt(Zinput , Ainput , generate_number , method , resolution , reaction_type = reaction_type , stochastic_type = 1 , iteration_number = 100, energy=energyinput)
         optimize_bool = False
     else:
         opt(Zinput,Ainput, generate_number, method, resolution, reaction_type = reaction_type,stochastic_type = 1, iteration_number = 100)

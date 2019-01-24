@@ -49,6 +49,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     #  generate event files using the recipe executable for freya
     print('Begin Generating Events...')
+    print('At energy: ',str(Energy))
 
     generate_begin = time.time()
 
@@ -66,10 +67,12 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     #  change directory to current working directory
     os.chdir(cwd )
 
-    #  call the actual executable
-    p = Popen("cd ../../freya/ \n ./recipe", shell = True, stdout=PIPE, stdin=PIPE, stderr=STDOUT)
-
-    grep_stdout = p.communicate(input=b''+brecipe_input)[0]
+    if 'prerun_file' in kwargs.keys():
+        grep_stdout = None
+    else:
+        #  call the actual executable
+        p = Popen("cd ../../freya/ \n ./recipe", shell = True, stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+        grep_stdout = p.communicate(input=b''+brecipe_input)[0]
 
     if grep_stdout is None:
         print('ERROR: Events not generated.')
@@ -158,6 +161,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     n_TKE = np.zeros((bin_number['n_TKE'],4))
     n_TKE[:,0] = np.arange(ranges_x['n_TKE'][0], ranges_x['n_TKE'][1], bin_width['n_TKE'])
+
+    m_TKE = np.zeros((bin_number['m_TKE'],4))
+    m_TKE[:,0] = np.arange(ranges_x['m_TKE'][0], ranges_x['m_TKE'][1], bin_width['m_TKE'])
 
     import_begin = time.time()
 
@@ -327,6 +333,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         n_TKE[n_TKE_bin,1] += ntot
         n_TKE[n_TKE_bin,2] += ntot ** 2
         n_TKE[n_TKE_bin,3] += 1
+
+        m_TKE_bin = np.searchsorted(m_TKE[:,0], TKE)
+        m_TKE[m_TKE_bin,1] += mtot
+        m_TKE[m_TKE_bin,2] += mtot ** 2
+        m_TKE[m_TKE_bin,3] += 1
 
         #  treat each case of neutrons and gamma separately (as determined by the 1 or 0 value of the indicating boolean nnl_tf for ex.)
         #  for each of these cases we write the appropriate values into the appropriate lists and arrays
@@ -531,8 +542,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         mannhart[:,0] = binEdges_freya[:-1]
         mannhart[:,1] = hlab_freya/degrid/n
 ###
-        #  mannhart[:,2] = 10/(np.sqrt(hlab_freya))
-        mannhart[:,2] = 2/(np.sqrt(hlab_freya))
+        mannhart[:,2] = 10/(np.sqrt(hlab_freya))
+        #  mannhart[:,2] = 2/(np.sqrt(hlab_freya))
+        #  mannhart[:,2] = 1/(np.sqrt(hlab_freya))
 ###
 
         n_TKE[:,1] = np.divide(n_TKE[:,1], n_TKE[:,3])
@@ -540,10 +552,21 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         n_TKE[:,2] = np.subtract(n_TKE[:,2], np.square(n_TKE[:,1]))
         n_TKE[:,2] = np.sqrt(n_TKE[:,2])
 
+        m_TKE[:,1] = np.divide(m_TKE[:,1], m_TKE[:,3])
+        m_TKE[:,2] = np.divide(m_TKE[:,2], m_TKE[:,3])
+        m_TKE[:,2] = np.subtract(m_TKE[:,2], np.square(m_TKE[:,1]))
+        m_TKE[:,2] = np.sqrt(m_TKE[:,2])
+
         nubar = float(len(n_spec))/float(len(events))
         nubar_sigma = np.sqrt(np.mean(np.square(np.array(neutrons))) - nubar**2)
         gammabar = float(len(m_spec)) / float(len(events))
         gammabar_sigma = np.sqrt(np.mean(np.square(np.array(photons))) - gammabar**2)
+
+
+        TKE_bar = np.average(np.array(freya_TKE))
+        TKE_bar_sigma = np.average(np.square(np.array(freya_TKE))) 
+        TKE_bar_sigma = TKE_bar_sigma - TKE_bar**2
+        TKE_bar_sigma = np.sqrt(TKE_bar_sigma)
 
         n_mult[:,2] = np.sqrt(1/n_mult[:,1])
         n_mult[:,1] = np.divide(n_mult[:,1] , np.sum(n_mult[:,1]) )
@@ -596,29 +619,33 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
     n_spectrum_bin_widths = bin_width['n_spectrum']
     number_of_bins = int(np.ceil(bin_number['n_spectrum']))
-    hist, bin_edges = np.histogram(n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]))
+    n_spec_bins = np.logspace(np.log10(0.1),np.log10(1.0), number_of_bins)
+    n_spec_bins = number_of_bins
+    hist, bin_edges = np.histogram(n_spec, bins = n_spec_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]))
     hist = hist.astype('float')
     hist[hist == 0] = None
-    normed_hist, bin_edges = np.histogram(n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]), normed = True)
+    normed_hist, bin_edges = np.histogram(n_spec, bins=n_spec_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]), normed = True)
     n_spectrum = np.zeros((number_of_bins ,3))
     n_spectrum[0] = [0,ranges_x['n_spectrum'][1],n_spectrum_bin_widths]
     n_spectrum[:,0] = bin_edges[:-1]
     n_spectrum[:,1] = normed_hist
     #  n_spectrum[:,2] = n_spectrum_bin_widths * 1/np.sqrt(hist)
-    n_spectrum[:,2] = np.nan
+    n_spectrum[:,2] = 1/np.sqrt(hist)
+    #  n_spectrum[:,2] = np.nan
 
-    n_spectrum_bin_widths = bin_width['n_spectrum']
-    number_of_bins = int(np.ceil(bin_number['n_spectrum']))
-    hist, bin_edges = np.histogram(rest_n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]))
-    hist = hist.astype('float')
-    hist[hist == 0] = None
-    normed_hist, normed_bin_edges = np.histogram(rest_n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]), normed = True)
-    rest_n_spectrum = np.zeros((number_of_bins ,3))
-    #  rest_n_spectrum[0] = [0,ranges_x['n_spectrum'][1],n_spectrum_bin_widths]
-    rest_n_spectrum[:,0] = normed_bin_edges[:-1]
-    rest_n_spectrum[:,1] = normed_hist
-    #  rest_n_spectrum[:,2] = rest_n_spectrum_bin_widths * 1/np.sqrt(hist)
-    rest_n_spectrum[:,2] = np.nan
+    #  #  #  #  failed attempt at adding n_spectrum in the rest frame
+    #  n_spectrum_bin_widths = bin_width['n_spectrum']
+    #  number_of_bins = int(np.ceil(bin_number['n_spectrum']))
+    #  hist, bin_edges = np.histogram(rest_n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]))
+    #  hist = hist.astype('float')
+    #  hist[hist == 0] = None
+    #  normed_hist, normed_bin_edges = np.histogram(rest_n_spec, bins = number_of_bins, range = (ranges_x['n_spectrum'][0],ranges_x['n_spectrum'][1]), normed = True)
+    #  rest_n_spectrum = np.zeros((number_of_bins ,3))
+    #  #  rest_n_spectrum[0] = [0,ranges_x['n_spectrum'][1],n_spectrum_bin_widths]
+    #  rest_n_spectrum[:,0] = normed_bin_edges[:-1]
+    #  rest_n_spectrum[:,1] = normed_hist
+    #  #  rest_n_spectrum[:,2] = rest_n_spectrum_bin_widths * 1/np.sqrt(hist)
+    #  rest_n_spectrum[:,2] = np.nan
 
     m_spectrum_bin_widths = bin_width['m_spectrum']
     number_of_bins = int(np.ceil(bin_number['m_spectrum']))
@@ -642,6 +669,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     freya_output['A00'] = initial_words[1]
     freya_output['isotope'] = 'Z = ' + str(freya_output['Z00']) + ' A = ' + str(freya_output['A00'])
     freya_output['number_of_events'] = initial_words[3]
+
+    freya_output['TKE_bar'] = [np.array([[[1],[TKE_bar],[TKE_bar_sigma]]]),
+            "TKEbar","TKEbar","N/A","TKEbar"]
     freya_output['nubar_moments'] = [np.array([[1,nu1,nu1_sigma],[2,nu2,nu2_sigma],[3,nu3,nu3_sigma]]),
                     "Moments",
                     "Neutron multiplicity moments for: "+freya_output['isotope'],
@@ -695,11 +725,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                     r'$Fission \ Neutron \ Spectrum\ for: \ $'+freya_output['isotope'], 
                     'Neutron Energy (MeV)', 
                     'Probability'] 
-    freya_output['rest_n_spectrum'] = [rest_n_spectrum,
-                    'Neutron Spectral Shape',
-                    r'$Fission \ Neutron \ Spectrum\ for: \ $'+freya_output['isotope'], 
-                    'Neutron Energy (MeV)', 
-                    'Probability'] 
+    #  freya_output['rest_n_spectrum'] = [rest_n_spectrum,
+    #                  'Neutron Spectral Shape',
+    #                  r'$Fission \ Neutron \ Spectrum\ for: \ $'+freya_output['isotope'],
+    #                  'Neutron Energy (MeV)',
+    #                  'Probability']
     freya_output['m_spectrum'] = [m_spectrum,
                     'Photon Spectral Shape',
                     r'$Fission \ Photon \ Spectrum\ for: \ $'+freya_output['isotope'], 
@@ -715,6 +745,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                     r'$Energy \ per \ Photon\ for: \ $'+freya_output['isotope'], 
                     'Fragment Mass A', 'Energy per Photon (MeV)']
     freya_output['average_photon_energy'] = [np.array([[[1],[average_photon_energy],[ape_sigma]]]),"average_photon_energy","average_photon_energy","N/A","average_photon_energy"]
+    freya_output['average_photon_energy_ratio'] = [np.array([[[1],[average_photon_energy/cf_ape],[ape_sigma/cf_ape]]]),"average_photon_energy_ratio","average_photon_energy_ratio","N/A","average_photon_energy_ratio"]
     freya_output['n_Af'] = [n_Af,
                     r'$ \bar \nu(A)$',
                     r'$Neutron \ Multiplicity \ vs. \ Fragment \ Mass \ for: \ $'+freya_output['isotope'], 
@@ -740,6 +771,11 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                     r'$Neutron \ Multiplicity \ vs. \ Total \ Kinetic \ Energy \ for: \ $'+freya_output['isotope'], 
                     'TKE (MeV)', 
                     r'$\bar \nu(TKE)$' ]
+    freya_output['m_TKE'] = [m_TKE,
+                    r'$N_\gamma(TKE)$',
+                    r'$Photon \ Multiplicity \ vs. \ Total \ Kinetic \ Energy \ for: \ $'+freya_output['isotope'], 
+                    'TKE (MeV)', 
+                    r'$N_\gamma(TKE)$' ]
 
     freya_output['light_neutrons'] = np.array(light_neutrons)
     freya_output['heavy_neutrons'] = np.array(heavy_neutrons)

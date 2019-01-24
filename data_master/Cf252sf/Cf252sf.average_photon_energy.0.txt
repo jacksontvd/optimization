@@ -1,3 +1,3 @@
-\cite{Chyzh data}
+\cite{Chyzh [18]}
 N/A : Average photon energy (MeV) : Error
  1    0.94   0.05
