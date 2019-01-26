@@ -36,6 +36,7 @@ generate_number = 10000
 
 #  reaction_type = 'spontaneous'
 reaction_type = 'induced'
+energies = [2.9]
 
 #  optimization_type = 'grid'
 optimization_type = 'anneal'
@@ -163,13 +164,14 @@ if len(sys.argv) > 1:
     job_type = str(sys.argv[1])
 else: 
     job_type = None
-if len(sys.argv) > 2:
-    n_energy = float(sys.argv[2])
+#  if len(sys.argv) > 2:
+    #  n_energy = float(sys.argv[2])
 
 if job_type == 'opt' and reaction_type == 'spontaneous':
     opti(optimization_type)
 elif job_type == 'opt' and reaction_type == 'induced':
-    opti(optimization_type,n_energy)
+    for n_energy in energies:
+        opti(optimization_type,n_energy)
 elif job_type == 'plot':
     print(cluster_plot())
 elif job_type == 'var':
