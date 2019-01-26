@@ -24,21 +24,19 @@ def enablePrint():
 def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs):
     print('starting')
     reac_t = kwargs['reaction_type']
+    Energy = kwargs['energy']
     os.chdir(cwd+'/../../freya/data_freya/')
 
     infile = open("inputparameters.dat","r+")
    
     #  parse appropriate data with fuction from data_parse.py
-    parsed_data = data_parse(Z,A,reac_t)
+    parsed_data = data_parse(Z,A,reac_t,Energy)
 
     #  pull the data array out of the data_parse output list
     data_array = parsed_data[0]
 
     #  pull the data key dictionary from the data_parse output list
     key_translator = parsed_data[1]
-
-    #  pull energy from the data_parse so the freya output matches the energy level of the comparison data
-    Energy = parsed_data[2]
 
     #  pull the line number for the isotope from the isotope function
     #  this is used to rewrite the appropriate line of the parameter file in each iteration of the optimization
@@ -83,7 +81,7 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     #  define function which takes in a set of parameters and returns the raw chi-squared error (total sum)
     #  see error.py for the details of this error calculation
     def err_opt(parameters):
-        return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
+        return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t, Energy = Energy)[0]
         #  return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
 
     #  define class to give parameter bounds to optimization routine

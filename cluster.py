@@ -14,27 +14,28 @@ from covmatrix import freya_hessian
 from grid_run import grid_run
 
 #  cf
-Zinput = 98
+#  Zinput = 98
 #  cm
 #  Zinput=96
 #  pu
 #  Zinput = 94
 #  u
-#  Zinput=92
+Zinput=92
 
 #  Ainput = 238
 #  Ainput = 240
 #  Ainput = 242
 #  Ainput = 244
-Ainput = 252
+#  Ainput = 252
+Ainput = 235
 
 #  generate_number = 1000000
 #  generate_number = 200000
 generate_number = 10000
 #  generate_number = 1
 
-reaction_type = 'spontaneous'
-#  reaction_type = 'induced'
+#  reaction_type = 'spontaneous'
+reaction_type = 'induced'
 
 #  optimization_type = 'grid'
 optimization_type = 'anneal'
@@ -49,14 +50,16 @@ machine_epsilon = 2.22044604925E-16
 #  machine_epsilon = 7./3 - 4./3 -1
 hessian_h = np.array(param_list(Zinput,Ainput,reaction_type))*np.sqrt(machine_epsilon)
 
-def opti(opt_method):
+def opti(opt_method,neutron_energy):
     result = opt(Zinput,
         Ainput, 
         generate_number, 
         opt_method,
         resolution, 
         stochastic_type = stochastic_type,
-        reaction_type = reaction_type)
+        reaction_type = reaction_type,
+        energy=neutron_energy
+        )
     return result
 
 def cluster_plot():
@@ -160,9 +163,13 @@ if len(sys.argv) > 1:
     job_type = str(sys.argv[1])
 else: 
     job_type = None
+if len(sys.argv) > 2:
+    n_energy = float(sys.argv[2])
 
-if job_type == 'opt':
+if job_type == 'opt' and reaction_type == 'spontaneous':
     opti(optimization_type)
+elif job_type == 'opt' and reaction_type == 'induced':
+    opti(optimization_type,n_energy)
 elif job_type == 'plot':
     print(cluster_plot())
 elif job_type == 'var':
