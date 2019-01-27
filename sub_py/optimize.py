@@ -179,7 +179,7 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     print('Calling for final error estimation...')
 
     #  print(reac_t)
-    chisq_array =  error(Z,A,None, None, None, None, None , generate_number, parsed_data , reaction_type = reac_t)
+    chisq_array =  error(Z,A,None, None, None, None, None , generate_number, parsed_data , reaction_type = reac_t,Energy=Energy)
     #  chisq_array =  test_error(Z,A,finalparams[0],finalparams[1],finalparams[2],finalparams[3],finalparams[4], generate_number, parsed_data , reaction_type = reac_t)
     
     if finalparams is not None:
