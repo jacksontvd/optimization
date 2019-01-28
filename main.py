@@ -121,6 +121,6 @@ elif taskl == 'optimize':
         post_opt(Zinput , Ainput , generate_number , method , resolution , reaction_type = reaction_type , stochastic_type = 1 , iteration_number = 100, energy=energyinput)
         optimize_bool = False
     else:
-        opt(Zinput,Ainput, generate_number, method, resolution, reaction_type = reaction_type,stochastic_type = 1, iteration_number = 100)
+        opt(Zinput,Ainput, generate_number, method, resolution, energy = energyinput,reaction_type = reaction_type,stochastic_type = 1, iteration_number = 100)
 else:
     print('ERROR: Input is not supported')

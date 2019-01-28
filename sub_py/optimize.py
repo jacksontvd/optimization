@@ -46,6 +46,7 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
 
     content = infile.readlines() #reads line by line and outputs a list of each line
     line_split = content[i].split()
+    infile.close()
 
     #  make a zero list which will eventually contain the guess parameters from the parameter file
     #  this is a list but not an array because the optimization functions prefer lists
@@ -81,7 +82,10 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     #  define function which takes in a set of parameters and returns the raw chi-squared error (total sum)
     #  see error.py for the details of this error calculation
     def err_opt(parameters):
-        return error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t, Energy = Energy)[0]
+        neww_error = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t, Energy = Energy)[0]
+        print("NEW PARAMETERS",parameters)
+        print("NEW ERROR",neww_error)
+        return neww_error
         #  return test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)[0]
 
     #  define class to give parameter bounds to optimization routine
@@ -132,15 +136,18 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
 
     elif method == 'anneal':
         #  blockPrint()
-        finalparams , this_error = anneal(err_opt , guesses)
+        finalparams , this_error = anneal(err_opt,guesses)
         #  enablePrint()
         grid_values = None
 
     #  this is a hidden feature of the optimization routine, which allows the user to simply plot the data (alone and along with freya) without waiting for the optimization to happen
     elif method == 'bypass':
         print('skipping optimization')
-        finalparams = np.zeros((10,0))
+        #  finalparams = np.zeros((10,0))
+        finalparams = guesses
+        print("Final parameters have not changed:",finalparams)
         res = None
+        grid_values = None
 
     #  the default optimization routine is the stochastic method
     elif method == 'basinhopping': 
@@ -163,8 +170,6 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     opt_time = opt_end - opt_begin
     print('Time:',opt_time)
 
-
-
     #  define path for optimization output to be placed
     opt_path = cwd + '/../../output/optimization/' + 'Z=' + str(Z) + ' A=' + str(A) + '_E=' + str(Energy) + '_' + str(method)
 
@@ -179,8 +184,10 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     print('Calling for final error estimation...')
 
     #  print(reac_t)
-    chisq_array =  error(Z,A,None, None, None, None, None , generate_number, parsed_data , reaction_type = reac_t,Energy=Energy)
-    #  chisq_array =  test_error(Z,A,finalparams[0],finalparams[1],finalparams[2],finalparams[3],finalparams[4], generate_number, parsed_data , reaction_type = reac_t)
+
+    #  chisq_array =  error(Z,A,None, None, None, None, None , generate_number, parsed_data , reaction_type = reac_t,Energy=Energy)
+    chisq_array =  error(Z,A,finalparams[0],finalparams[1],finalparams[2],finalparams[3],finalparams[4], generate_number, parsed_data , reaction_type = reac_t,Energy=Energy)
+
     
     if finalparams is not None:
         print('Final Set of Parameters: ',finalparams)

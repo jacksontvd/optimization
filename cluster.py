@@ -22,7 +22,9 @@ from grid_run import grid_run
 #  u
 Zinput=92
 
+#  Ainput= 233
 #  Ainput = 238
+#  Ainput = 239
 #  Ainput = 240
 #  Ainput = 242
 #  Ainput = 244
@@ -40,6 +42,7 @@ energies = [2.9]
 
 #  optimization_type = 'grid'
 optimization_type = 'anneal'
+#  optimization_type = 'bypass'
 #  optimization_type = 'basinhopping'
 #  optimization_type = 'process'
 stochastic_type = 0
@@ -168,7 +171,7 @@ else:
     #  n_energy = float(sys.argv[2])
 
 if job_type == 'opt' and reaction_type == 'spontaneous':
-    opti(optimization_type)
+    opti(optimization_type,-1)
 elif job_type == 'opt' and reaction_type == 'induced':
     for n_energy in energies:
         opti(optimization_type,n_energy)

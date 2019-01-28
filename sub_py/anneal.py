@@ -4,15 +4,16 @@ import os, sys
 import numpy as np
 from scipy import optimize
 from random import random
+from error import error
 
 cwd = os.getcwd()
 
 def acceptance_probability(old_error , new_error , T):
-    return np.exp(-(old_error - new_error)**2/(2*T))
+    return np.exp(-(new_error-old_error)/(2*T))
     #  return T/(((old_error-new_error)**2 + T**2)**3)
 
 def neighbor(old):
-    sigma = old/1E3
+    sigma = old/1E2
     mu = old
     new = np.zeros((5))
     new[0] = mu[0] + sigma[0] * np.random.uniform(low=-1,high=1)
@@ -22,22 +23,26 @@ def neighbor(old):
     new[4] = mu[4] + sigma[4] * np.random.uniform(low=-1,high=1)
     return new
 
-def anneal(objective_function , guess):
+    #  define function which takes in a set of parameters and returns the raw chi-squared error (total sum)
+    #  see error.py for the details of this error calculation
+
+def anneal(objective_function,guess):
     old_error = objective_function(guess)
     T = 1.0
     #  T_min = 1E-2
-    T_min = 0.05
-    alpha = 0.8
+    T_min = 0.1
+    alpha = 0.7
     best_error = objective_function(guess)
     best_guess = guess
     #  best_guess = 0
     print("Guess:",guess,"Error:",best_error)
     while T > T_min:
         i = 1
-        while i <= 100:
+        while i <= 10:
             new_guess = neighbor(guess)
-            print("NEW GUESS:",new_guess)
             new_error = objective_function(new_guess)
+            print("NEW GUESS-------",new_guess)
+            print("NEW ERROR-------",new_error)
             ap = acceptance_probability(old_error, new_error, T)
             if ap > random():
                 guess = new_guess
@@ -45,6 +50,7 @@ def anneal(objective_function , guess):
                 if old_error < best_error:
                     best_error = old_error
                     best_guess = guess
-            i += 1
+                    print("NEW BEST ERROR-------",best_error)
+        i += 1
         T = T*alpha
     return best_guess, best_error

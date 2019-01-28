@@ -23,10 +23,12 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     # if parameters are prescribed, rewrite the parameter file
     if e is not None:
         print("Begin Rewriting Parameter File...")
-        if Energy == '-1' or -1:
+        if Energy == '-1' or Energy == -1:
             reac_type = 'spontaneous'
+            freyaA = A
         else:
             reac_type = 'induced'
+            freyaA = int(A) + 1
         iso = isotope(Z,A,reac_type = reac_type)
         i = iso[1]
         reaction_type = iso[2]
@@ -35,15 +37,17 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         infile = open("inputparameters.dat","r+") 
         
         content = infile.readlines() #reads line by line and outputs a list of each line
-        content[i] = str(Z)+"  "+str(A)+"   '"+str(reaction_type)+"'      "+str(e)+"     "+str(x)+"  "+str(c)+" "+str(T)+" 0.150  -                "+str(d)+"\n" 
+        content[i] = str(Z)+"  "+str(freyaA)+"   '"+str(reaction_type)+"'      "+str(e)+"     "+str(x)+"  "+str(c)+" "+str(T)+" 0.150  -                "+str(d)+"\n" 
         #replaces content of the (i+1)th line with chosen parameter values
         infile.close()
         infile = open("inputparameters.dat", 'w') #clears content of file. 
-        infile.close
+        infile.close()
         infile = open("inputparameters.dat", 'r+')
         for item in content: #rewrites file content from list 
             infile.write("%s" % item)
+        
         infile.close()
+
         os.chdir(cwd)
         print('Successful.')
 
@@ -65,19 +69,24 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     brecipe_input = recipe_input.encode()
 
     #  change directory to current working directory
-    os.chdir(cwd )
+    #  os.chdir(cwd)
+    #  os.chdir("../../freya/sample_codes/events/build")
+    #  q = Popen("rm "+str(output_file),shell = True, stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+    #  change directory to current working directory
+    os.chdir(cwd)
 
     if 'prerun_file' in kwargs.keys():
         grep_stdout = None
     else:
         #  call the actual executable
+        #  p = Popen("cd ../../freya/ \n ./recipe", shell = True, stdout=PIPE, stdin=PIPE, stderr=STDOUT)
         p = Popen("cd ../../freya/ \n ./recipe", shell = True, stdout=PIPE, stdin=PIPE, stderr=STDOUT)
-        grep_stdout = p.communicate(input=b''+brecipe_input)[0]
+        grep_stdout = p.communicate(input=brecipe_input)[0]
 
     if grep_stdout is None:
         print('ERROR: Events not generated.')
     else:
-        #  print(grep_stdout)
+        #  print("DEBUG",grep_stdout)
         print('Successful.')
 
     #  record and print the time at the end of generating events
@@ -100,6 +109,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     lines = file.readlines()
     lines = lines[0:len(lines)]
     file.close()
+    #  print("DEBUG",lines[3])
 
     #Build structure of observables
     #  as many rows as we have bins

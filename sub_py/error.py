@@ -42,6 +42,8 @@ def error(Z, A, e, x , c , T, d, generate_number, data, **kwargs):
 
     #  assign the output of the generating function to be anal
     #  this is a list as given by the gpa function in gen_par_ana.py
+    anal=0
+    anal_dict = 0
     anal = gpa(Z, A, Energy, 'error_data.dat', e = e, x = x, c = c, T = T, d = d, generate_number = generate_number)
     anal_dict = anal[0]
 

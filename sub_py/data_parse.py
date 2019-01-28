@@ -44,7 +44,7 @@ def data_parse(Z,A,reaction_type,energy):
     for datafile in files:
         #  only process files with the appropriate beginning matching the correct isotope (in case there are irrelevant files present) 
         file_name_words = datafile.split('.')
-        if file_name_words[-1] == 'txt':
+        if file_name_words[-1] == 'txt' or file_name_words[-1] == 'dat':
             #  assign the variable is3d to determine whether the data will be plotted on 3-d axes or 2d axes. 
             if file_name_words[1] == 'n_A_TKE':
                 is3d = True

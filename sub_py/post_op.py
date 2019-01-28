@@ -44,6 +44,8 @@ def post_opt(Z,A, generate_number = None, method = None, resolution = None, **kw
     #  parse appropriate data with fuction from data_parse.py
     parsed_data = data_parse(Z,A,reac_t,Energy)
 
+    #  print("UHOHUOHUHOH",error(92,235,10.37 ,  1.15   ,1.3    ,0.87 ,  0.39, 10000,parsed_data,reaction_type='induced',Energy = 2.9)[0])
+
     #  pull the data array out of the data_parse output list
     data_array = parsed_data[0]
 
