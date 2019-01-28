@@ -159,7 +159,7 @@ u239nf_weights['average_photon_energy'] = 1
 u239nf_weights['gammabar'] = 1
 u239nf_weights['n_mult'] = 1
 u239nf_weights['nubar_moments'] = 1
-error_weights['92238(n,f)'] = u238nf_weights
+error_weights['92238(n,f)'] = u239nf_weights
 
 u235nf_weights = {}
 u235nf_weights['average_photon_energy'] = 1/100
