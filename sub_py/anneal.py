@@ -9,7 +9,7 @@ from error import error
 cwd = os.getcwd()
 
 def acceptance_probability(old_error , new_error , T):
-    return np.exp(-(new_error-old_error)/(2*T))
+    return np.exp(-(new_error-old_error)/(T))
     #  return T/(((old_error-new_error)**2 + T**2)**3)
 
 def neighbor(old):
@@ -31,7 +31,7 @@ def anneal(objective_function,guess):
     T = 1.0
     #  T_min = 1E-2
     T_min = 0.1
-    alpha = 0.7
+    alpha = 0.6
     best_error = objective_function(guess)
     best_guess = guess
     #  best_guess = 0
@@ -51,6 +51,6 @@ def anneal(objective_function,guess):
                     best_error = old_error
                     best_guess = guess
                     print("NEW BEST ERROR-------",best_error)
-        i += 1
+            i += 1
         T = T*alpha
     return best_guess, best_error

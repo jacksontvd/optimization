@@ -38,7 +38,20 @@ generate_number = 10000
 
 #  reaction_type = 'spontaneous'
 reaction_type = 'induced'
-energies = [2.9]
+#  thermal
+energies = [1E-10]
+#  Adams
+#  energies = [0.52]
+#  Boykov
+#  energies = [2.9,14.7]
+#  chinu
+#  energies = [0.52,14.7]
+#  Conde
+#  energies = [1.5]
+#  Knitter
+#  energies = [1.5]
+#  Staples
+#  energies = [0.5,2.5]
 
 #  optimization_type = 'grid'
 optimization_type = 'anneal'
