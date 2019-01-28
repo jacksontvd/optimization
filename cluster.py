@@ -47,6 +47,7 @@ energies = [1E-10]
 #  Boykov
 #  energies = [2.9,14.7]
 #  chinu
+#  energies = [2,14]
 #  energies = [0.52,14.7]
 #  Conde
 #  energies = [1.5]
