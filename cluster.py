@@ -26,10 +26,12 @@ Zinput=92
 #  Ainput = 238
 #  Ainput = 239
 #  Ainput = 240
+#  Ainput = 241
 #  Ainput = 242
 #  Ainput = 244
 #  Ainput = 252
 Ainput = 235
+#  Ainput = 238
 
 #  generate_number = 1000000
 #  generate_number = 200000
