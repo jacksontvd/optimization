@@ -13,7 +13,7 @@ def acceptance_probability(old_error , new_error , T):
     #  return T/(((old_error-new_error)**2 + T**2)**3)
 
 def neighbor(old):
-    sigma = old/1E2
+    sigma = old/5E2
     mu = old
     new = np.zeros((5))
     new[0] = mu[0] + sigma[0] * np.random.uniform(low=-1,high=1)
@@ -29,8 +29,8 @@ def neighbor(old):
 def anneal(objective_function,guess):
     old_error = objective_function(guess)
     T = 1.0
-    T_min = 1E-2
-    alpha = 0.75
+    T_min = 5E-2
+    alpha = 0.7
     best_error = objective_function(guess)
     best_guess = guess
     #  best_guess = 0

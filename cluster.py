@@ -34,7 +34,8 @@ Ainput = 235
 #  Ainput = 238
 
 #  generate_number = 1000000
-generate_number = 100000
+generate_number = 500000
+#  generate_number = 100000
 #  generate_number = 10000
 #  generate_number = 1
 
