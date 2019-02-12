@@ -255,7 +255,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         light = event[nn_tf+2:nn_tf+2+nnl_tf+ngl_tf+2]
         
         #  now we do the same thing for the heavy fragment
-        print("DEBUG",event[nn_tf+2+nnl_tf+ngl_tf+2])
+
+        if len(event[nn_tf+2+nnl_tf+ngl_tf+2].split()) < 6:
+            print("DEBUG",event[nn_tf+2+nnl_tf+ngl_tf+2])
         nnh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[4] )
         ngh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[5] )
 
