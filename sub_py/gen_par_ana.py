@@ -259,6 +259,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         if len(event)-1<nn_tf+2+nnl_tf+ngl_tf+2:
             print("DEBUG")
             print("LENGTH:",len(event))
+            print("INDEX:",nn_tf+2+nnl_tf+ngl_tf+2)
             print(event[-2:])
             nnh = 0
             ngh = 0
