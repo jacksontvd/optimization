@@ -322,6 +322,13 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         m_mult[mtot][1] += 1
         photons.append(mtot)
 
+        if len(light)<2 or len(heavy)<2:
+            print("DEBUG")
+            print("LIGHT LENGTH",len(light))
+            print("HEAVY LENGTH",len(heavy))
+            print("LIGHT line",light[1])
+            print("HEAVY line",heavy[1])
+
         TKE = float( light[1].split()[0] ) + float( heavy[1].split()[0] )
 
         light_TKE = float( light[1].split()[0] )
