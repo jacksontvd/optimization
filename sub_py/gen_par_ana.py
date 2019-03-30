@@ -109,7 +109,6 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     lines = file.readlines()
     lines = lines[0:len(lines)]
     file.close()
-    #  print("DEBUG",lines[3])
 
     #Build structure of observables
     #  as many rows as we have bins
@@ -322,11 +321,13 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         m_mult[mtot][1] += 1
         photons.append(mtot)
 
-        if len(light)<2 or len(heavy)<2:
+        if len(light)<3:
             print("DEBUG")
             print("LIGHT LENGTH",len(light))
+            print("LIGHT",light)
+        if len(heavy)<3:
+            print("DEBUG")
             print("HEAVY LENGTH",len(heavy))
-            print("LIGHT line",light[1])
             print("HEAVY line",heavy[1])
 
         TKE = float( light[1].split()[0] ) + float( heavy[1].split()[0] )
