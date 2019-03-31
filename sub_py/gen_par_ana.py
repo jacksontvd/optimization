@@ -241,14 +241,12 @@ def gpa(Z, A, Energy, output_file, **kwargs):
             nnl = 0
             ngl = 0
         else:
-            nnh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[4] )
-            ngh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[5] )
-        
-        #  nnl is the integer number of neutrons coming from the light fragment
-        nnl = int( event[nn_tf+2].split()[4] )
+            #  nnl is the integer number of neutrons coming from the light fragment
+            nnl = int( event[nn_tf+2].split()[4] )
 
-        #  ngl is the integer number of gammas coming from the light fragment
-        ngl = int( event[nn_tf+2].split()[5] )
+            #  ngl is the integer number of gammas coming from the light fragment
+            ngl = int( event[nn_tf+2].split()[5] )
+
         #  if we have a positive number for nnl, set the nnl_tf to be 1 for true
         if(nnl > 0):
             nnl_tf = 1
