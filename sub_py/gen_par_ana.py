@@ -233,6 +233,16 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         else:
             m_tf = 0
 
+        if len(event)-1<nn_tf+2:
+            print("DEBUG")
+            print("LENGTH:",len(event))
+            print("INDEX:",nn_tf+2)
+            print(event[-2:])
+            nnl = 0
+            ngl = 0
+        else:
+            nnh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[4] )
+            ngh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[5] )
         
         #  nnl is the integer number of neutrons coming from the light fragment
         nnl = int( event[nn_tf+2].split()[4] )
@@ -321,14 +331,14 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         m_mult[mtot][1] += 1
         photons.append(mtot)
 
-        if len(light)<3:
+        if len(light)<2:
             print("DEBUG")
             print("LIGHT LENGTH",len(light))
             print("LIGHT",light)
-        if len(heavy)<3:
+        if len(heavy)<2:
             print("DEBUG")
             print("HEAVY LENGTH",len(heavy))
-            print("HEAVY line",heavy[1])
+            print("HEAVY line",heavy)
 
         TKE = float( light[1].split()[0] ) + float( heavy[1].split()[0] )
 
