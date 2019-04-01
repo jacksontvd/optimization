@@ -140,40 +140,43 @@ pu242sf_weights['n_spectrum'] = 1
 pu242sf_weights['m_TKE'] = 1
 error_weights['94242sf'] = pu242sf_weights
 
-pu241nf_weights = {}
-pu241nf_weights['average_photon_energy'] = 1
-pu241nf_weights['gammabar'] = 1
-pu241nf_weights['n_mult'] = 1
-pu241nf_weights['nubar_moments'] = 1
-error_weights['94241(n,f)'] = pu241nf_weights
+pu240nf_weights = {}
+pu240nf_weights['average_photon_energy'] = 1
+pu240nf_weights['gammabar'] = 1
+pu240nf_weights['n_mult'] = 1
+pu240nf_weights['nubar'] = 1
+pu240nf_weights['nubar_moments'] = 1
+error_weights['94239(n,f)'] = pu240nf_weights
 
 pu242nf_weights = {}
 pu242nf_weights['average_photon_energy'] = 1
 pu242nf_weights['gammabar'] = 1
 pu242nf_weights['n_mult'] = 1
+pu242nf_weights['nubar'] = 1
 pu242nf_weights['nubar_moments'] = 1
-error_weights['94242(n,f)'] = pu242nf_weights
+error_weights['94241(n,f)'] = pu242nf_weights
 
 u239nf_weights = {}
 u239nf_weights['average_photon_energy'] = 1
 u239nf_weights['gammabar'] = 1
 u239nf_weights['n_mult'] = 1
+u239nf_weights['nubar'] = 1
 u239nf_weights['nubar_moments'] = 1
 error_weights['92238(n,f)'] = u239nf_weights
 
-u235nf_weights = {}
-u235nf_weights['average_photon_energy'] = 1/100
-u235nf_weights['gammabar'] = 1
-u235nf_weights['m_Af'] = 1
-u235nf_weights['m_TKE'] = 100
-u235nf_weights['n_Af'] = 1
-u235nf_weights['n_mult'] = 100
-u235nf_weights['n_spectrum'] = 100
-u235nf_weights['nubar_moments'] = 1/100
-u235nf_weights['nubar'] = 10
-u235nf_weights['TKE_bar'] = 1
-u235nf_weights['total_photon_energy'] = 1
-error_weights['92235(n,f)'] = u235nf_weights
+u236nf_weights = {}
+u236nf_weights['average_photon_energy'] = 1/100
+u236nf_weights['gammabar'] = 1
+u236nf_weights['m_Af'] = 1
+u236nf_weights['m_TKE'] = 100
+u236nf_weights['n_Af'] = 1
+u236nf_weights['n_mult'] = 100
+u236nf_weights['n_spectrum'] = 100
+u236nf_weights['nubar_moments'] = 1/100
+u236nf_weights['nubar'] = 10
+u236nf_weights['TKE_bar'] = 1
+u236nf_weights['total_photon_energy'] = 1
+error_weights['92235(n,f)'] = u236nf_weights
 
 
 #  The dictionary ranges_x, will take the string associated to an observable, and return the range for the $x$-axis.
