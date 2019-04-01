@@ -35,16 +35,20 @@ def log_probability(chi_sq,dof):
     return factor + power + exponential
 
 #  Define a function which takes Z,A, a number of events to generate, a parameter h, and the type of reaction. This function will return the hessian matrix.
-def freya_hessian(Z,A,generate_number,h,reac_t):
+def freya_hessian(Z,A,generate_number,h,reac_t,**kwargs):
+    #  pull the energy
+    Energy = kwargs['Energy']
     #  pull a list with the optimized parameters from ranges.py
     parameters = param_list(Z,A,reac_t)
     print("Using Hessian to calculate correlation matrix at the point: ",parameters)
     print("Interval used to estimate derivatives: ",h)
     #  pull the array of parsed data from data_parse.py
-    parsed_data = data_parse(Z,A,reac_t)
+    parsed_data = data_parse(Z,A,reac_t,Energy)
     #  define an objective function which takes the parameters and returns the logarithm of the probability.
     def objective(parameters):
-        error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+        error_array = error(Z, A, parameters[0],parameters[1], parameters[2],
+                parameters[3], parameters[4], generate_number, parsed_data, reaction_type
+                = reac_t,Energy = Energy)
         #  error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number,None, reaction_type = reac_t)
         error_value = error_array[0]
         print("ERROR:",error_value)

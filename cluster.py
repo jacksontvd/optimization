@@ -34,15 +34,15 @@ Ainput = 235
 #  Ainput = 238
 
 #  generate_number = 1000000
-generate_number = 500000
+#  generate_number = 500000
 #  generate_number = 100000
 #  generate_number = 10000
-#  generate_number = 1
+generate_number = 1
 
 #  reaction_type = 'spontaneous'
 reaction_type = 'induced'
 #  thermal
-#  energies = [1E-10]
+energies = [1E-10]
 #  Adams
 #  energies = [0.52]
 #  Boykov
@@ -87,16 +87,16 @@ def cluster_plot():
     result = plot(Zinput, Ainput, "-1", "plot_output",generate_number = generate_number)
     return result
 
-def var(parameter):
+def var(parameter,particular_energy):
     result = variance(Zinput,
             Ainput,
             generate_number,
             "grid",
             resolution,
             reaction_type = reaction_type,
-            parameter = parameter)
+            parameter = parameter,Energy=particular_energy)
 
-def covar(parameter1 , parameter2):
+def covar(parameter1 , parameter2,particular_energy):
     result = covariance(Zinput,
             Ainput,
             generate_number,
@@ -104,14 +104,14 @@ def covar(parameter1 , parameter2):
             resolution,
             reaction_type = reaction_type,
             parameter = parameter1,
-            parameter2 = parameter2)
+            parameter2 = parameter2,Energy=particular_energy)
 
-def hess():
+def hess(particular_energy):
     result = freya_hessian(Zinput,
             Ainput,
             generate_number,
             hessian_h,
-            reaction_type)
+            reaction_type,Energy=particular_energy)
     return result
 
 def cov_plot(parameter1 , parameter2):
@@ -195,15 +195,20 @@ elif job_type == 'opt' and reaction_type == 'induced':
 elif job_type == 'plot':
     print(cluster_plot())
 elif job_type == 'var':
-    print("we are here")
     arg = sys.argv[2]
-    print(var(str(arg)))
+    for n_energy in energies:
+        print("Variance for Energy=",n_energy,"is:")
+        print(var(str(arg),n_energy))
 elif job_type == 'covar':
     arg1 = sys.argv[2]
     arg2 = sys.argv[3]
-    print(covar(str(arg1),str(arg2)))
+    for n_energy in energies:
+        print("Covariance for Energy=",n_energy,"is:")
+        print(covar(str(arg1),str(arg2),n_energy))
 elif job_type == 'hessian':
-    print(hess())
+    for n_energy in energies:
+        print("Hessian for Energy=",n_energy,"is:")
+        print(hess(n_energy))
 elif job_type == 'pre_plot':
     pre_plot()
 elif job_type == 'well':

@@ -47,15 +47,17 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
 
     os.chdir(cwd+'/../../freya/data_freya/')
     infile = open("inputparameters.dat","r+")
+
+    #  Read energy in directly from post_op (or whatever calls this)
+    Energy = kwargs['Energy']
    
     #  parse appropriate data with fuction from data_parse.py
-    parsed_data = data_parse(Z,A,reac_t)
+    parsed_data = data_parse(Z,A,reac_t,Energy)
     #  pull the data array out of the data_parse output list
     data_array = parsed_data[0]
     #  pull the data key dictionary from the data_parse output list
     key_translator = parsed_data[1]
-    #  pull energy from the data_parse so the freya output matches the energy level of the comparison data
-    Energy = parsed_data[2]
+
     #  pull the line number for the isotope from the isotope function
     #  this is used to rewrite the appropriate line of the parameter file in each iteration of the optimization
     #  it is also used to read off the guess values from the parameter file as it is currently
@@ -72,8 +74,9 @@ def variance(Z,A, generate_number = None, method = None, resolution = None, **kw
     #  see error.py for the details of this error calculation
     def err_opt(parameter):
         parameters[special_index] = parameter
-        error_array = error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
-        #  error_array = test_error(Z, A, parameters[0],parameters[1], parameters[2], parameters[3], parameters[4], generate_number, parsed_data, reaction_type = reac_t)
+        error_array = error(Z, A, parameters[0],parameters[1], parameters[2],
+                parameters[3], parameters[4], generate_number, parsed_data, reaction_type
+                = reac_t,Energy = Energy)
         error_value = error_array[0]
         dof = error_array[6]
         return error_value
