@@ -267,7 +267,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
             print("DEBUG")
             print("LENGTH:",len(event))
             print("INDEX:",nn_tf+2+nnl_tf+ngl_tf+2)
-            print(event[-2:])
+            print(event)
             nnh = 0
             ngh = 0
         else:
