@@ -284,6 +284,15 @@ def gpa(Z, A, Energy, output_file, **kwargs):
             ngh_tf = 0
         heavy = event[nn_tf+2+nnl_tf+ngl_tf+2:nn_tf+2+nnl_tf+ngl_tf+2+nnh_tf+ngh_tf+2]
 
+        if len(light[0].split()) < 3:
+            print("DEBUG, light LINE wasn't even 3 long")
+            print("event",event)
+            print("LIGHT",light)
+        if len(heavy[0].split()) < 3:
+            print("DEBUG, heavy LINE wasn't even 3 long")
+            print("event",event)
+            print("heavy",heavy)
+
         Afrag_l = int( light[0].split()[2] )
         Afrag_h = int( heavy[0].split()[2] )
 
