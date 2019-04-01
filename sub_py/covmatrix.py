@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import numpy as np
 from numpy import exp, array, linalg, zeros, isscalar
-from math import gamma
+from math import *
 from ranges import *
 from error import *
 from test import *
