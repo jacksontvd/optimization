@@ -14,6 +14,9 @@ def blockPrint():
 def enablePrint():
     sys.stdout = sys.__stdout__
 
+def orderOfMagnitude(number):
+    return math.floor(math.log(number, 10))
+
 #  Define a function which takes an array with chi squared error, a normalization constant, and the number of degrees of freedom and returns an array with the associated probabilities.
 def probability(chi_sq_array,number,dof):
     factor = 1/(2**(dof/2)*gamma(dof/2))
@@ -55,7 +58,8 @@ def freya_hessian(Z,A,generate_number,h,reac_t,**kwargs):
         dof = error_array[6]
         print("DOF:",dof)
         if dof > 100:
-                log_prob = log_probability(error_value/100,dof/10)
+                oom = orderOfMagnitude(dof)
+                log_prob = log_probability(error_value/(oom*10),dof/(10*(oom-1)))
         else:
                 log_prob = log_probability(error_value,dof)
         print("LOG_PROB:",log_prob)
