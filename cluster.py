@@ -50,8 +50,7 @@ reaction_type = 'induced'
 #  energies = [2.9,14.7]
 #  chinu
 #  energies = [0.5,1,1.5,2,2.5,3,4,5,5.5,6,7,8,9,10,11,11.5,12,13,13.5,14,15,17.5]
-#  energies = [0.5,1]
-#  energies = [1,1.5]
+#  energies = [0.5,1,1.5]
 #  energies = [2,2.5]
 #  energies = [3,4]
 #  energies = [5,5.5]
