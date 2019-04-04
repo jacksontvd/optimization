@@ -59,8 +59,7 @@ reaction_type = 'induced'
 #  energies = [10,11]
 #  energies = [11.5,12]
 #  energies = [13,13.5]
-#  energies = [14,15]
-#  energies = [17.5]
+#  energies = [14,15,17.5]
 #  Conde
 #  energies = [1.5]
 #  Knitter
