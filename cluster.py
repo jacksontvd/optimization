@@ -35,21 +35,33 @@ Ainput = 235
 
 #  generate_number = 1000000
 #  generate_number = 500000
+generate_number = 300000
 #  generate_number = 100000
 #  generate_number = 10000
-generate_number = 1
+#  generate_number = 1
 
 #  reaction_type = 'spontaneous'
 reaction_type = 'induced'
 #  thermal
-energies = [1E-10]
+#  energies = [1E-10]
 #  Adams
 #  energies = [0.52]
 #  Boykov
 #  energies = [2.9,14.7]
 #  chinu
-#  energies=[0.5]
-#  energies = [0.5,1,1.5,2,2.5,3,3,4,5,5.5,6,7,8,9,10,11,11.5,12,13,13.5,14,15,17.5]
+#  energies = [0.5,1,1.5,2,2.5,3,4,5,5.5,6,7,8,9,10,11,11.5,12,13,13.5,14,15,17.5]
+#  energies = [0.5,1]
+#  energies = [1,1.5]
+#  energies = [2,2.5]
+#  energies = [3,4]
+#  energies = [5,5.5]
+#  energies = [6,7]
+#  energies = [8,9]
+#  energies = [10,11]
+#  energies = [11.5,12]
+#  energies = [13,13.5]
+#  energies = [14,15]
+#  energies = [17.5]
 #  Conde
 #  energies = [1.5]
 #  Knitter
