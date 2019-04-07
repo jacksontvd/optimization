@@ -210,6 +210,7 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         return new_energy
 
     for event in events:
+        event_number = event[0].split()[0]
         initial = []
         light = []
         heavy = []
@@ -233,24 +234,24 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         else:
             m_tf = 0
 
+        if len(event)-1<nn_tf+2:
+            print("DEBUG")
+            print("LENGTH:",len(event))
+            print("INDEX:",nn_tf+2)
+            print("event number:",event_number)
+            print(event[-2:])
+            nnl = 0
+            ngl = 0
+        else:
+            #  nnl is the integer number of neutrons coming from the light fragment
+            nnl = int( event[nn_tf+2].split()[4] )
+            #  ngl is the integer number of gammas coming from the light fragment
+            ngl = int( event[nn_tf+2].split()[5] )
 #  #  #  #  #  #
-        #  if len(event)-1<nn_tf+2:
-        #      print("DEBUG")
-        #      print("LENGTH:",len(event))
-        #      print("INDEX:",nn_tf+2)
-        #      print(event[-2:])
-        #      nnl = 0
-        #      ngl = 0
-        #  else:
-        #      #  nnl is the integer number of neutrons coming from the light fragment
-        #      nnl = int( event[nn_tf+2].split()[4] )
-        #      #  ngl is the integer number of gammas coming from the light fragment
-        #      ngl = int( event[nn_tf+2].split()[5] )
-#  #  #  #  #  #
-        #  nnl is the integer number of neutrons coming from the light fragment
-        nnl = int( event[nn_tf+2].split()[4] )
-        #  ngl is the integer number of gammas coming from the light fragment
-        ngl = int( event[nn_tf+2].split()[5] )
+#          #  nnl is the integer number of neutrons coming from the light fragment
+        #  nnl = int( event[nn_tf+2].split()[4] )
+        #  #  ngl is the integer number of gammas coming from the light fragment
+#          ngl = int( event[nn_tf+2].split()[5] )
 #  #  #  #  #  #
 
         #  if we have a positive number for nnl, set the nnl_tf to be 1 for true
@@ -269,20 +270,20 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         
         #  now we do the same thing for the heavy fragment
 
+        if len(event)-1<nn_tf+2+nnl_tf+ngl_tf+2:
+            print("DEBUG")
+            print("LENGTH:",len(event))
+            print("INDEX:",nn_tf+2+nnl_tf+ngl_tf+2)
+            print("event number:",event_number)
+            print(event)
+            nnh = 0
+            ngh = 0
+        else:
+            nnh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[4] )
+            ngh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[5] )
 #  #  #  #  #  #
-        #  if len(event)-1<nn_tf+2+nnl_tf+ngl_tf+2:
-        #      print("DEBUG")
-        #      print("LENGTH:",len(event))
-        #      print("INDEX:",nn_tf+2+nnl_tf+ngl_tf+2)
-        #      print(event)
-        #      nnh = 0
-        #      ngh = 0
-        #  else:
-        #      nnh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[4] )
-        #      ngh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[5] )
-#  #  #  #  #  #
-        nnh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[4] )
-        ngh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[5] )
+        #  nnh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[4] )
+        #  ngh = int( event[nn_tf+2+nnl_tf+ngl_tf+2].split()[5] )
 #  #  #  #  #  #
 
         if(nnh > 0):
@@ -299,10 +300,12 @@ def gpa(Z, A, Energy, output_file, **kwargs):
             print("DEBUG, light LINE wasn't even 3 long")
             print("event",event)
             print("LIGHT",light)
+            print("event number:",event_number)
         if len(heavy[0].split()) < 3:
             print("DEBUG, heavy LINE wasn't even 3 long")
             print("event",event)
             print("heavy",heavy)
+            print("event number:",event_number)
 
         Afrag_l = int( light[0].split()[2] )
         Afrag_h = int( heavy[0].split()[2] )
@@ -353,10 +356,12 @@ def gpa(Z, A, Energy, output_file, **kwargs):
             print("DEBUG")
             print("LIGHT LENGTH",len(light))
             print("LIGHT",light)
+            print("event number:",event_number)
         if len(heavy)<2:
             print("DEBUG")
             print("HEAVY LENGTH",len(heavy))
             print("HEAVY line",heavy)
+            print("event number:",event_number)
 
         TKE = float( light[1].split()[0] ) + float( heavy[1].split()[0] )
 
