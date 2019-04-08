@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import numpy as np
+import math
 from numpy import exp, array, linalg, zeros, isscalar
 from math import *
 from ranges import *
