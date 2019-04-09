@@ -236,9 +236,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
         if len(event)-1<nn_tf+2:
             print("DEBUG")
+            print("event number:",event_number)
             print("LENGTH:",len(event))
             print("INDEX:",nn_tf+2)
-            print("event number:",event_number)
             print(event[-2:])
             nnl = 0
             ngl = 0
@@ -487,6 +487,9 @@ def gpa(Z, A, Energy, output_file, **kwargs):
                 dot_product = np.sum(np.array(momentum) * np.array(heavy_direction))
                 rest_En = rest_frame_boost(En,dot_product,heavy_TKE,Afrag_h)
                 rest_n_spec.append(rest_En)
+            if len(heavy) < 4:
+                print("DEBUG")
+                print("event number:",event_number)
             parts = heavy[3].split()
             for j in range( 0,int(len(parts)/4) ):
                 Eg = float(parts[j*4])
