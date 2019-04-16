@@ -15,17 +15,22 @@ parameter_labels['d'] = 'dTKE'
 
 param_ranges = {}
 
-param_ranges['e0'] = [7,12,0]
+#  param_ranges['e0'] = [7,12,0]
+param_ranges['e0'] = [8,11,0]
 param_ranges['e'] = param_ranges['e0']
 
-param_ranges['x'] = [1,1.5,1]
+#  param_ranges['x'] = [1,1.5,1]
+param_ranges['x'] = [1.1,1.2,1]
 
-param_ranges['c'] = [1,3,2]
+#  param_ranges['c'] = [1,3,2]
+param_ranges['c'] = [1,2,2]
 
-param_ranges['cS'] = [0.5, 1.5,3]
+#  param_ranges['cS'] = [0.5, 1.5,3]
+param_ranges['cS'] = [0.5, 1,3]
 param_ranges['T'] = param_ranges['cS'] 
 
-param_ranges['dTKE'] = [-5, 5,4]
+#  param_ranges['dTKE'] = [-5, 5,4]
+param_ranges['dTKE'] = [-1, 1,4]
 param_ranges['d'] = param_ranges['dTKE']
 
 def param_list(Z,A,reac_type):
