@@ -26,9 +26,15 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         if Energy == '-1' or Energy == -1:
             reac_type = 'spontaneous'
             freyaA = A
+            #  there is no dtke file for spontaneous. For induced this needs to be written into the parameter file.
+            dtke_file = "-                "
         else:
             reac_type = 'induced'
             freyaA = int(A) + 1
+            #  find name of dTKE file (for rewriting inputparameters.dat)(this is stored in ranges.py)
+            dtke_file = dtke_file_dict[str(Z),str(A)]
+            print("- - - - - - - -",dtke_file,"- - - - - - - -")
+
         iso = isotope(Z,A,reac_type = reac_type)
         i = iso[1]
         reaction_type = iso[2]
@@ -37,7 +43,8 @@ def gpa(Z, A, Energy, output_file, **kwargs):
         infile = open("inputparameters.dat","r+") 
         
         content = infile.readlines() #reads line by line and outputs a list of each line
-        content[i] = str(Z)+"  "+str(freyaA)+"   '"+str(reaction_type)+"'      "+str(e)+"     "+str(x)+"  "+str(c)+" "+str(T)+" 0.150  -                "+str(d)+"\n" 
+        #  content[i] = str(Z)+"  "+str(freyaA)+"   '"+str(reaction_type)+"'      "+str(e)+"     "+str(x)+"  "+str(c)+" "+str(T)+" 0.150  -                "+str(d)+"\n"
+        content[i] = str(Z)+"  "+str(freyaA)+"   '"+str(reaction_type)+"'      "+str(e)+"     "+str(x)+"  "+str(c)+" "+str(T)+" 0.150  "+str(dtke_file)+str(d)+"\n"
         #replaces content of the (i+1)th line with chosen parameter values
         infile.close()
         infile = open("inputparameters.dat", 'w') #clears content of file. 

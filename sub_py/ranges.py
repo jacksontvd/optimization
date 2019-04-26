@@ -33,6 +33,13 @@ param_ranges['T'] = param_ranges['cS']
 param_ranges['dTKE'] = [-1, 1,4]
 param_ranges['d'] = param_ranges['dTKE']
 
+dtke_file_dict = {}
+dtke_file_dict['92','233'] = "U234.dTKE     "
+dtke_file_dict['92','235'] = "U236.dTKE     "
+dtke_file_dict['92','238'] = "U239.dTKE     "
+dtke_file_dict['94','239'] = "Pu240.dTKE    "
+dtke_file_dict['94','241'] = "Pu242.dTKE    "
+
 def param_list(Z,A,reac_type):
     iso = isotope(int(Z),int(A),reac_type = reac_type)
     i = iso[1]
