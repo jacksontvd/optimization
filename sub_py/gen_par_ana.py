@@ -41,6 +41,14 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
         os.chdir(cwd+'/../../freya/data_freya/')
         infile = open("inputparameters.dat","r+") 
+
+        #  truncate the parameter values.
+        #  if we don't truncate the values the optimization script can put in very long floats which mess with freya
+        e = round(e,3)
+        x = round(x,3)
+        c = round(c,3)
+        T = round(T,3)
+        d = round(d,3)
         
         content = infile.readlines() #reads line by line and outputs a list of each line
         #  content[i] = str(Z)+"  "+str(freyaA)+"   '"+str(reaction_type)+"'      "+str(e)+"     "+str(x)+"  "+str(c)+" "+str(T)+" 0.150  -                "+str(d)+"\n"
