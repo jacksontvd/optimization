@@ -44,15 +44,15 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
         #  truncate the parameter values.
         #  if we don't truncate the values the optimization script can put in very long floats which mess with freya
-        e = round(e,3)
-        x = round(x,3)
-        c = round(c,3)
-        T = round(T,3)
-        d = round(d,3)
+        e = round(e,4)
+        x = round(x,2)
+        c = round(c,2)
+        T = round(T,2)
+        d = round(d,4)
         
         content = infile.readlines() #reads line by line and outputs a list of each line
         #  content[i] = str(Z)+"  "+str(freyaA)+"   '"+str(reaction_type)+"'      "+str(e)+"     "+str(x)+"  "+str(c)+" "+str(T)+" 0.150  -                "+str(d)+"\n"
-        content[i] = str(Z)+"  "+str(freyaA)+"   '"+str(reaction_type)+"'      "+str(e)+"     "+str(x)+"  "+str(c)+" "+str(T)+" 0.150  "+str(dtke_file)+str(d)+"\n"
+        content[i] = str(Z)+"  "+str(freyaA)+"   '"+str(reaction_type)+"'   "+str(e)+"  "+str(x)+"  "+str(c)+" "+str(T)+" 0.150  "+str(dtke_file)+str(d)+"\n"
         #replaces content of the (i+1)th line with chosen parameter values
         infile.close()
         infile = open("inputparameters.dat", 'w') #clears content of file. 
