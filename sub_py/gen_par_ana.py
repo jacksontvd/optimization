@@ -44,7 +44,8 @@ def gpa(Z, A, Energy, output_file, **kwargs):
 
         #  truncate the parameter values.
         #  if we don't truncate the values the optimization script can put in very long floats which mess with freya
-        e = round(e,4)
+        #  e = round(e,4)
+        e = round(e,3)
         x = round(x,2)
         c = round(c,2)
         T = round(T,2)
