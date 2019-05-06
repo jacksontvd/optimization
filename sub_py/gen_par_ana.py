@@ -211,7 +211,8 @@ def gpa(Z, A, Energy, output_file, **kwargs):
     #clear this portion of memory
     lines = [] 
 
-    print(initial_words[3] + ' events imported.')
+    #  print(initial_words[3] + ' events imported.')
+    print(str(len(events)) + ' events imported.')
     import_end = time.time()
     import_time = import_end - import_begin
     print('Time: '+ str(import_time) + " sec")

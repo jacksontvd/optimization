@@ -17,7 +17,7 @@ param_ranges = {}
 
 #  param_ranges['e0'] = [7,12,0]
 #  param_ranges['e0'] = [8,11,0]
-param_ranges['e0'] = [8,10.58,0]
+param_ranges['e0'] = [8,10.4,0]
 param_ranges['e'] = param_ranges['e0']
 
 #  param_ranges['x'] = [1,1.5,1]
