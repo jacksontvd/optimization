@@ -177,10 +177,17 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     if not os.path.exists(opt_path):
         os.makedirs(opt_path)
 
-    if finalparams is not None:
+    try:
+        finalparams
+    except NameError:
+        success = False
+    else:
+        success = True
+
+    if success is True:
         print('Successful initial optimization.')
     else:
-        print('Error in initial optimization routine!')
+        print('----------------------------------Error in initial optimization routine----------------------------------')
     print('Calling for final error estimation...')
 
     #  print(reac_t)
