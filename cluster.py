@@ -20,7 +20,7 @@ from grid_run import grid_run
 #  pu
 #  Zinput = 94
 #  u
-Zinput=92
+#  Zinput=92
 
 #  Ainput= 233
 #  Ainput = 238
@@ -35,15 +35,16 @@ Ainput = 235
 
 #  generate_number = 1000000
 #  generate_number = 500000
-generate_number = 300000
+#  generate_number = 300000
 #  generate_number = 100000
 #  generate_number = 10000
 #  generate_number = 1
+generate_number = 10
 
 #  reaction_type = 'spontaneous'
 reaction_type = 'induced'
 #  thermal
-#  energies = [1E-10]
+energies = [1E-10]
 #  Adams
 #  energies = [0.52]
 #  Boykov
@@ -77,6 +78,11 @@ stochastic_type = 0
 #  resolution = 4
 resolution = 10
 
+#  custom radius to test parameters (varying from current defaults)
+parameter_range_radius = 0.1
+#  set to 0 for default ranges
+#  parameter_range_radius = 0
+
 machine_epsilon = 2.22044604925E-16
 #  machine_epsilon = 7./3 - 4./3 -1
 hessian_h = np.array(param_list(Zinput,Ainput,reaction_type))*np.sqrt(machine_epsilon)
@@ -89,7 +95,8 @@ def opti(opt_method,neutron_energy):
         resolution, 
         stochastic_type = stochastic_type,
         reaction_type = reaction_type,
-        energy=neutron_energy
+        energy=neutron_energy,
+        prr=parameter_range_radius
         )
     return result
 

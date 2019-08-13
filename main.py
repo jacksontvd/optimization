@@ -43,7 +43,7 @@ if job_type == 'process':
     #  Zinput = 92
     #  Ainput = 238
 
-    generate_number = 10000000
+    #  generate_number = 10000000
     #  generate_number = 100000
     #  generate_number = 10000
     #  generate_number = 1
@@ -64,8 +64,10 @@ if taskl == 'run' or taskl == 'run ' or taskl == ' run':
     Zinput = int(Zinputraw)
     Ainputraw = input('A = ')
     Ainput = int(Ainputraw)
-    energyraw = input('Value of energy (in units of MeV, -1 for spontaneous fission): ')
+    energyraw = input('Value of energy (in units of MeV, 0 for spontaneous fission): ')
     energyinput = float(energyraw)
+    if energyinput == 0:
+        energyinput = -1
     path_raw = input('Name of output file and location of plots: ')
     path_input = str(path_raw)
     generate_number_raw = input('How many events (Suggested 1,000,000 for high quality results): ')
@@ -98,15 +100,18 @@ elif taskl == 'optimize':
     Ainputraw = input('A = ')
     Ainput = int(Ainputraw)
 
-    energyraw = input('Value of energy (in units of MeV, -1 for spontaneous fission): ')
+    energyraw = input('Value of energy (in units of MeV, 0 for spontaneous fission): ')
     energyinput = float(energyraw)
-    if energyinput == -1:
+    if energyinput ==0:
+        energyinput = -1
         reaction_type = 'spontaneous'
     else:
         reaction_type = 'induced'
 
+    parameter_range_radius= float(input('Radius around the current default parameters which the optimization procedure will test (0 for default (largest) ranges):'))
+
     print('Which method of optimization do you prefer?')
-    method_raw = input('Stochastic or Grid: ')
+    method_raw = input('Anneal or Grid (or bypass): ')
     method_input = str(method_raw)
     method = method_input.lower()
     generate_number_raw = input('How many events per iteration (Suggested 1,000,000 for high quality results): ')
@@ -117,10 +122,11 @@ elif taskl == 'optimize':
         resolution = resolution_raw.lower()
     else:
         resolution = None
-    if method == 'process':
+    if method == 'process' or method == 'bypass':
+        #  print("Generate number is:",generate_number)
         post_opt(Zinput , Ainput , generate_number , method , resolution , reaction_type = reaction_type , stochastic_type = 1 , iteration_number = 100, energy=energyinput)
         optimize_bool = False
     else:
-        opt(Zinput,Ainput, generate_number, method, resolution, energy = energyinput,reaction_type = reaction_type,stochastic_type = 1, iteration_number = 100)
+        opt(Zinput,Ainput, generate_number, method, resolution, energy = energyinput,reaction_type = reaction_type,stochastic_type = 1, iteration_number = 100,prr=parameter_range_radius)
 else:
     print('ERROR: Input is not supported')

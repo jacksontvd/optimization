@@ -25,10 +25,11 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     print('starting')
     reac_t = kwargs['reaction_type']
     Energy = kwargs['energy']
+    parameter_range_radius = kwargs['prr']
     os.chdir(cwd+'/../../freya/data_freya/')
 
     infile = open("inputparameters.dat","r+")
-   
+
     #  parse appropriate data with fuction from data_parse.py
     parsed_data = data_parse(Z,A,reac_t,Energy)
 
@@ -57,6 +58,27 @@ def opt(Z,A, generate_number = None, method = None, resolution = None, **kwargs)
     guesses[3] = float(line_split[6])
     guesses[4] = float(line_split[9])
     guesses = np.array(guesses)
+
+    #  if parameter_range_radius is nonzero, then take each parameter guess and define the range to be \pm the radius
+    if parameter_range_radius != 0:
+        param_ranges['e'][0] = guesses[0] - parameter_range_radius
+        param_ranges['x'][0] = guesses[1] - parameter_range_radius
+        param_ranges['c'][0] = guesses[2] - parameter_range_radius
+        param_ranges['T'][0] = guesses[3] - parameter_range_radius
+        param_ranges['d'][0] = guesses[4] - parameter_range_radius
+
+        param_ranges['e'][1] = guesses[0] + parameter_range_radius
+        param_ranges['x'][1] = guesses[1] + parameter_range_radius
+        param_ranges['c'][1] = guesses[2] + parameter_range_radius
+        param_ranges['T'][1] = guesses[3] + parameter_range_radius
+        param_ranges['d'][1] = guesses[4] + parameter_range_radius
+    #  if parameter_range_radius is 0, then just use the default parameter ranges (i.e. the widest ones) from ranges.py
+    #  (this array is loaded in the preable)
+    else:
+        print("Using default ranges.")
+
+    print("Initial guess for parameters (i.e. current default value):",guesses)
+    print("Ranges being used in optimization:",param_ranges)
 
     opt_begin = time.time()
 
